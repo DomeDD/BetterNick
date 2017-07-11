@@ -56,6 +56,12 @@ public class v1_9_R2 implements Listener {
 			if(nick.length() <= 14) {
 				if(!blacklist.contains(nick)) {
 					if(!NickAPI.isNickNameUsed(nick)) {
+						if(pl.nickedPlayers.contains(nameprefix + nick)) {
+							pl.nickedPlayers.remove(nameprefix + nick);
+							pl.nickedPlayers.add(nameprefix + nick);
+						} else {
+							pl.nickedPlayers.add(nameprefix + nick);
+						}
 						try {
 							pl.nameField.set(cp.getProfile(), nametagprefix + nick);
 						} catch (IllegalArgumentException | IllegalAccessException e) {
@@ -115,6 +121,12 @@ public class v1_9_R2 implements Listener {
 			if(names.get(i).toString().length() <= 14) {
 				if(!blacklist.contains(names.get(i))) {
 					if(!NickAPI.isNickNameUsed(names.get(i).toString())) {
+						if(pl.nickedPlayers.contains(nameprefix + names.get(i).toString())) {
+							pl.nickedPlayers.remove(nameprefix + names.get(i).toString());
+							pl.nickedPlayers.add(nameprefix + names.get(i).toString());
+						} else {
+							pl.nickedPlayers.add(nameprefix + names.get(i).toString());
+						}
 						try {
 							pl.nameField.set(cp.getProfile(), nametagprefix + names.get(i).toString());
 						} catch (IllegalArgumentException | IllegalAccessException e) {
@@ -164,6 +176,9 @@ public class v1_9_R2 implements Listener {
 		}
 	}
 	public static void UnNick(UUID p) {
+		if(pl.nickedPlayers.contains(Bukkit.getPlayer(p).getDisplayName())) {
+			pl.nickedPlayers.remove(Bukkit.getPlayer(p).getDisplayName());
+		}
 		CraftPlayer cp = (CraftPlayer) Bukkit.getPlayer(p);
 		if(NickAPI.NickedPlayerExists(p)) {
 			try {
