@@ -44,6 +44,7 @@ public class Main extends JavaPlugin implements Listener {
 	public Field nameField;
 	public Chat chat = null;
 	public Logger log = this.getLogger();
+	public ArrayList<String> nickedPlayers = new ArrayList<>();
 	
 	public void onEnable() {
 		if(getConfig().getBoolean("Config.API Mode")) {
