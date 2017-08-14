@@ -1,3 +1,12 @@
+/*
+ * All rights by DomeDD
+ * You are allowed to modify this code
+ * You are allowed to use this code in your plugins for private projects
+ * You are allowed to publish your plugin including this code as long as your plugin is for free 
+ * You are NOT allowed to claim this plugin as your own
+ * You are NOT allowed to publish this plugin or your modified version of this plugin
+ * 
+ */
 package BetterNick.CMD;
 
 import org.bukkit.Bukkit;
@@ -22,22 +31,22 @@ public class NickListCMD implements CommandExecutor {
 			if(args.length == 0) {
 				if(p.hasPermission("BetterNick.NickList")) {
 					if(pl.nickedPlayers.isEmpty()) {
-						p.sendMessage(pl.getConfig().getString("Config.Messages.Get Nicked Players Error").replace("&", "ง"));
+						p.sendMessage(pl.getConfig().getString("Config.Messages.Get Nicked Players Error").replace("&", "ยง"));
 					} else {
-						p.sendMessage(pl.getConfig().getString("Config.Messages.Get Nicked Players Header").replace("&", "ง"));
+						p.sendMessage(pl.getConfig().getString("Config.Messages.Get Nicked Players Header").replace("&", "ยง"));
 						for(int i = 0; i < pl.nickedPlayers.size(); i++) {
-							p.sendMessage(pl.getConfig().getString("Config.Messages.Get Nicked Players").replace("[ID]", Integer.valueOf(i + 1).toString()).replace("[PLAYER]", Bukkit.getPlayer(pl.nickedPlayers.get(i)).getDisplayName()).replace("[NAME]", NickAPI.getRealName(Bukkit.getPlayer(pl.nickedPlayers.get(i)).getUniqueId())).replace("&", "ง"));
+							p.sendMessage(pl.getConfig().getString("Config.Messages.Get Nicked Players").replace("[ID]", Integer.valueOf(i + 1).toString()).replace("[PLAYER]", Bukkit.getPlayer(pl.nickedPlayers.get(i)).getDisplayName()).replace("[NAME]", NickAPI.getRealName(Bukkit.getPlayer(pl.nickedPlayers.get(i)).getUniqueId())).replace("&", "ยง"));
 						}
 					}
 				}
 			}
 		} else {
 			if(pl.nickedPlayers.isEmpty()) {
-				Bukkit.getConsoleSender().sendMessage(pl.getConfig().getString("Config.Messages.Get Nicked Players Error").replace("&", "ง"));
+				Bukkit.getConsoleSender().sendMessage(pl.getConfig().getString("Config.Messages.Get Nicked Players Error").replace("&", "ยง"));
 			} else {
-				Bukkit.getConsoleSender().sendMessage(pl.getConfig().getString("Config.Messages.Get Nicked Players Header").replace("&", "ง"));
+				Bukkit.getConsoleSender().sendMessage(pl.getConfig().getString("Config.Messages.Get Nicked Players Header").replace("&", "ยง"));
 				for(int i = 0; i < pl.nickedPlayers.size(); i++) {
-					Bukkit.getConsoleSender().sendMessage(pl.getConfig().getString("Config.Messages.Get Nicked Players").replace("[ID]", Integer.valueOf(i + 1).toString()).replace("[PLAYER]", Bukkit.getPlayer(pl.nickedPlayers.get(i)).getDisplayName()).replace("[NAME]", NickAPI.getRealName(Bukkit.getPlayer(pl.nickedPlayers.get(i)).getUniqueId())).replace("&", "ง"));
+					Bukkit.getConsoleSender().sendMessage(pl.getConfig().getString("Config.Messages.Get Nicked Players").replace("[ID]", Integer.valueOf(i + 1).toString()).replace("[PLAYER]", Bukkit.getPlayer(pl.nickedPlayers.get(i)).getDisplayName()).replace("[NAME]", NickAPI.getRealName(Bukkit.getPlayer(pl.nickedPlayers.get(i)).getUniqueId())).replace("&", "ยง"));
 				}
 			}
 		}
