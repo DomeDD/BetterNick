@@ -11,6 +11,7 @@ package BetterNick.API;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -30,6 +31,7 @@ import BetterNick.Versions.v1_9_R2;
 
 public class NickAPI implements Listener {
 	
+	public static HashMap<Player, Integer> taskID = new HashMap<Player, Integer>();
 	private static Main pl;
 	@SuppressWarnings("static-access")
 	public NickAPI(Main main) {
@@ -239,29 +241,6 @@ public class NickAPI implements Listener {
 			v1_12_R1.resetSkin(p);
 		}
 	}
-	public static void sendActionBar(UUID p, String msg) {
-		if(Bukkit.getVersion().contains("(MC: 1.8.3)")) {
-			v1_8_R2.sendActionBar(p, msg);
-		}
-		if(Bukkit.getVersion().contains("(MC: 1.8.4)") || Bukkit.getVersion().contains("(MC: 1.8.5)") || Bukkit.getVersion().contains("(MC: 1.8.6)") || Bukkit.getVersion().contains("(MC: 1.8.7)") || Bukkit.getVersion().contains("(MC: 1.8.8)")) {
-			v1_8_R3.sendActionBar(p, msg);
-		}
-		if(Bukkit.getVersion().contains("(MC: 1.9)") || Bukkit.getVersion().contains("(MC: 1.9.1)") || Bukkit.getVersion().contains("(MC: 1.9.2)") || Bukkit.getVersion().contains("(MC: 1.9.3)")) {
-			v1_9_R1.sendActionBar(p, msg);
-		}
-		if(Bukkit.getVersion().contains("(MC: 1.9.4)")) {
-			v1_9_R2.sendActionBar(p, msg);
-		}
-		if(Bukkit.getVersion().contains("(MC: 1.10)") || Bukkit.getVersion().contains("(MC: 1.10.1)") || Bukkit.getVersion().contains("(MC: 1.10.2)")) {
-			v1_10_R1.sendActionBar(p, msg);
-		}
-		if(Bukkit.getVersion().contains("(MC: 1.11)") || Bukkit.getVersion().contains("(MC: 1.11.1)") || Bukkit.getVersion().contains("(MC: 1.11.2)")) {
-			v1_11_R1.sendActionBar(p, msg);
-		}
-		if(Bukkit.getVersion().contains("(MC: 1.12)")) {
-			v1_12_R1.sendActionBar(p, msg);
-		}
-	}
 	public static void autoNick(UUID p, boolean autonick) {
 		if(MySQLEnabled()) {
 			MySQL_Connection.update("UPDATE BetterNick SET AUTONICK='" + autonick + "' WHERE UUID='" + p + "'");
@@ -323,5 +302,42 @@ public class NickAPI implements Listener {
 			}
 		}
 		return used;
+	}
+	public static void sendActionBar(UUID p, String msg){
+		int tid = 0;
+		tid = Bukkit.getScheduler().scheduleSyncRepeatingTask(pl, new Runnable() {
+			@Override
+			public void run() {
+				if(Bukkit.getVersion().contains("(MC: 1.8.3)")) {
+					v1_8_R2.sendActionBar(p, msg);
+				}
+				if(Bukkit.getVersion().contains("(MC: 1.8.4)") || Bukkit.getVersion().contains("(MC: 1.8.5)") || Bukkit.getVersion().contains("(MC: 1.8.6)") || Bukkit.getVersion().contains("(MC: 1.8.7)") || Bukkit.getVersion().contains("(MC: 1.8.8)")) {
+					v1_8_R3.sendActionBar(p, msg);
+				}
+				if(Bukkit.getVersion().contains("(MC: 1.9)") || Bukkit.getVersion().contains("(MC: 1.9.1)") || Bukkit.getVersion().contains("(MC: 1.9.2)") || Bukkit.getVersion().contains("(MC: 1.9.3)")) {
+					v1_9_R1.sendActionBar(p, msg);
+				}
+				if(Bukkit.getVersion().contains("(MC: 1.9.4)")) {
+					v1_9_R2.sendActionBar(p, msg);
+				}
+				if(Bukkit.getVersion().contains("(MC: 1.10)") || Bukkit.getVersion().contains("(MC: 1.10.1)") || Bukkit.getVersion().contains("(MC: 1.10.2)")) {
+					v1_10_R1.sendActionBar(p, msg);
+				}
+				if(Bukkit.getVersion().contains("(MC: 1.11)") || Bukkit.getVersion().contains("(MC: 1.11.1)") || Bukkit.getVersion().contains("(MC: 1.11.2)")) {
+					v1_11_R1.sendActionBar(p, msg);
+				}
+				if(Bukkit.getVersion().contains("(MC: 1.12)")) {
+					v1_12_R1.sendActionBar(p, msg);
+				}
+			}
+		}, 0, 40);
+		taskID.put(Bukkit.getPlayer(p), tid);
+	}
+	public static void endActionBar(UUID p){
+		if(taskID.containsKey(Bukkit.getPlayer(p))) {
+			int tid = taskID.get(Bukkit.getPlayer(p));
+			pl.getServer().getScheduler().cancelTask(tid);
+			taskID.remove(Bukkit.getPlayer(p));
+		}
 	}
 }
