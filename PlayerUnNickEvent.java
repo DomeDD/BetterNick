@@ -10,11 +10,6 @@ public class PlayerUnNickEvent {
 	Player getPlayer();
 	
 	/**
-   	 * @return nickname
-	 */
-	String getNickName();
-	
-	/**
    	 * @param arg0 message
 	 */
 	void setUnNickMessage(String arg0);
