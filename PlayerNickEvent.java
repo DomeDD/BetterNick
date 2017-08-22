@@ -1,6 +1,7 @@
 /*
  * All rights by DomeDD
  */
+
 public class PlayerNickEvent {
 	
 	/**
