@@ -29,6 +29,10 @@ import BetterNick.Main;
 import BetterNick.API.GameProfileBuilder;
 import BetterNick.API.NickAPI;
 import BetterNick.API.UUIDFetcher;
+import BetterNick.API.Events.PlayerNickEvent;
+import BetterNick.API.Events.PlayerSkinResetEvent;
+import BetterNick.API.Events.PlayerSkinSetEvent;
+import BetterNick.API.Events.PlayerUnNickEvent;
 import BetterNick.Files.NickedPlayers;
 import BetterNick.MySQL.MySQL_Connection;
 import net.minecraft.server.v1_8_R3.PacketPlayInClientCommand;
@@ -57,6 +61,7 @@ public class v1_8_R3 implements Listener {
 		CraftPlayer cp = (CraftPlayer) Bukkit.getPlayer(p);
 		@SuppressWarnings("rawtypes")
 		List blacklist = pl.getConfig().getStringList("Config.Names Black List");
+		Bukkit.getPluginManager().callEvent(new PlayerNickEvent(Bukkit.getPlayer(p), nick));
 		if(NickAPI.NickedPlayerExists(p)) {
 			if(nick.length() <= 14) {
 				if(!blacklist.contains(nick)) {
@@ -99,13 +104,6 @@ public class v1_8_R3 implements Listener {
 							NickedPlayers.cfg.set("NickedPlayers." + p + ".Nicked", true);
 							NickedPlayers.saveFile();
 						}
-						if(pl.getConfig().getBoolean("Config.Messages.Enabled")) {
-							Bukkit.getPlayer(p).sendMessage(pl.getConfig().getString("Config.Messages.Nick Name Set").replace("[NAME]", nick).replace("&", "§"));
-						}
-						if(pl.getConfig().getBoolean("Config.Nicked Actionbar")) {
-							NickAPI.endActionBar(p);
-							NickAPI.sendActionBar(p, pl.getConfig().getString("Config.Messages.Nicked Actionbar").replace("[NAME]", nick).replace("&", "§"));
-						}
 					} else {
 						setRandomNickName(p, nameprefix, nametagprefix, tablistprefix);
 					}
@@ -128,9 +126,10 @@ public class v1_8_R3 implements Listener {
 		List names = pl.getConfig().getStringList("Config.Names");
 		Random r = new Random();
 		int i = r.nextInt(names.size());
+		Bukkit.getPluginManager().callEvent(new PlayerNickEvent(Bukkit.getPlayer(p), names.get(i).toString()));
 		if(NickAPI.NickedPlayerExists(p)) {
 			if(names.get(i).toString().length() <= 14) {
-				if(!blacklist.contains(names.get(i))) {
+				if(!blacklist.contains(names.get(i).toString())) {
 					if(!NickAPI.isNickNameUsed(names.get(i).toString())) {
 						if(pl.nickedPlayers.contains(nameprefix + names.get(i).toString())) {
 							pl.nickedPlayers.remove(nameprefix + names.get(i).toString());
@@ -170,13 +169,6 @@ public class v1_8_R3 implements Listener {
 							NickedPlayers.cfg.set("NickedPlayers." + p + ".Nicked", true);
 							NickedPlayers.saveFile();
 						}
-						if(pl.getConfig().getBoolean("Config.Messages.Enabled")) {
-							Bukkit.getPlayer(p).sendMessage(pl.getConfig().getString("Config.Messages.Nick Name Set").replace("[NAME]", names.get(i).toString()).replace("&", "§"));
-						}
-						if(pl.getConfig().getBoolean("Config.Nicked Actionbar")) {
-							NickAPI.endActionBar(p);
-							NickAPI.sendActionBar(p, pl.getConfig().getString("Config.Messages.Nicked Actionbar").replace("[NAME]", names.get(i).toString()).replace("&", "§"));
-						}
 					} else {
 						setRandomNickName(p, nameprefix, nametagprefix, tablistprefix);
 					}
@@ -193,6 +185,7 @@ public class v1_8_R3 implements Listener {
 		}
 	}
 	public static void UnNick(UUID p) {
+		Bukkit.getPluginManager().callEvent(new PlayerUnNickEvent(Bukkit.getPlayer(p)));
 		if(pl.nickedPlayers.contains(Bukkit.getPlayer(p).getDisplayName())) {
 			pl.nickedPlayers.remove(Bukkit.getPlayer(p).getDisplayName());
 		}
@@ -228,12 +221,6 @@ public class v1_8_R3 implements Listener {
 				NickedPlayers.cfg.set("NickedPlayers." + p + ".Nicked", false);
 				NickedPlayers.saveFile();
 			}
-			if(pl.getConfig().getBoolean("Config.Messages.Enabled")) {
-				Bukkit.getPlayer(p).sendMessage(pl.getConfig().getString("Config.Messages.Nick Name Removed").replace("&", "§"));
-			}
-			if(pl.getConfig().getBoolean("Config.Nicked Actionbar")) {
-				NickAPI.endActionBar(p);
-			}
 		} else {
 			NickAPI.createNickedPlayer(p);
 			UnNick(p);
@@ -242,6 +229,7 @@ public class v1_8_R3 implements Listener {
 	public static void setSkin(UUID p, String pskin) {
 		CraftPlayer cp = (CraftPlayer) Bukkit.getPlayer(p);
 		GameProfile profile = GameProfileBuilder.fetch(UUIDFetcher.getUUID(pskin));
+		Bukkit.getPluginManager().callEvent(new PlayerSkinSetEvent(Bukkit.getPlayer(p), pskin));
 		Collection<Property> properties = profile.getProperties().get("textures");
 		cp.getProfile().getProperties().removeAll("textures");
 		cp.getProfile().getProperties().putAll("textures", properties);
@@ -274,9 +262,6 @@ public class v1_8_R3 implements Listener {
 				}
 			}, 4);
 		}
-		if(pl.getConfig().getBoolean("Config.Messages.Enabled")) {
-			Bukkit.getPlayer(p).sendMessage(pl.getConfig().getString("Config.Messages.Skin Set").replace("&", "§"));
-		}
 	}
 	public static void setRandomSkin(UUID p) {
 		CraftPlayer cp = (CraftPlayer) Bukkit.getPlayer(p);
@@ -285,6 +270,7 @@ public class v1_8_R3 implements Listener {
 		List skins = pl.getConfig().getStringList("Config.Skins");
 		Random r = new Random();
 		int i = r.nextInt(skins.size());
+		Bukkit.getPluginManager().callEvent(new PlayerSkinSetEvent(Bukkit.getPlayer(p), skins.get(i).toString()));
 		profile = GameProfileBuilder.fetch(UUIDFetcher.getUUID(skins.get(i).toString()));
 		Collection<Property> properties = profile.getProperties().get("textures");
 		cp.getProfile().getProperties().removeAll("textures");
@@ -318,13 +304,11 @@ public class v1_8_R3 implements Listener {
 				}
 			}, 4);
 		}
-		if(pl.getConfig().getBoolean("Config.Messages.Enabled")) {
-			Bukkit.getPlayer(p).sendMessage(pl.getConfig().getString("Config.Messages.Skin Set").replace("&", "§"));
-		}
 	}
 	public static void resetSkin(UUID p) {
 		CraftPlayer cp = (CraftPlayer) Bukkit.getPlayer(p);
 		GameProfile profile = cp.getProfile();
+		Bukkit.getPluginManager().callEvent(new PlayerSkinResetEvent(Bukkit.getPlayer(p)));
 		if(NickAPI.NickedPlayerExists(p)) {
 			profile = GameProfileBuilder.fetch(UUIDFetcher.getUUID(NickAPI.getNickName(p)));
 			Collection<Property> properties = profile.getProperties().get("textures");
@@ -359,19 +343,20 @@ public class v1_8_R3 implements Listener {
 					}
 				}, 4);
 			}
-			if(pl.getConfig().getBoolean("Config.Messages.Enabled")) {
-				Bukkit.getPlayer(p).sendMessage(pl.getConfig().getString("Config.Messages.Skin Removed").replace("&", "§"));
-			}
 		} else {
 			NickAPI.createNickedPlayer(p);
 			resetSkin(p);
 		}
 	}
 	public static void sendActionBar(UUID p, String msg) {
-	    PlayerConnection Connection = ((CraftPlayer)Bukkit.getPlayer(p)).getHandle().playerConnection;
-	    IChatBaseComponent ABchat = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + msg + "\"}");
-	    PacketPlayOutChat ABpacket = new PacketPlayOutChat(ABchat, (byte)2);
-	    Connection.sendPacket(ABpacket);
+		if(Bukkit.getPlayer(p) != null) {
+			PlayerConnection Connection = ((CraftPlayer)Bukkit.getPlayer(p)).getHandle().playerConnection;
+			IChatBaseComponent ABchat = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + msg + "\"}");
+			PacketPlayOutChat ABpacket = new PacketPlayOutChat(ABchat, (byte)2);
+			Connection.sendPacket(ABpacket); 
+		} else {
+			NickAPI.endActionBar(p);
+		}
 	}
 	private static void spawn(UUID p) {
 		CraftPlayer cp = (CraftPlayer) Bukkit.getPlayer(p);
