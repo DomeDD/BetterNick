@@ -31,7 +31,7 @@ import BetterNick.Versions.v1_9_R2;
 
 public class NickAPI implements Listener {
 	
-	public static HashMap<Player, Integer> taskID = new HashMap<Player, Integer>();
+	private static HashMap<Player, Integer> taskID = new HashMap<Player, Integer>();
 	private static Main pl;
 	@SuppressWarnings("static-access")
 	public NickAPI(Main main) {
@@ -122,7 +122,7 @@ public class NickAPI implements Listener {
 		if(Bukkit.getVersion().contains("(MC: 1.11)") || Bukkit.getVersion().contains("(MC: 1.11.1)") || Bukkit.getVersion().contains("(MC: 1.11.2)")) {
 			v1_11_R1.setNickName(p, nick, nameprefix, nametagprefix, tablistprefix);
 		}
-		if(Bukkit.getVersion().contains("(MC: 1.12)")) {
+		if(Bukkit.getVersion().contains("(MC: 1.12)") || Bukkit.getVersion().contains("(MC: 1.12.1)")) {
 			v1_12_R1.setNickName(p, nick, nameprefix, nametagprefix, tablistprefix);
 		}
 	}
@@ -145,7 +145,7 @@ public class NickAPI implements Listener {
 		if(Bukkit.getVersion().contains("(MC: 1.11)") || Bukkit.getVersion().contains("(MC: 1.11.1)") || Bukkit.getVersion().contains("(MC: 1.11.2)")) {
 			v1_11_R1.setRandomNickName(p, nameprefix, nametagprefix, tablistprefix);
 		}
-		if(Bukkit.getVersion().contains("(MC: 1.12)")) {
+		if(Bukkit.getVersion().contains("(MC: 1.12)") || Bukkit.getVersion().contains("(MC: 1.12.1)")) {
 			v1_12_R1.setRandomNickName(p, nameprefix, nametagprefix, tablistprefix);
 		}
 	}
@@ -168,7 +168,7 @@ public class NickAPI implements Listener {
 		if(Bukkit.getVersion().contains("(MC: 1.11)") || Bukkit.getVersion().contains("(MC: 1.11.1)") || Bukkit.getVersion().contains("(MC: 1.11.2)")) {
 			v1_11_R1.UnNick(p);
 		}
-		if(Bukkit.getVersion().contains("(MC: 1.12)")) {
+		if(Bukkit.getVersion().contains("(MC: 1.12)") || Bukkit.getVersion().contains("(MC: 1.12.1)")) {
 			v1_12_R1.UnNick(p);
 		}
 	}
@@ -191,7 +191,7 @@ public class NickAPI implements Listener {
 		if(Bukkit.getVersion().contains("(MC: 1.11)") || Bukkit.getVersion().contains("(MC: 1.11.1)") || Bukkit.getVersion().contains("(MC: 1.11.2)")) {
 			v1_11_R1.setSkin(p, pskin);
 		}
-		if(Bukkit.getVersion().contains("(MC: 1.12)")) {
+		if(Bukkit.getVersion().contains("(MC: 1.12)") || Bukkit.getVersion().contains("(MC: 1.12.1)")) {
 			v1_12_R1.setSkin(p, pskin);
 		}
 	}
@@ -214,7 +214,7 @@ public class NickAPI implements Listener {
 		if(Bukkit.getVersion().contains("(MC: 1.11)") || Bukkit.getVersion().contains("(MC: 1.11.1)") || Bukkit.getVersion().contains("(MC: 1.11.2)")) {
 			v1_11_R1.setRandomSkin(p);
 		}
-		if(Bukkit.getVersion().contains("(MC: 1.12)")) {
+		if(Bukkit.getVersion().contains("(MC: 1.12)") || Bukkit.getVersion().contains("(MC: 1.12.1)")) {
 			v1_12_R1.setRandomSkin(p);
 		}
 	}
@@ -237,7 +237,7 @@ public class NickAPI implements Listener {
 		if(Bukkit.getVersion().contains("(MC: 1.11)") || Bukkit.getVersion().contains("(MC: 1.11.1)") || Bukkit.getVersion().contains("(MC: 1.11.2)")) {
 			v1_11_R1.resetSkin(p);
 		}
-		if(Bukkit.getVersion().contains("(MC: 1.12)")) {
+		if(Bukkit.getVersion().contains("(MC: 1.12)") || Bukkit.getVersion().contains("(MC: 1.12.1)")) {
 			v1_12_R1.resetSkin(p);
 		}
 	}
@@ -303,7 +303,7 @@ public class NickAPI implements Listener {
 		}
 		return used;
 	}
-	public static void sendActionBar(UUID p, String msg){
+	public static void sendActionBar(UUID p, String msg) {
 		int tid = 0;
 		tid = Bukkit.getScheduler().scheduleSyncRepeatingTask(pl, new Runnable() {
 			@Override
@@ -326,14 +326,14 @@ public class NickAPI implements Listener {
 				if(Bukkit.getVersion().contains("(MC: 1.11)") || Bukkit.getVersion().contains("(MC: 1.11.1)") || Bukkit.getVersion().contains("(MC: 1.11.2)")) {
 					v1_11_R1.sendActionBar(p, msg);
 				}
-				if(Bukkit.getVersion().contains("(MC: 1.12)")) {
+				if(Bukkit.getVersion().contains("(MC: 1.12)") || Bukkit.getVersion().contains("(MC: 1.12.1)")) {
 					v1_12_R1.sendActionBar(p, msg);
 				}
 			}
 		}, 0, 40);
 		taskID.put(Bukkit.getPlayer(p), tid);
 	}
-	public static void endActionBar(UUID p){
+	public static void endActionBar(UUID p) {
 		if(taskID.containsKey(Bukkit.getPlayer(p))) {
 			int tid = taskID.get(Bukkit.getPlayer(p));
 			pl.getServer().getScheduler().cancelTask(tid);
