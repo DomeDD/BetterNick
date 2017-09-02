@@ -97,12 +97,22 @@ public class v1_8_R2 implements Listener {
 							}
 						}
 						if(NickAPI.MySQLEnabled()) {
-							MySQL_Connection.update("UPDATE BetterNick SET NICKNAME='" + nick + "' WHERE UUID='" + p + "'");
-							MySQL_Connection.update("UPDATE BetterNick SET NICKED='true' WHERE UUID='" + p + "'");
+							Bukkit.getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
+								@Override
+								public void run() {
+									MySQL_Connection.update("UPDATE BetterNick SET NICKNAME='" + nick + "' WHERE UUID='" + p + "'");
+									MySQL_Connection.update("UPDATE BetterNick SET NICKED='true' WHERE UUID='" + p + "'");
+								}
+							}, 2);
 						} else {
-							NickedPlayers.cfg.set("NickedPlayers." + p + ".NickName", nick);
-							NickedPlayers.cfg.set("NickedPlayers." + p + ".Nicked", true);
-							NickedPlayers.saveFile();
+							Bukkit.getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
+								@Override
+								public void run() {
+									NickedPlayers.cfg.set("NickedPlayers." + p + ".NickName", nick);
+									NickedPlayers.cfg.set("NickedPlayers." + p + ".Nicked", true);
+									NickedPlayers.saveFile();
+								}
+							}, 2);
 						}
 					} else {
 						setRandomNickName(p, nameprefix, nametagprefix, tablistprefix);
@@ -162,12 +172,22 @@ public class v1_8_R2 implements Listener {
 							}
 						}
 						if(NickAPI.MySQLEnabled()) {
-							MySQL_Connection.update("UPDATE BetterNick SET NICKNAME='" + names.get(i) + "' WHERE UUID='" + p + "'");
-							MySQL_Connection.update("UPDATE BetterNick SET NICKED='true' WHERE UUID='" + p + "'");
+							Bukkit.getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
+								@Override
+								public void run() {
+									MySQL_Connection.update("UPDATE BetterNick SET NICKNAME='" + names.get(i).toString() + "' WHERE UUID='" + p + "'");
+									MySQL_Connection.update("UPDATE BetterNick SET NICKED='true' WHERE UUID='" + p + "'");
+								}
+							}, 2);
 						} else {
-							NickedPlayers.cfg.set("NickedPlayers." + p + ".NickName", names.get(i));
-							NickedPlayers.cfg.set("NickedPlayers." + p + ".Nicked", true);
-							NickedPlayers.saveFile();
+							Bukkit.getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
+								@Override
+								public void run() {
+									NickedPlayers.cfg.set("NickedPlayers." + p + ".NickName", names.get(i).toString());
+									NickedPlayers.cfg.set("NickedPlayers." + p + ".Nicked", true);
+									NickedPlayers.saveFile();
+								}
+							}, 2);
 						}
 					} else {
 						setRandomNickName(p, nameprefix, nametagprefix, tablistprefix);
