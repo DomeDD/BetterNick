@@ -44,7 +44,7 @@ public class NickAPI implements Listener {
 		String name = "";
 		if(MySQLEnabled()) {
 			try {
-				ResultSet rs = MySQL_Connection.Result("SELECT * FROM BetterNick WHERE UUID='" + p + "'");
+				ResultSet rs = MySQL_Connection.Result("SELECT NICKNAME FROM BetterNick WHERE UUID='" + p + "'");
 				if(rs.next() && rs.getString("NICKNAME") == null);
 				name = rs.getString("NICKNAME");
 			} catch(SQLException e) {
@@ -59,7 +59,7 @@ public class NickAPI implements Listener {
 		String name = "";
 		if(MySQLEnabled()) {
 			try {
-				ResultSet rs = MySQL_Connection.Result("SELECT * FROM BetterNick WHERE UUID='" + p + "'");
+				ResultSet rs = MySQL_Connection.Result("SELECT NAME FROM BetterNick WHERE UUID='" + p + "'");
 				if(rs.next() && rs.getString("NAME") == null);
 				name = rs.getString("NAME");
 			} catch(SQLException e) {
@@ -74,7 +74,7 @@ public class NickAPI implements Listener {
 		boolean exists = false;
 		if(MySQLEnabled()) {
 			try {
-		    	ResultSet rs = MySQL_Connection.Result("SELECT * FROM BetterNick WHERE UUID='" + p + "'");
+		    	ResultSet rs = MySQL_Connection.Result("SELECT NAME FROM BetterNick WHERE UUID='" + p + "'");
 		    	if (rs.next()) {
 		    		exists = true;
 		    	} else {
