@@ -40,41 +40,44 @@ public class NickAPI implements Listener {
 	public static boolean MySQLEnabled() {
 		return pl.getConfig().getBoolean("Config.MySQL");
 	}
-	public static String getNickName(UUID p) {
+	public static String getNickName(Player p) {
+		UUID uuid = p.getUniqueId();
 		String name = "";
 		if(MySQLEnabled()) {
 			try {
-				ResultSet rs = MySQL_Connection.Result("SELECT NICKNAME FROM BetterNick WHERE UUID='" + p + "'");
+				ResultSet rs = MySQL_Connection.Result("SELECT NICKNAME FROM BetterNick WHERE UUID='" + uuid + "'");
 				if(rs.next() && rs.getString("NICKNAME") == null);
 				name = rs.getString("NICKNAME");
 			} catch(SQLException e) {
 				e.printStackTrace();
 			}
 		} else {
-			name = NickedPlayers.cfg.getString("NickedPlayers." + p + ".NickName");
+			name = NickedPlayers.cfg.getString("NickedPlayers." + uuid + ".NickName");
 		}
 		return name;
 	}
-	public static String getRealName(UUID p) {
+	public static String getRealName(Player p) {
+		UUID uuid = p.getUniqueId();
 		String name = "";
 		if(MySQLEnabled()) {
 			try {
-				ResultSet rs = MySQL_Connection.Result("SELECT NAME FROM BetterNick WHERE UUID='" + p + "'");
+				ResultSet rs = MySQL_Connection.Result("SELECT NAME FROM BetterNick WHERE UUID='" + uuid + "'");
 				if(rs.next() && rs.getString("NAME") == null);
 				name = rs.getString("NAME");
 			} catch(SQLException e) {
 				e.printStackTrace();
 			}
 		} else {
-			name = NickedPlayers.cfg.getString("NickedPlayers." + p + ".Name");
+			name = NickedPlayers.cfg.getString("NickedPlayers." + uuid + ".Name");
 		}
 		return name;
 	}
-	public static boolean NickedPlayerExists(UUID p) {
+	public static boolean NickedPlayerExists(Player p) {
+		UUID uuid = p.getUniqueId();
 		boolean exists = false;
 		if(MySQLEnabled()) {
 			try {
-		    	ResultSet rs = MySQL_Connection.Result("SELECT NAME FROM BetterNick WHERE UUID='" + p + "'");
+		    	ResultSet rs = MySQL_Connection.Result("SELECT NAME FROM BetterNick WHERE UUID='" + uuid + "'");
 		    	if (rs.next()) {
 		    		exists = true;
 		    	} else {
@@ -84,26 +87,27 @@ public class NickAPI implements Listener {
 		    	e.printStackTrace();
 		    }
 		} else {
-			if(NickedPlayers.cfg.contains("NickedPlayers." + p)) {
+			if(NickedPlayers.cfg.contains("NickedPlayers." + uuid)) {
 				exists = true;
 			}
 		}
 	    return exists;
 	}
-	public static void createNickedPlayer(UUID p) {
+	public static void createNickedPlayer(Player p) {
+		UUID uuid = p.getUniqueId();
 		if(!NickedPlayerExists(p)) {
 			if(MySQLEnabled()) {
-				MySQL_Connection.update("INSERT INTO BetterNick (UUID, NAME, NICKNAME, NICKED, AUTONICK) VALUES ('" + p + "', '" + Bukkit.getPlayer(p).getName() + "', '" + Bukkit.getPlayer(p).getName() + "', 'false', 'false');");
+				MySQL_Connection.update("INSERT INTO BetterNick (UUID, NAME, NICKNAME, NICKED, AUTONICK) VALUES ('" + uuid + "', '" + p.getName() + "', '" + p.getName() + "', 'false', 'false');");
 			} else {
-				NickedPlayers.cfg.set("NickedPlayers." + p + ".Name", Bukkit.getPlayer(p).getName());
-				NickedPlayers.cfg.set("NickedPlayers." + p + ".NickName", Bukkit.getPlayer(p).getName());
+				NickedPlayers.cfg.set("NickedPlayers." + p + ".Name", p.getName());
+				NickedPlayers.cfg.set("NickedPlayers." + p + ".NickName", p.getName());
 				NickedPlayers.cfg.set("NickedPlayers." + p + ".Nicked", false);
 				NickedPlayers.cfg.set("NickedPlayers." + p + ".AutoNick", false);
 				NickedPlayers.saveFile();
 			}
 		}
 	}
-	public static void setNickName(UUID p, String nick, String nameprefix, String nametagprefix, String tablistprefix) {
+	public static void setNickName(Player p, String nick, String nameprefix, String nametagprefix, String tablistprefix) {
 		if(Bukkit.getVersion().contains("(MC: 1.8.3)")) {
 			v1_8_R2.setNickName(p, nick, nameprefix, nametagprefix, tablistprefix);
 		}
@@ -122,11 +126,11 @@ public class NickAPI implements Listener {
 		if(Bukkit.getVersion().contains("(MC: 1.11)") || Bukkit.getVersion().contains("(MC: 1.11.1)") || Bukkit.getVersion().contains("(MC: 1.11.2)")) {
 			v1_11_R1.setNickName(p, nick, nameprefix, nametagprefix, tablistprefix);
 		}
-		if(Bukkit.getVersion().contains("(MC: 1.12)") || Bukkit.getVersion().contains("(MC: 1.12.1)")) {
+		if(Bukkit.getVersion().contains("(MC: 1.12)") || Bukkit.getVersion().contains("(MC: 1.12.1)") || Bukkit.getVersion().contains("(MC: 1.12.2)")) {
 			v1_12_R1.setNickName(p, nick, nameprefix, nametagprefix, tablistprefix);
 		}
 	}
-	public static void setRandomNickName(UUID p, String nameprefix, String nametagprefix, String tablistprefix) {
+	public static void setRandomNickName(Player p, String nameprefix, String nametagprefix, String tablistprefix) {
 		if(Bukkit.getVersion().contains("(MC: 1.8.3)")) {
 			v1_8_R2.setRandomNickName(p, nameprefix, nametagprefix, tablistprefix);
 		}
@@ -145,11 +149,11 @@ public class NickAPI implements Listener {
 		if(Bukkit.getVersion().contains("(MC: 1.11)") || Bukkit.getVersion().contains("(MC: 1.11.1)") || Bukkit.getVersion().contains("(MC: 1.11.2)")) {
 			v1_11_R1.setRandomNickName(p, nameprefix, nametagprefix, tablistprefix);
 		}
-		if(Bukkit.getVersion().contains("(MC: 1.12)") || Bukkit.getVersion().contains("(MC: 1.12.1)")) {
+		if(Bukkit.getVersion().contains("(MC: 1.12)") || Bukkit.getVersion().contains("(MC: 1.12.1)") || Bukkit.getVersion().contains("(MC: 1.12.2)")) {
 			v1_12_R1.setRandomNickName(p, nameprefix, nametagprefix, tablistprefix);
 		}
 	}
-	public static void UnNick(UUID p) {
+	public static void UnNick(Player p) {
 		if(Bukkit.getVersion().contains("(MC: 1.8.3)")) {
 			v1_8_R2.UnNick(p);
 		}
@@ -168,11 +172,11 @@ public class NickAPI implements Listener {
 		if(Bukkit.getVersion().contains("(MC: 1.11)") || Bukkit.getVersion().contains("(MC: 1.11.1)") || Bukkit.getVersion().contains("(MC: 1.11.2)")) {
 			v1_11_R1.UnNick(p);
 		}
-		if(Bukkit.getVersion().contains("(MC: 1.12)") || Bukkit.getVersion().contains("(MC: 1.12.1)")) {
+		if(Bukkit.getVersion().contains("(MC: 1.12)") || Bukkit.getVersion().contains("(MC: 1.12.1)") || Bukkit.getVersion().contains("(MC: 1.12.2)")) {
 			v1_12_R1.UnNick(p);
 		}
 	}
-	public static void setSkin(UUID p, String pskin) {
+	public static void setSkin(Player p, String pskin) {
 		if(Bukkit.getVersion().contains("(MC: 1.8.3)")) {
 			v1_8_R2.setSkin(p, pskin);
 		}
@@ -191,11 +195,11 @@ public class NickAPI implements Listener {
 		if(Bukkit.getVersion().contains("(MC: 1.11)") || Bukkit.getVersion().contains("(MC: 1.11.1)") || Bukkit.getVersion().contains("(MC: 1.11.2)")) {
 			v1_11_R1.setSkin(p, pskin);
 		}
-		if(Bukkit.getVersion().contains("(MC: 1.12)") || Bukkit.getVersion().contains("(MC: 1.12.1)")) {
+		if(Bukkit.getVersion().contains("(MC: 1.12)") || Bukkit.getVersion().contains("(MC: 1.12.1)") || Bukkit.getVersion().contains("(MC: 1.12.2)")) {
 			v1_12_R1.setSkin(p, pskin);
 		}
 	}
-	public static void setRandomSkin(UUID p) {
+	public static void setRandomSkin(Player p) {
 		if(Bukkit.getVersion().contains("(MC: 1.8.3)")) {
 			v1_8_R2.setRandomSkin(p);
 		}
@@ -214,11 +218,11 @@ public class NickAPI implements Listener {
 		if(Bukkit.getVersion().contains("(MC: 1.11)") || Bukkit.getVersion().contains("(MC: 1.11.1)") || Bukkit.getVersion().contains("(MC: 1.11.2)")) {
 			v1_11_R1.setRandomSkin(p);
 		}
-		if(Bukkit.getVersion().contains("(MC: 1.12)") || Bukkit.getVersion().contains("(MC: 1.12.1)")) {
+		if(Bukkit.getVersion().contains("(MC: 1.12)") || Bukkit.getVersion().contains("(MC: 1.12.1)") || Bukkit.getVersion().contains("(MC: 1.12.2)")) {
 			v1_12_R1.setRandomSkin(p);
 		}
 	}
-	public static void resetSkin(UUID p) {
+	public static void resetSkin(Player p) {
 		if(Bukkit.getVersion().contains("(MC: 1.8.3)")) {
 			v1_8_R2.resetSkin(p);
 		}
@@ -237,23 +241,25 @@ public class NickAPI implements Listener {
 		if(Bukkit.getVersion().contains("(MC: 1.11)") || Bukkit.getVersion().contains("(MC: 1.11.1)") || Bukkit.getVersion().contains("(MC: 1.11.2)")) {
 			v1_11_R1.resetSkin(p);
 		}
-		if(Bukkit.getVersion().contains("(MC: 1.12)") || Bukkit.getVersion().contains("(MC: 1.12.1)")) {
+		if(Bukkit.getVersion().contains("(MC: 1.12)") || Bukkit.getVersion().contains("(MC: 1.12.1)") || Bukkit.getVersion().contains("(MC: 1.12.2)")) {
 			v1_12_R1.resetSkin(p);
 		}
 	}
-	public static void autoNick(UUID p, boolean autonick) {
+	public static void autoNick(Player p, boolean autonick) {
+		UUID uuid = p.getUniqueId();
 		if(MySQLEnabled()) {
-			MySQL_Connection.update("UPDATE BetterNick SET AUTONICK='" + autonick + "' WHERE UUID='" + p + "'");
+			MySQL_Connection.update("UPDATE BetterNick SET AUTONICK='" + autonick + "' WHERE UUID='" + uuid + "'");
 		} else {
-			NickedPlayers.cfg.set("NickedPlayers." + p + ".AutoNick", autonick);
+			NickedPlayers.cfg.set("NickedPlayers." + uuid + ".AutoNick", autonick);
 			NickedPlayers.saveFile();
 		}
 	}
-	public static boolean autoNick(UUID p) {
+	public static boolean autoNick(Player p) {
+		UUID uuid = p.getUniqueId();
 		boolean autoNick = false;
 		if(MySQLEnabled()) {
 			try {
-				ResultSet rs = MySQL_Connection.Result("SELECT * FROM BetterNick WHERE UUID='" + p + "'");
+				ResultSet rs = MySQL_Connection.Result("SELECT * FROM BetterNick WHERE UUID='" + uuid + "'");
 				if(rs.next()) {
 					autoNick = rs.getBoolean("AUTONICK");
 				}
@@ -261,15 +267,16 @@ public class NickAPI implements Listener {
 				e.printStackTrace();
 			}
 		} else {
-			autoNick = NickedPlayers.cfg.getBoolean("NickedPlayers." + p + ".AutoNick");
+			autoNick = NickedPlayers.cfg.getBoolean("NickedPlayers." + uuid + ".AutoNick");
 		}
 		return autoNick;
 	}
-	public static boolean isNicked(UUID p) {
+	public static boolean isNicked(Player p) {
+		UUID uuid = p.getUniqueId();
 		boolean nicked = false;
 		if(MySQLEnabled()) {
 			try {
-				ResultSet rs = MySQL_Connection.Result("SELECT * FROM BetterNick WHERE UUID='" + p + "'");
+				ResultSet rs = MySQL_Connection.Result("SELECT * FROM BetterNick WHERE UUID='" + uuid + "'");
 				if(rs.next()) {
 					nicked = rs.getBoolean("NICKED");
 				}
@@ -277,7 +284,7 @@ public class NickAPI implements Listener {
 				e.printStackTrace();
 			}
 		} else {
-			nicked = NickedPlayers.cfg.getBoolean("NickedPlayers." + p + ".Nicked");
+			nicked = NickedPlayers.cfg.getBoolean("NickedPlayers." + uuid + ".Nicked");
 		}
 		return nicked;
 	}
@@ -303,7 +310,7 @@ public class NickAPI implements Listener {
 		}
 		return used;
 	}
-	public static void sendActionBar(UUID p, String msg) {
+	public static void sendActionBar(Player p, String msg) {
 		int tid = 0;
 		tid = Bukkit.getScheduler().scheduleSyncRepeatingTask(pl, new Runnable() {
 			@Override
@@ -326,18 +333,18 @@ public class NickAPI implements Listener {
 				if(Bukkit.getVersion().contains("(MC: 1.11)") || Bukkit.getVersion().contains("(MC: 1.11.1)") || Bukkit.getVersion().contains("(MC: 1.11.2)")) {
 					v1_11_R1.sendActionBar(p, msg);
 				}
-				if(Bukkit.getVersion().contains("(MC: 1.12)") || Bukkit.getVersion().contains("(MC: 1.12.1)")) {
+				if(Bukkit.getVersion().contains("(MC: 1.12)") || Bukkit.getVersion().contains("(MC: 1.12.1)") || Bukkit.getVersion().contains("(MC: 1.12.2)")) {
 					v1_12_R1.sendActionBar(p, msg);
 				}
 			}
 		}, 0, 40);
-		taskID.put(Bukkit.getPlayer(p), tid);
+		taskID.put(p, tid);
 	}
-	public static void endActionBar(UUID p) {
-		if(taskID.containsKey(Bukkit.getPlayer(p))) {
-			int tid = taskID.get(Bukkit.getPlayer(p));
+	public static void endActionBar(Player p) {
+		if(taskID.containsKey(p)) {
+			int tid = taskID.get(p);
 			pl.getServer().getScheduler().cancelTask(tid);
-			taskID.remove(Bukkit.getPlayer(p));
+			taskID.remove(p);
 		}
 	}
 }
