@@ -33,7 +33,7 @@ public class RealNameCMD implements CommandExecutor {
 				if(p.hasPermission("BetterNick.RealName")) {
 					Player t = Bukkit.getPlayer(args[0]);
 					if(t != null) {
-						p.sendMessage(pl.getConfig().getString("Config.Messages.See Real Name").replace("[PLAYER]", t.getDisplayName()).replace("[NAME]", NickAPI.getRealName(t.getUniqueId())).replace("&", "§"));
+						p.sendMessage(pl.getConfig().getString("Config.Messages.See Real Name").replace("[PLAYER]", t.getDisplayName()).replace("[NAME]", NickAPI.getRealName(t)).replace("&", "§"));
 					} else {
 						p.sendMessage(pl.getConfig().getString("Config.Messages.See Real Name Error").replace("&", "§"));
 					}
@@ -43,7 +43,7 @@ public class RealNameCMD implements CommandExecutor {
 			if(args.length == 1) {
 				Player t = Bukkit.getPlayer(args[0]);
 				if(t != null) {
-					Bukkit.getConsoleSender().sendMessage(pl.getConfig().getString("Config.Messages.See Real Name").replace("[PLAYER]", t.getDisplayName()).replace("[NAME]", NickAPI.getRealName(t.getUniqueId())).replace("&", "§"));
+					Bukkit.getConsoleSender().sendMessage(pl.getConfig().getString("Config.Messages.See Real Name").replace("[PLAYER]", t.getDisplayName()).replace("[NAME]", NickAPI.getRealName(t)).replace("&", "§"));
 				} else {
 					Bukkit.getConsoleSender().sendMessage(pl.getConfig().getString("Config.Messages.See Real Name Error").replace("&", "§"));
 				}

@@ -16,6 +16,7 @@ import org.bukkit.entity.Player;
 
 import BetterNick.Main;
 import BetterNick.API.NickAPI;
+import BetterNick.Versions.v1_12_R1;
 
 public class NickCMD implements CommandExecutor {
 
@@ -32,8 +33,8 @@ public class NickCMD implements CommandExecutor {
 					String nameprefix = pl.getConfig().getString("Config.Display Name Prefix").replace("&", "§");
 					String nametagprefix = pl.getConfig().getString("Config.Name Tag Prefix").replace("&", "§");
 					String tablistprefix = pl.getConfig().getString("Config.Tablist Name Prefix").replace("&", "§");
-					NickAPI.setRandomNickName(p.getUniqueId(), nameprefix, nametagprefix, tablistprefix);
-					NickAPI.setRandomSkin(p.getUniqueId());
+					v1_12_R1.setRandomNickName(p, nameprefix, nametagprefix, tablistprefix);
+					v1_12_R1.setRandomSkin(p);
 				}
 			}
 			if(args.length == 1) {
@@ -41,8 +42,8 @@ public class NickCMD implements CommandExecutor {
 					String nameprefix = pl.getConfig().getString("Config.Display Name Prefix").replace("&", "§");
 					String nametagprefix = pl.getConfig().getString("Config.Name Tag Prefix").replace("&", "§");
 					String tablistprefix = pl.getConfig().getString("Config.Tablist Name Prefix").replace("&", "§");
-					NickAPI.setNickName(p.getUniqueId(), args[0], nameprefix, nametagprefix, tablistprefix);
-					NickAPI.setRandomSkin(p.getUniqueId());
+					NickAPI.setNickName(p, args[0], nameprefix, nametagprefix, tablistprefix);
+					NickAPI.setRandomSkin(p);
 				}
 			}
 		}

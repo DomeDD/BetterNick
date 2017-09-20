@@ -24,12 +24,12 @@ public class SkinCMD implements CommandExecutor {
 			Player p = (Player) sender;
 			if(args.length == 0) {
 				if(p.hasPermission("BetterNick.RandomSkin")) {
-					NickAPI.setRandomSkin(p.getUniqueId());
+					NickAPI.setRandomSkin(p);
 				}
 			}
 			if(args.length == 1) {
 				if(p.hasPermission("BetterNick.Skin")) {
-					NickAPI.setSkin(p.getUniqueId(), args[0]);
+					NickAPI.setSkin(p, args[0]);
 				}
 			}
 		}

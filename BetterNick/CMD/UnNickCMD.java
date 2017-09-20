@@ -30,11 +30,11 @@ public class UnNickCMD implements CommandExecutor {
 			Player p = (Player) sender;
 			if(args.length == 0) {
 				if(p.hasPermission("BetterNick.UnNick")) {
-					if(NickAPI.isNicked(p.getUniqueId())) {
-						NickAPI.UnNick(p.getUniqueId());
-						NickAPI.resetSkin(p.getUniqueId());
+					if(NickAPI.isNicked(p)) {
+						NickAPI.UnNick(p);
+						NickAPI.resetSkin(p);
 					} else {
-						NickAPI.resetSkin(p.getUniqueId());
+						NickAPI.resetSkin(p);
 					}
 				}
 			}
@@ -42,11 +42,11 @@ public class UnNickCMD implements CommandExecutor {
 			if(args.length == 1) {
 				Player t = Bukkit.getPlayer(args[0]);
 				if(t != null) {
-					if(NickAPI.isNicked(t.getUniqueId())) {
-						NickAPI.UnNick(t.getUniqueId());
-						NickAPI.resetSkin(t.getUniqueId());
+					if(NickAPI.isNicked(t)) {
+						NickAPI.UnNick(t);
+						NickAPI.resetSkin(t);
 					} else {
-						NickAPI.resetSkin(t.getUniqueId());
+						NickAPI.resetSkin(t);
 					}
 				} else {
 					Bukkit.getConsoleSender().sendMessage(pl.getConfig().getString("Config.Messages.See Real Name Error").replace("&", "§"));
