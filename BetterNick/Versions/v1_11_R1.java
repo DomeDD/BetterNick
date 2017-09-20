@@ -13,7 +13,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
-import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -57,11 +56,11 @@ public class v1_11_R1 implements Listener {
 	private static HashMap<Player, Integer> food = new HashMap<Player, Integer>();
 	private static HashMap<Player, Location> location = new HashMap<Player, Location>();
 	
-	public static void setNickName(UUID p, String nick, String nameprefix, String nametagprefix, String tablistprefix) {
-		CraftPlayer cp = (CraftPlayer) Bukkit.getPlayer(p);
+	public static void setNickName(Player p, String nick, String nameprefix, String nametagprefix, String tablistprefix) {
+		CraftPlayer cp = (CraftPlayer) p;
 		@SuppressWarnings("rawtypes")
 		List blacklist = pl.getConfig().getStringList("Config.Names Black List");
-		Bukkit.getPluginManager().callEvent(new PlayerNickEvent(Bukkit.getPlayer(p), nick));
+		Bukkit.getPluginManager().callEvent(new PlayerNickEvent(p, nick));
 		if(NickAPI.NickedPlayerExists(p)) {
 			if(nick.length() <= 14) {
 				if(!blacklist.contains(nick)) {
@@ -77,66 +76,66 @@ public class v1_11_R1 implements Listener {
 						} catch (IllegalArgumentException | IllegalAccessException e) {
 							e.printStackTrace();
 						}
-						destroy(p);
-						removeFromTablist(p);
+						destroy(cp);
+						removeFromTablist(cp);
 						Bukkit.getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
 							@Override
 							public void run() {
-								spawn(p);
-								addToTablist(p);
+								spawn(cp);
+								addToTablist(cp);
 							}
 						}, 4);
-						Bukkit.getPlayer(p).setDisplayName(nameprefix + nick);
-						Bukkit.getPlayer(p).setPlayerListName(tablistprefix + nick);
+						p.setDisplayName(nameprefix + nick);
+						p.setPlayerListName(tablistprefix + nick);
 						if(pl.getConfig().getBoolean("Config.Use Vault")) {
-							if(!DefaultPermsPrefix.containsKey(Bukkit.getPlayer(p))) {
-								DefaultPermsPrefix.put(Bukkit.getPlayer(p), pl.chat.getPlayerPrefix(Bukkit.getPlayer(p)));
+							if(!DefaultPermsPrefix.containsKey(p)) {
+								DefaultPermsPrefix.put(p, pl.chat.getPlayerPrefix(p));
 							}
 							for(World w : Bukkit.getWorlds()) {
-								pl.chat.setPlayerPrefix(w.getName(), Bukkit.getPlayer(p), pl.getConfig().getString("Config.Permissions System Prefix").replace("&", "§"));
+								pl.chat.setPlayerPrefix(w.getName(), p, pl.getConfig().getString("Config.Permissions System Prefix").replace("&", "§"));
 							}
 						}
 						if(NickAPI.MySQLEnabled()) {
 							Bukkit.getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
 								@Override
 								public void run() {
-									MySQL_Connection.update("UPDATE BetterNick SET NICKNAME='" + nick + "' WHERE UUID='" + p + "'");
-									MySQL_Connection.update("UPDATE BetterNick SET NICKED='true' WHERE UUID='" + p + "'");
+									MySQL_Connection.update("UPDATE BetterNick SET NICKNAME='" + nick + "' WHERE UUID='" + p.getUniqueId() + "'");
+									MySQL_Connection.update("UPDATE BetterNick SET NICKED='true' WHERE UUID='" + p.getUniqueId() + "'");
 								}
 							}, 2);
 						} else {
 							Bukkit.getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
 								@Override
 								public void run() {
-									NickedPlayers.cfg.set("NickedPlayers." + p + ".NickName", nick);
-									NickedPlayers.cfg.set("NickedPlayers." + p + ".Nicked", true);
+									NickedPlayers.cfg.set("NickedPlayers." + p.getUniqueId() + ".NickName", nick);
+									NickedPlayers.cfg.set("NickedPlayers." + p.getUniqueId() + ".Nicked", true);
 									NickedPlayers.saveFile();
 								}
 							}, 2);
 						}
 					} else {
-						setRandomNickName(p, nameprefix, nametagprefix, tablistprefix);
+						setRandomNickName(cp, nameprefix, nametagprefix, tablistprefix);
 					}
 				} else {
-					setRandomNickName(p, nameprefix, nametagprefix, tablistprefix);
+					setRandomNickName(cp, nameprefix, nametagprefix, tablistprefix);
 				}
 			} else if(pl.getConfig().getBoolean("Config.Messages.Enabled")) {
-				Bukkit.getPlayer(p).sendMessage(pl.getConfig().getString("Config.Messages.Nick Set Error").replace("[NAME]", nick).replace("&", "§"));
+				p.sendMessage(pl.getConfig().getString("Config.Messages.Nick Set Error").replace("[NAME]", nick).replace("&", "§"));
 			}
 		} else {
 			NickAPI.createNickedPlayer(p);
-			setNickName(p, nick, nameprefix, nametagprefix, tablistprefix);
+			setNickName(cp, nick, nameprefix, nametagprefix, tablistprefix);
 		}
 	}
-	public static void setRandomNickName(UUID p, String nameprefix, String nametagprefix, String tablistprefix) {
-		CraftPlayer cp = (CraftPlayer) Bukkit.getPlayer(p);
+	public static void setRandomNickName(Player p, String nameprefix, String nametagprefix, String tablistprefix) {
+		CraftPlayer cp = (CraftPlayer) p;
 		@SuppressWarnings("rawtypes")
 		List blacklist = pl.getConfig().getStringList("Config.Names Black List");
 		@SuppressWarnings("rawtypes")
 		List names = pl.getConfig().getStringList("Config.Names");
 		Random r = new Random();
 		int i = r.nextInt(names.size());
-		Bukkit.getPluginManager().callEvent(new PlayerNickEvent(Bukkit.getPlayer(p), names.get(i).toString()));
+		Bukkit.getPluginManager().callEvent(new PlayerNickEvent(p, names.get(i).toString()));
 		if(NickAPI.NickedPlayerExists(p)) {
 			if(names.get(i).toString().length() <= 14) {
 				if(!blacklist.contains(names.get(i).toString())) {
@@ -152,225 +151,226 @@ public class v1_11_R1 implements Listener {
 						} catch (IllegalArgumentException | IllegalAccessException e) {
 							e.printStackTrace();
 						}
-						destroy(p);
-						removeFromTablist(p);
+						destroy(cp);
+						removeFromTablist(cp);
 						Bukkit.getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
 							@Override
 							public void run() {
-								addToTablist(p);
-								spawn(p);
+								addToTablist(cp);
+								spawn(cp);
 							}
 						}, 4);
-						Bukkit.getPlayer(p).setDisplayName(nameprefix + names.get(i));
-						Bukkit.getPlayer(p).setPlayerListName(tablistprefix + names.get(i));
+						p.setDisplayName(nameprefix + names.get(i));
+						p.setPlayerListName(tablistprefix + names.get(i));
 						if(pl.getConfig().getBoolean("Config.Use Vault")) {
-							if(!DefaultPermsPrefix.containsKey(Bukkit.getPlayer(p))) {
-								DefaultPermsPrefix.put(Bukkit.getPlayer(p), pl.chat.getPlayerPrefix(Bukkit.getPlayer(p)));
+							if(!DefaultPermsPrefix.containsKey(p)) {
+								DefaultPermsPrefix.put(p, pl.chat.getPlayerPrefix(p));
 							}
 							for(World w : Bukkit.getWorlds()) {
-								pl.chat.setPlayerPrefix(w.getName(), Bukkit.getPlayer(p), pl.getConfig().getString("Config.Permissions System Prefix").replace("&", "§"));
+								pl.chat.setPlayerPrefix(w.getName(), p, pl.getConfig().getString("Config.Permissions System Prefix").replace("&", "§"));
 							}
 						}
 						if(NickAPI.MySQLEnabled()) {
 							Bukkit.getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
 								@Override
 								public void run() {
-									MySQL_Connection.update("UPDATE BetterNick SET NICKNAME='" + names.get(i).toString() + "' WHERE UUID='" + p + "'");
-									MySQL_Connection.update("UPDATE BetterNick SET NICKED='true' WHERE UUID='" + p + "'");
+									MySQL_Connection.update("UPDATE BetterNick SET NICKNAME='" + names.get(i).toString() + "' WHERE UUID='" + p.getUniqueId() + "'");
+									MySQL_Connection.update("UPDATE BetterNick SET NICKED='true' WHERE UUID='" + p.getUniqueId() + "'");
 								}
 							}, 2);
 						} else {
 							Bukkit.getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
 								@Override
 								public void run() {
-									NickedPlayers.cfg.set("NickedPlayers." + p + ".NickName", names.get(i).toString());
-									NickedPlayers.cfg.set("NickedPlayers." + p + ".Nicked", true);
+									NickedPlayers.cfg.set("NickedPlayers." + p.getUniqueId() + ".NickName", names.get(i).toString());
+									NickedPlayers.cfg.set("NickedPlayers." + p.getUniqueId() + ".Nicked", true);
 									NickedPlayers.saveFile();
 								}
 							}, 2);
 						}
 					} else {
-						setRandomNickName(p, nameprefix, nametagprefix, tablistprefix);
+						setRandomNickName(cp, nameprefix, nametagprefix, tablistprefix);
 					}
 				} else {
-					setRandomNickName(p, nameprefix, nametagprefix, tablistprefix);
+					setRandomNickName(cp, nameprefix, nametagprefix, tablistprefix);
 				}
 			} else {
 				pl.log.warning("This Random Nickname is too long! Please edit " + names.get(i).toString() + " in the config.yml!");
-				setRandomNickName(p, nameprefix, nametagprefix, tablistprefix);
+				setRandomNickName(cp, nameprefix, nametagprefix, tablistprefix);
 			}
 		} else {
 			NickAPI.createNickedPlayer(p);
-			setRandomNickName(p, nameprefix, nametagprefix, tablistprefix);
+			setRandomNickName(cp, nameprefix, nametagprefix, tablistprefix);
 		}
 	}
-	public static void UnNick(UUID p) {
-		Bukkit.getPluginManager().callEvent(new PlayerUnNickEvent(Bukkit.getPlayer(p)));
-		if(pl.nickedPlayers.contains(Bukkit.getPlayer(p).getDisplayName())) {
-			pl.nickedPlayers.remove(Bukkit.getPlayer(p).getDisplayName());
+	public static void UnNick(Player p) {
+		CraftPlayer cp = (CraftPlayer) p;
+		Bukkit.getPluginManager().callEvent(new PlayerUnNickEvent(p));
+		if(pl.nickedPlayers.contains(p.getDisplayName())) {
+			pl.nickedPlayers.remove(p.getDisplayName());
 		}
-		CraftPlayer cp = (CraftPlayer) Bukkit.getPlayer(p);
 		if(NickAPI.NickedPlayerExists(p)) {
 			try {
 				pl.nameField.set(cp.getProfile(), NickAPI.getRealName(p));
 			} catch (IllegalArgumentException | IllegalAccessException e) {
 				e.printStackTrace();
 			}
-			destroy(p);
-			removeFromTablist(p);
+			destroy(cp);
+			removeFromTablist(cp);
 			Bukkit.getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
 				@Override
 				public void run() {
-					addToTablist(p);
-					spawn(p);
+					addToTablist(cp);
+					spawn(cp);
 				}
 			}, 4);
-			Bukkit.getPlayer(p).setDisplayName(NickAPI.getRealName(p));
-			Bukkit.getPlayer(p).setPlayerListName(NickAPI.getRealName(p));
+			p.setDisplayName(NickAPI.getRealName(p));
+			p.setPlayerListName(NickAPI.getRealName(p));
 			if(pl.getConfig().getBoolean("Config.Use Vault")) {
 				for(World w : Bukkit.getWorlds()) {
-					pl.chat.setPlayerPrefix(w.getName(), Bukkit.getPlayer(p), DefaultPermsPrefix.get(Bukkit.getPlayer(p)));
+					pl.chat.setPlayerPrefix(w.getName(), p, DefaultPermsPrefix.get(p));
 				}
-				DefaultPermsPrefix.remove(Bukkit.getPlayer(p));
+				DefaultPermsPrefix.remove(p);
 			}
 			if(NickAPI.MySQLEnabled()) {
-				MySQL_Connection.update("UPDATE BetterNick SET NICKNAME='" + Bukkit.getPlayer(p).getName() + "' WHERE UUID='" + p + "'");
-				MySQL_Connection.update("UPDATE BetterNick SET NICKED='false' WHERE UUID='" + p + "'");
+				MySQL_Connection.update("UPDATE BetterNick SET NICKNAME='" + p.getName() + "' WHERE UUID='" + p.getUniqueId() + "'");
+				MySQL_Connection.update("UPDATE BetterNick SET NICKED='false' WHERE UUID='" + p.getUniqueId() + "'");
 			} else {
-				NickedPlayers.cfg.set("NickedPlayers." + p + ".NickName", Bukkit.getPlayer(p).getName());
-				NickedPlayers.cfg.set("NickedPlayers." + p + ".Nicked", false);
+				NickedPlayers.cfg.set("NickedPlayers." + p.getUniqueId() + ".NickName", p.getName());
+				NickedPlayers.cfg.set("NickedPlayers." + p.getUniqueId() + ".Nicked", false);
 				NickedPlayers.saveFile();
 			}
 		} else {
 			NickAPI.createNickedPlayer(p);
-			UnNick(p);
+			UnNick(cp);
 		}
 	}
-	public static void setSkin(UUID p, String pskin) {
-		CraftPlayer cp = (CraftPlayer) Bukkit.getPlayer(p);
+	public static void setSkin(Player p, String pskin) {
+		CraftPlayer cp = (CraftPlayer) p;
 		GameProfile profile = GameProfileBuilder.fetch(UUIDFetcher.getUUID(pskin));
-		Bukkit.getPluginManager().callEvent(new PlayerSkinSetEvent(Bukkit.getPlayer(p), pskin));
+		Bukkit.getPluginManager().callEvent(new PlayerSkinSetEvent(p, pskin));
 		Collection<Property> properties = profile.getProperties().get("textures");
 		cp.getProfile().getProperties().removeAll("textures");
 		cp.getProfile().getProperties().putAll("textures", properties);
 		if(pl.getConfig().getBoolean("Config.Skin Self Update")) {
-			destroy(p);
-			removeFromTablist(p);
-			location.put(Bukkit.getPlayer(p), Bukkit.getPlayer(p).getLocation().add(0, 1, 0));
-			health.put(Bukkit.getPlayer(p), Bukkit.getPlayer(p).getHealth());
-			food.put(Bukkit.getPlayer(p), Bukkit.getPlayer(p).getFoodLevel());
-			Bukkit.getPlayer(p).setHealth(0);
+			destroy(cp);
+			removeFromTablist(cp);
+			location.put(p, p.getLocation().add(0, 1, 0));
+			health.put(p, p.getHealth());
+			food.put(p, p.getFoodLevel());
+			p.setHealth(0);
 			Bukkit.getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
 				@Override
 				public void run() {
-					addToTablist(p);
-					spawn(p);
-					respawn(Bukkit.getPlayer(p));
-					Bukkit.getPlayer(p).setHealth(health.get(Bukkit.getPlayer(p)));
-					Bukkit.getPlayer(p).setFoodLevel(food.get(Bukkit.getPlayer(p)));
-					Bukkit.getPlayer(p).teleport(location.get(Bukkit.getPlayer(p)));
+					addToTablist(cp);
+					spawn(cp);
+					respawn(cp);
+					p.setHealth(health.get(p));
+					p.setFoodLevel(food.get(p));
+					p.teleport(location.get(p));
 				}
 			}, 4);
 		} else {
-			destroy(p);
-			removeFromTablist(p);
+			destroy(cp);
+			removeFromTablist(cp);
 			Bukkit.getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
 				@Override
 				public void run() {
-					addToTablist(p);
-					spawn(p);
+					addToTablist(cp);
+					spawn(cp);
 				}
 			}, 4);
 		}
 	}
-	public static void setRandomSkin(UUID p) {
-		CraftPlayer cp = (CraftPlayer) Bukkit.getPlayer(p);
+	public static void setRandomSkin(Player p) {
+		CraftPlayer cp = (CraftPlayer) p;
 		GameProfile profile = cp.getProfile();
 		@SuppressWarnings("rawtypes")
 		List skins = pl.getConfig().getStringList("Config.Skins");
 		Random r = new Random();
 		int i = r.nextInt(skins.size());
-		Bukkit.getPluginManager().callEvent(new PlayerSkinSetEvent(Bukkit.getPlayer(p), skins.get(i).toString()));
+		Bukkit.getPluginManager().callEvent(new PlayerSkinSetEvent(p, skins.get(i).toString()));
 		profile = GameProfileBuilder.fetch(UUIDFetcher.getUUID(skins.get(i).toString()));
 		Collection<Property> properties = profile.getProperties().get("textures");
 		cp.getProfile().getProperties().removeAll("textures");
 		cp.getProfile().getProperties().putAll("textures", properties);
 		if(pl.getConfig().getBoolean("Config.Skin Self Update")) {
-			destroy(p);
-			removeFromTablist(p);
-			location.put(Bukkit.getPlayer(p), Bukkit.getPlayer(p).getLocation().add(0, 1, 0));
-			health.put(Bukkit.getPlayer(p), Bukkit.getPlayer(p).getHealth());
-			food.put(Bukkit.getPlayer(p), Bukkit.getPlayer(p).getFoodLevel());
-			Bukkit.getPlayer(p).setHealth(0);
+			destroy(cp);
+			removeFromTablist(cp);
+			location.put(p, p.getLocation().add(0, 1, 0));
+			health.put(p, p.getHealth());
+			food.put(p, p.getFoodLevel());
+			p.setHealth(0);
 			Bukkit.getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
 				@Override
 				public void run() {
-					addToTablist(p);
-					spawn(p);
-					respawn(Bukkit.getPlayer(p));
-					Bukkit.getPlayer(p).setHealth(health.get(Bukkit.getPlayer(p)));
-					Bukkit.getPlayer(p).setFoodLevel(food.get(Bukkit.getPlayer(p)));
-					Bukkit.getPlayer(p).teleport(location.get(Bukkit.getPlayer(p)));
+					addToTablist(cp);
+					spawn(cp);
+					respawn(cp);
+					p.setHealth(health.get(p));
+					p.setFoodLevel(food.get(p));
+					p.teleport(location.get(p));
 				}
 			}, 4);
 		} else {
-			destroy(p);
-			removeFromTablist(p);
+			destroy(cp);
+			removeFromTablist(cp);
 			Bukkit.getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
 				@Override
 				public void run() {
-					addToTablist(p);
-					spawn(p);
+					addToTablist(cp);
+					spawn(cp);
 				}
 			}, 4);
 		}
 	}
-	public static void resetSkin(UUID p) {
-		CraftPlayer cp = (CraftPlayer) Bukkit.getPlayer(p);
+	public static void resetSkin(Player p) {
+		CraftPlayer cp = (CraftPlayer) p;
 		GameProfile profile = cp.getProfile();
-		Bukkit.getPluginManager().callEvent(new PlayerSkinResetEvent(Bukkit.getPlayer(p)));
+		Bukkit.getPluginManager().callEvent(new PlayerSkinResetEvent(p));
 		if(NickAPI.NickedPlayerExists(p)) {
 			profile = GameProfileBuilder.fetch(UUIDFetcher.getUUID(NickAPI.getNickName(p)));
 			Collection<Property> properties = profile.getProperties().get("textures");
 			cp.getProfile().getProperties().removeAll("textures");
 			cp.getProfile().getProperties().putAll("textures", properties);
 			if(pl.getConfig().getBoolean("Config.Skin Self Update")) {
-				destroy(p);
-				removeFromTablist(p);
-				location.put(Bukkit.getPlayer(p), Bukkit.getPlayer(p).getLocation().add(0, 1, 0));
-				health.put(Bukkit.getPlayer(p), Bukkit.getPlayer(p).getHealth());
-				food.put(Bukkit.getPlayer(p), Bukkit.getPlayer(p).getFoodLevel());
-				Bukkit.getPlayer(p).setHealth(0);
+				destroy(cp);
+				removeFromTablist(cp);
+				location.put(p, p.getLocation().add(0, 1, 0));
+				health.put(p, p.getHealth());
+				food.put(p, p.getFoodLevel());
+				p.setHealth(0);
 				Bukkit.getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
 					@Override
 					public void run() {
-						addToTablist(p);
-						spawn(p);
-						respawn(Bukkit.getPlayer(p));
-						Bukkit.getPlayer(p).setHealth(health.get(Bukkit.getPlayer(p)));
-						Bukkit.getPlayer(p).setFoodLevel(food.get(Bukkit.getPlayer(p)));
-						Bukkit.getPlayer(p).teleport(location.get(Bukkit.getPlayer(p)));
+						addToTablist(cp);
+						spawn(cp);
+						respawn(cp);
+						p.setHealth(health.get(p));
+						p.setFoodLevel(food.get(p));
+						p.teleport(location.get(p));
 					}
 				}, 4);
 			} else {
-				destroy(p);
-				removeFromTablist(p);
+				destroy(cp);
+				removeFromTablist(cp);
 				Bukkit.getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
 					@Override
 					public void run() {
-						addToTablist(p);
-						spawn(p);
+						addToTablist(cp);
+						spawn(cp);
 					}
 				}, 4);
 			}
 		} else {
 			NickAPI.createNickedPlayer(p);
-			resetSkin(p);
+			resetSkin(cp);
 		}
 	}
-	public static void sendActionBar(UUID p, String msg) {
-		if(Bukkit.getPlayer(p) != null) {
-			PlayerConnection Connection = ((CraftPlayer)Bukkit.getPlayer(p)).getHandle().playerConnection;
+	public static void sendActionBar(Player p, String msg) {
+		CraftPlayer cp = (CraftPlayer) p;
+		if(p != null) {
+			PlayerConnection Connection = cp.getHandle().playerConnection;
 			IChatBaseComponent ABchat = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + msg + "\"}");
 			PacketPlayOutChat ABpacket = new PacketPlayOutChat(ABchat, (byte)2);
 			Connection.sendPacket(ABpacket); 
@@ -378,36 +378,32 @@ public class v1_11_R1 implements Listener {
 			NickAPI.endActionBar(p);
 		}
 	}
-	private static void spawn(UUID p) {
-		CraftPlayer cp = (CraftPlayer) Bukkit.getPlayer(p);
-		if(Bukkit.getPlayer(p) != null) {
+	private static void spawn(CraftPlayer cp) {
+		if(cp != null) {
 			for(Player all : Bukkit.getOnlinePlayers()) {
-	        	if(!all.equals(Bukkit.getPlayer(p))) {
+	        	if(!all.equals(cp)) {
 	        		PacketPlayOutNamedEntitySpawn spawn = new PacketPlayOutNamedEntitySpawn(cp.getHandle());
 	        		((CraftPlayer)all).getHandle().playerConnection.sendPacket(spawn);
 	        	}
 	        }
 		}
 	}
-	private static void destroy(UUID p) {
-		CraftPlayer cp = ((CraftPlayer)Bukkit.getPlayer(p));
+	private static void destroy(CraftPlayer cp) {
 		PacketPlayOutEntityDestroy destroy = new PacketPlayOutEntityDestroy(cp.getEntityId());
 		sendPacket(destroy);
 	}
-	private static void addToTablist(UUID p) {
-		CraftPlayer cp = ((CraftPlayer)Bukkit.getPlayer(p));
-		if(Bukkit.getPlayer(p) != null) {
+	private static void addToTablist(CraftPlayer cp) {
+		if(cp != null) {
 			PacketPlayOutPlayerInfo packet = new PacketPlayOutPlayerInfo(EnumPlayerInfoAction.ADD_PLAYER, cp.getHandle());
 			sendPacket(packet);
 		}
 	}
-	private static void removeFromTablist(UUID p) {
-		CraftPlayer cp = ((CraftPlayer)Bukkit.getPlayer(p));
+	private static void removeFromTablist(CraftPlayer cp) {
 		PacketPlayOutPlayerInfo packet = new PacketPlayOutPlayerInfo(EnumPlayerInfoAction.REMOVE_PLAYER, cp.getHandle());
 		sendPacket(packet);
 	}
-	private static void respawn(Player p) {
-		((CraftPlayer)p).getHandle().playerConnection.a(new PacketPlayInClientCommand(PacketPlayInClientCommand.EnumClientCommand.PERFORM_RESPAWN));
+	private static void respawn(CraftPlayer cp) {
+		cp.getHandle().playerConnection.a(new PacketPlayInClientCommand(PacketPlayInClientCommand.EnumClientCommand.PERFORM_RESPAWN));
 	}
 	private static void sendPacket(Packet<?> packet) {
 		for(Player all : Bukkit.getOnlinePlayers()) {
