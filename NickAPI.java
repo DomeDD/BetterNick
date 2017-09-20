@@ -5,21 +5,21 @@
 public class NickAPI {
 	
 	/**
-   	 * @param p uuid of the player
+   	 * @param p player
    	 * @return true if the player exists
 	 */
-	boolean NickedPlayerExists(UUID p);
+	boolean NickedPlayerExists(Player p);
 	
 	/**
-   	 * @param p uuid of the player
+   	 * @param p player
    	 */
-  	void createNickedPlayer(UUID p);
+  	void createNickedPlayer(Player p);
 	
 	/**
-   	 * @param p uuid of the player
+   	 * @param p player
     	 * @return true if the player is nicked
    	 */
-  	boolean isNicked(UUID p);
+  	boolean isNicked(Player p);
   
   	/**
    	 * @param name nickname
@@ -28,52 +28,52 @@ public class NickAPI {
   	boolean isNickNameUsed(String name);
   
   	/**
-   	 * @param p uuid of the player
+   	 * @param p player
    	 * @return nickname of the player
    	 */
   	String getNickName(UUID p);
   
   	/**
-   	 * @param p uuid of the player
+   	 * @param p player
        	 * @return name of the player
    	 */
-  	String getRealName(UUID p);
+  	String getRealName(Player p);
   
   	/**
-   	 * @param p uuid of the player
+   	 * @param p player
    	 * @param nick nickname
    	 * @param nameprefix nameprefix
    	 * @param nametagprefix nametagprefix
    	 * @param tablistprefix tablistprefix
    	 */
-  	void setNickName(UUID p, String nick, String nameprefix, String nametagprefix, String tablistprefix);
+  	void setNickName(Player p, String nick, String nameprefix, String nametagprefix, String tablistprefix);
   
   	/**
-   	 * @param p uuid of the player
+   	 * @param p player
    	 * @param nameprefix nameprefix
    	 * @param nametagprefix nametagprefix
    	 * @param tablistprefix tablistprefix
    	 */
-	void setRandomNickName(UUID p, String nameprefix, String nametagprefix, String tablistprefix);
+	void setRandomNickName(Player p, String nameprefix, String nametagprefix, String tablistprefix);
   
   	/**
-   	 * @param p uuid of the player
+   	 * @param p player
    	 * @param pskin skin owner
    	 */
-  	void setSkin(UUID p, String pskin);
+  	void setSkin(Player p, String pskin);
   
   	/**
-   	 * @param p uuid of the player
+   	 * @param p player
    	 */
-  	void setRandomSkin(UUID p);
+  	void setRandomSkin(Player p);
   
   	/**
-   	 * @param p uuid of the player
+   	 * @param p player
    	 */
-  	void UnNick(UUID p);
+  	void UnNick(Player p);
   
   	/**
-   	 * @param p uuid of the player
+   	 * @param p player
    	 */
-  	void resetSkin(UUID p);
+  	void resetSkin(Player p);
 }
