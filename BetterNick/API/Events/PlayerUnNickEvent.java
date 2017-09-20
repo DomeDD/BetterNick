@@ -30,7 +30,7 @@ public class PlayerUnNickEvent extends Event {
 		player.sendMessage(arg0);
 	}
 	public void stopNickActionbarMessage() {
-		NickAPI.endActionBar(player.getUniqueId());
+		NickAPI.endActionBar(player);
 	}
 	@Override
 	public HandlerList getHandlers() {

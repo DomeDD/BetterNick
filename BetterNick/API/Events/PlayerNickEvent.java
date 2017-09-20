@@ -35,10 +35,10 @@ public class PlayerNickEvent extends Event {
 		player.sendMessage(arg0);
 	}
 	public void setNickActionbarMessage(String arg0) {
-		NickAPI.sendActionBar(player.getUniqueId(), arg0);
+		NickAPI.sendActionBar(player, arg0);
 	}
 	public void stopNickActionbarMessage() {
-		NickAPI.endActionBar(player.getUniqueId());
+		NickAPI.endActionBar(player);
 	}
 	@Override
 	public HandlerList getHandlers() {
