@@ -27,17 +27,15 @@ public class AutoNick implements Listener {
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent e) {
 		Player p = e.getPlayer();
+		String nameprefix = pl.getConfig().getString("Config.Display Name Prefix").replace("&", "§");
+		String nametagprefix = pl.getConfig().getString("Config.Name Tag Prefix").replace("&", "§");
+		String tablistprefix = pl.getConfig().getString("Config.Tablist Name Prefix").replace("&", "§");
 		if(p.hasPermission("BetterNick.Nick")) {
-			if(!NickAPI.NickedPlayerExists(p.getUniqueId())) {
-				NickAPI.createNickedPlayer(p.getUniqueId());
-			}
+			NickAPI.createNickedPlayer(p);
 			if(!pl.getConfig().getBoolean("Config.BungeeCord Lobby Mode")) {
-				if(NickAPI.autoNick(p.getUniqueId())) {
-					String nameprefix = pl.getConfig().getString("Config.Display Name Prefix").replace("&", "§");
-					String nametagprefix = pl.getConfig().getString("Config.Name Tag Prefix").replace("&", "§");
-					String tablistprefix = pl.getConfig().getString("Config.Tablist Name Prefix").replace("&", "§");
-					NickAPI.setRandomNickName(p.getUniqueId(), nameprefix, nametagprefix, tablistprefix);
-					NickAPI.setRandomSkin(p.getUniqueId());
+				if(NickAPI.autoNick(p)) {
+					NickAPI.setRandomNickName(p, nameprefix, nametagprefix, tablistprefix);
+					NickAPI.setRandomSkin(p);
 				}
 			}
 		}
@@ -46,9 +44,9 @@ public class AutoNick implements Listener {
 	public void onPlayerQuit(PlayerQuitEvent e) {
 		Player p = e.getPlayer();
 		if(p.hasPermission("BetterNick.UnNick")) {
-			if(NickAPI.isNicked(p.getUniqueId())) {
-				NickAPI.UnNick(p.getUniqueId());
-			}
+			if(NickAPI.isNicked(p)) {
+				NickAPI.UnNick(p);
+			}			
 		}
 	}
 }
