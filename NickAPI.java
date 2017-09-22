@@ -31,7 +31,7 @@ public class NickAPI {
    	 * @param p player
    	 * @return nickname of the player
    	 */
-  	String getNickName(UUID p);
+  	String getNickName(Player p);
   
   	/**
    	 * @param p player
