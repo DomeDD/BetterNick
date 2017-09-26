@@ -220,8 +220,8 @@ public class v1_11_R1 implements Listener {
 			Bukkit.getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
 				@Override
 				public void run() {
-					addToTablist(cp);
 					spawn(cp);
+					addToTablist(cp);
 				}
 			}, 4);
 			p.setDisplayName(NickAPI.getRealName(p));
@@ -365,6 +365,41 @@ public class v1_11_R1 implements Listener {
 		} else {
 			NickAPI.createNickedPlayer(p);
 			resetSkin(cp);
+		}
+	}
+	public static void UnNickOnLeave(Player p) {
+		CraftPlayer cp = (CraftPlayer) p;
+		Bukkit.getPluginManager().callEvent(new PlayerUnNickEvent(p));
+		if(pl.nickedPlayers.contains(p.getDisplayName())) {
+			pl.nickedPlayers.remove(p.getDisplayName());
+		}
+		if(NickAPI.NickedPlayerExists(p)) {
+			try {
+				pl.nameField.set(cp.getProfile(), NickAPI.getRealName(p));
+			} catch (IllegalArgumentException | IllegalAccessException e) {
+				e.printStackTrace();
+			}
+			destroy(cp);
+			removeFromTablist(cp);
+			p.setDisplayName(NickAPI.getRealName(p));
+			p.setPlayerListName(NickAPI.getRealName(p));
+			if(pl.getConfig().getBoolean("Config.Use Vault")) {
+				for(World w : Bukkit.getWorlds()) {
+					pl.chat.setPlayerPrefix(w.getName(), p, DefaultPermsPrefix.get(p));
+				}
+				DefaultPermsPrefix.remove(p);
+			}
+			if(NickAPI.MySQLEnabled()) {
+				MySQL_Connection.update("UPDATE BetterNick SET NICKNAME='" + p.getName() + "' WHERE UUID='" + p.getUniqueId() + "'");
+				MySQL_Connection.update("UPDATE BetterNick SET NICKED='false' WHERE UUID='" + p.getUniqueId() + "'");
+			} else {
+				NickedPlayers.cfg.set("NickedPlayers." + p.getUniqueId() + ".NickName", p.getName());
+				NickedPlayers.cfg.set("NickedPlayers." + p.getUniqueId() + ".Nicked", false);
+				NickedPlayers.saveFile();
+			}
+		} else {
+			NickAPI.createNickedPlayer(p);
+			UnNickOnLeave(cp);
 		}
 	}
 	public static void sendActionBar(Player p, String msg) {
