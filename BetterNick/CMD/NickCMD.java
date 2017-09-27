@@ -30,18 +30,18 @@ public class NickCMD implements CommandExecutor {
 			Player p = (Player) sender;
 			if(args.length == 0) {
 				if(p.hasPermission("BetterNick.RandomNick")) {
-					String nameprefix = pl.getConfig().getString("Config.Display Name Prefix").replace("&", "ง");
-					String nametagprefix = pl.getConfig().getString("Config.Name Tag Prefix").replace("&", "ง");
-					String tablistprefix = pl.getConfig().getString("Config.Tablist Name Prefix").replace("&", "ง");
-					v1_12_R1.setRandomNickName(p, nameprefix, nametagprefix, tablistprefix);
-					v1_12_R1.setRandomSkin(p);
+					String nameprefix = pl.getConfig().getString("Config.Display Name Prefix").replace("&", "ยง");
+					String nametagprefix = pl.getConfig().getString("Config.Name Tag Prefix").replace("&", "ยง");
+					String tablistprefix = pl.getConfig().getString("Config.Tablist Name Prefix").replace("&", "ยง");
+					NickAPI.setRandomNickName(p, nameprefix, nametagprefix, tablistprefix);
+					NickAPI.setRandomSkin(p);
 				}
 			}
 			if(args.length == 1) {
 				if(p.hasPermission("BetterNick.Nick")) {
-					String nameprefix = pl.getConfig().getString("Config.Display Name Prefix").replace("&", "ง");
-					String nametagprefix = pl.getConfig().getString("Config.Name Tag Prefix").replace("&", "ง");
-					String tablistprefix = pl.getConfig().getString("Config.Tablist Name Prefix").replace("&", "ง");
+					String nameprefix = pl.getConfig().getString("Config.Display Name Prefix").replace("&", "ยง");
+					String nametagprefix = pl.getConfig().getString("Config.Name Tag Prefix").replace("&", "ยง");
+					String tablistprefix = pl.getConfig().getString("Config.Tablist Name Prefix").replace("&", "ยง");
 					NickAPI.setNickName(p, args[0], nameprefix, nametagprefix, tablistprefix);
 					NickAPI.setRandomSkin(p);
 				}
