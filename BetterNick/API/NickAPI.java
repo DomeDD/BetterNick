@@ -99,10 +99,10 @@ public class NickAPI implements Listener {
 			if(MySQLEnabled()) {
 				MySQL_Connection.update("INSERT INTO BetterNick (UUID, NAME, NICKNAME, NICKED, AUTONICK) VALUES ('" + uuid + "', '" + p.getName() + "', '" + p.getName() + "', 'false', 'false');");
 			} else {
-				NickedPlayers.cfg.set("NickedPlayers." + p + ".Name", p.getName());
-				NickedPlayers.cfg.set("NickedPlayers." + p + ".NickName", p.getName());
-				NickedPlayers.cfg.set("NickedPlayers." + p + ".Nicked", false);
-				NickedPlayers.cfg.set("NickedPlayers." + p + ".AutoNick", false);
+				NickedPlayers.cfg.set("NickedPlayers." + uuid + ".Name", p.getName());
+				NickedPlayers.cfg.set("NickedPlayers." + uuid + ".NickName", p.getName());
+				NickedPlayers.cfg.set("NickedPlayers." + uuid + ".Nicked", false);
+				NickedPlayers.cfg.set("NickedPlayers." + uuid + ".AutoNick", false);
 				NickedPlayers.saveFile();
 			}
 		}
@@ -243,6 +243,29 @@ public class NickAPI implements Listener {
 		}
 		if(Bukkit.getVersion().contains("(MC: 1.12)") || Bukkit.getVersion().contains("(MC: 1.12.1)") || Bukkit.getVersion().contains("(MC: 1.12.2)")) {
 			v1_12_R1.resetSkin(p);
+		}
+	}
+	public static void UnNickOnLeave(Player p) {
+		if(Bukkit.getVersion().contains("(MC: 1.8.3)")) {
+			v1_8_R2.UnNickOnLeave(p);
+		}
+		if(Bukkit.getVersion().contains("(MC: 1.8.4)") || Bukkit.getVersion().contains("(MC: 1.8.5)") || Bukkit.getVersion().contains("(MC: 1.8.6)") || Bukkit.getVersion().contains("(MC: 1.8.7)") || Bukkit.getVersion().contains("(MC: 1.8.8)")) {
+			v1_8_R3.UnNickOnLeave(p);
+		}
+		if(Bukkit.getVersion().contains("(MC: 1.9)") || Bukkit.getVersion().contains("(MC: 1.9.1)") || Bukkit.getVersion().contains("(MC: 1.9.2)") || Bukkit.getVersion().contains("(MC: 1.9.3)")) {
+			v1_9_R1.UnNickOnLeave(p);
+		}
+		if(Bukkit.getVersion().contains("(MC: 1.9.4)")) {
+			v1_9_R2.UnNickOnLeave(p);
+		}
+		if(Bukkit.getVersion().contains("(MC: 1.10)") || Bukkit.getVersion().contains("(MC: 1.10.1)") || Bukkit.getVersion().contains("(MC: 1.10.2)")) {
+			v1_10_R1.UnNickOnLeave(p);
+		}
+		if(Bukkit.getVersion().contains("(MC: 1.11)") || Bukkit.getVersion().contains("(MC: 1.11.1)") || Bukkit.getVersion().contains("(MC: 1.11.2)")) {
+			v1_11_R1.UnNickOnLeave(p);
+		}
+		if(Bukkit.getVersion().contains("(MC: 1.12)") || Bukkit.getVersion().contains("(MC: 1.12.1)") || Bukkit.getVersion().contains("(MC: 1.12.2)")) {
+			v1_12_R1.UnNickOnLeave(p);
 		}
 	}
 	public static void autoNick(Player p, boolean autonick) {

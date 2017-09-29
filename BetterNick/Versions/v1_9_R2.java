@@ -23,6 +23,7 @@ import org.bukkit.event.Listener;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
+import com.nametagedit.plugin.NametagEdit;
 
 import BetterNick.Main;
 import BetterNick.API.GameProfileBuilder;
@@ -72,7 +73,11 @@ public class v1_9_R2 implements Listener {
 							pl.nickedPlayers.add(nameprefix + nick);
 						}
 						try {
-							pl.nameField.set(cp.getProfile(), nametagprefix + nick);
+							if(pl.nte) {
+								pl.nameField.set(cp.getProfile(), nick);
+							} else {
+								pl.nameField.set(cp.getProfile(), nametagprefix + nick);
+							}
 						} catch (IllegalArgumentException | IllegalAccessException e) {
 							e.printStackTrace();
 						}
@@ -86,7 +91,15 @@ public class v1_9_R2 implements Listener {
 							}
 						}, 4);
 						p.setDisplayName(nameprefix + nick);
-						p.setPlayerListName(tablistprefix + nick);
+						Bukkit.getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
+							@Override
+							public void run() {
+								if(pl.nte) {
+									NametagEdit.getApi().setPrefix(p.getDisplayName(), nametagprefix);
+								}
+								p.setPlayerListName(tablistprefix + nick);
+							}
+						}, 2);
 						if(pl.getConfig().getBoolean("Config.Use Vault")) {
 							if(!DefaultPermsPrefix.containsKey(p)) {
 								DefaultPermsPrefix.put(p, pl.chat.getPlayerPrefix(p));
@@ -147,7 +160,11 @@ public class v1_9_R2 implements Listener {
 							pl.nickedPlayers.add(nameprefix + names.get(i).toString());
 						}
 						try {
-							pl.nameField.set(cp.getProfile(), nametagprefix + names.get(i).toString());
+							if(pl.nte) {
+								pl.nameField.set(cp.getProfile(), names.get(i).toString());
+							} else {
+								pl.nameField.set(cp.getProfile(), nametagprefix + names.get(i).toString());
+							}
 						} catch (IllegalArgumentException | IllegalAccessException e) {
 							e.printStackTrace();
 						}
@@ -161,7 +178,15 @@ public class v1_9_R2 implements Listener {
 							}
 						}, 4);
 						p.setDisplayName(nameprefix + names.get(i));
-						p.setPlayerListName(tablistprefix + names.get(i));
+						Bukkit.getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
+							@Override
+							public void run() {
+								if(pl.nte) {
+									NametagEdit.getApi().setPrefix(p.getDisplayName(), nametagprefix);
+								}
+								p.setPlayerListName(tablistprefix + names.get(i));
+							}
+						}, 2);
 						if(pl.getConfig().getBoolean("Config.Use Vault")) {
 							if(!DefaultPermsPrefix.containsKey(p)) {
 								DefaultPermsPrefix.put(p, pl.chat.getPlayerPrefix(p));
@@ -220,8 +245,8 @@ public class v1_9_R2 implements Listener {
 			Bukkit.getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
 				@Override
 				public void run() {
-					addToTablist(cp);
 					spawn(cp);
+					addToTablist(cp);
 				}
 			}, 4);
 			p.setDisplayName(NickAPI.getRealName(p));

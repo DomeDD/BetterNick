@@ -51,6 +51,7 @@ public class Main extends JavaPlugin implements Listener {
 	public Permission perms = null;
 	public Logger log = this.getLogger();
 	public ArrayList<String> nickedPlayers = new ArrayList<>();
+	public boolean nte;
 	
 	public void onEnable() {
 		checkandLoadVersions();
@@ -101,6 +102,11 @@ public class Main extends JavaPlugin implements Listener {
 			this.getServer().getPluginManager().registerEvents(new NickAPI(this), this);
 			this.getServer().getPluginManager().registerEvents(new PlayerDeath(this), this);
 			this.getServer().getPluginManager().registerEvents(new MySQL_Connection(this), this);
+			if(Bukkit.getPluginManager().isPluginEnabled("NametagEdit")) {
+				nte = true;
+			} else {
+				nte = false;
+			}
 			if(getConfig().getBoolean("Config.Use Vault")) {
 	    		RegisteredServiceProvider<Chat> chatProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.chat.Chat.class);
 	    		RegisteredServiceProvider<Permission> permsProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
@@ -134,6 +140,11 @@ public class Main extends JavaPlugin implements Listener {
 			getCommand("realname").setExecutor(new RealNameCMD(this));
 			getCommand("skin").setExecutor(new SkinCMD());
 			getCommand("nicklist").setExecutor(new NickListCMD(this));
+			if(Bukkit.getPluginManager().isPluginEnabled("NametagEdit")) {
+				nte = true;
+			} else {
+				nte = false;
+			}
 	    	if(getConfig().getBoolean("Config.Use Vault")) {
 	    		RegisteredServiceProvider<Chat> chatProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.chat.Chat.class);
 	    		RegisteredServiceProvider<Permission> permsProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);

@@ -45,7 +45,7 @@ public class AutoNick implements Listener {
 		Player p = e.getPlayer();
 		if(p.hasPermission("BetterNick.UnNick")) {
 			if(NickAPI.isNicked(p)) {
-				NickAPI.UnNick(p);
+				NickAPI.UnNickOnLeave(p);
 			}			
 		}
 	}

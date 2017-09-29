@@ -45,7 +45,13 @@ public class MySQL_Connection implements Listener {
 	      e.printStackTrace();
 	    }
 	}
-	public MySQL_Connection(String user, String password, String host, String database) {}
+	@SuppressWarnings("static-access")
+	public MySQL_Connection(String user, String password, String host, String database) {
+		this.username = user;
+		this.password = password;
+		this.host = host;
+		this.database = database;
+	}
 	public static void setDefaultMySQL() {
 		cfg.options().copyDefaults(true);
 		cfg.addDefault("Username", "root");
