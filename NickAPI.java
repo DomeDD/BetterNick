@@ -50,7 +50,7 @@ public class NickAPI {
   
   	/**
    	 * @param p player
-   	 * @param nameprefix nameprefix
+   	 * @param nameprefix displaynameprefix
    	 * @param nametagprefix nametagprefix
    	 * @param tablistprefix tablistprefix
    	 */
