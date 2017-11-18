@@ -20,11 +20,6 @@ class PlayerSkinResetEvent extends Event {
 	NickedPlayer getNickedPlayer();
 	
 	/**
-   	 * @return nickname
-	 */
-	String getNickName();
-	
-	/**
    	 * @param arg0 message
 	 */
 	void setSkinResetMessage(String arg0);
