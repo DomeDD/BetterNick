@@ -1,3 +1,12 @@
+/*
+ * All rights by DomeDD
+ * You are allowed to modify this code
+ * You are allowed to use this code in your plugins for private projects
+ * You are allowed to publish your plugin including this code as long as your plugin is for free 
+ * You are NOT allowed to claim this plugin as your own
+ * You are NOT allowed to publish this plugin or your modified version of this plugin
+ * 
+ */
 package de.domedd.betternick.commands;
 
 import org.bukkit.command.Command;
@@ -23,10 +32,10 @@ public class AutoNickCMD implements CommandExecutor {
 			if(p.hasPermission("BetterNick.JoinItem")) {
 				if(p.hasAutoNick()) {
 					p.setAutoNick(false);
-					p.sendMessage(pl.getConfig().getString("Messages.AutoNick Turned Off").replace("&", "ง"));
+					p.sendMessage(pl.getConfig().getString("Messages.AutoNick Turned Off").replace("&", "ยง"));
 				} else {
 					p.setAutoNick(true);
-					p.sendMessage(pl.getConfig().getString("Messages.AutoNick Turned On").replace("&", "ง"));
+					p.sendMessage(pl.getConfig().getString("Messages.AutoNick Turned On").replace("&", "ยง"));
 				}
 			}
 		}
