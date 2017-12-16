@@ -62,7 +62,52 @@ public class v1_12_R1 implements Listener {
 		if(arg0.exists()) {
 			if(arg1.length() <= 14) {
 				if(!blacklist.contains(arg1)) {
-					if(!arg0.isNickNameUsed(arg1)) {
+					if(arg0.isNicked()) {
+						if(!pl.nickedPlayers.contains(arg2 + arg1)) {
+							pl.nickedPlayers.add(arg2 + arg1);
+						} else {
+							pl.nickedPlayers.remove(arg2 + arg1);
+							pl.nickedPlayers.add(arg2 + arg1);
+						}
+						try {
+							if(pl.nte) {
+								pl.nameField.set(cp.getProfile(), arg1);
+							} else {
+								pl.nameField.set(cp.getProfile(), arg4 + arg1);
+							}
+						} catch(IllegalArgumentException | IllegalAccessException e) {
+							e.printStackTrace();
+						}
+						destroy(cp);
+						removeFromTablist(cp);
+						Bukkit.getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
+							@Override
+							public void run() {
+								spawn(cp);
+								addToTablist(cp);
+							}
+						}, 4);
+						arg0.setDisplayName(arg2 + arg1);
+						Bukkit.getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
+							@Override
+							public void run() {
+								if(pl.nte) {
+									NametagEdit.getApi().setPrefix(arg0.getDisplayName(), arg3);
+								}
+								arg0.setPlayerListName(arg4 + arg1);
+							}
+						}, 2);
+						if(pl.chat != null) {
+							if(!defaultPermsPrefix.containsKey(arg0)) {
+								defaultPermsPrefix.put(arg0, pl.chat.getPlayerPrefix(arg0));
+							}
+							for(World w : Bukkit.getWorlds()) {
+								pl.chat.setPlayerPrefix(w.getName(), arg0, pl.getConfig().getString("Config.Permissions System Player Prefix").replace("&", "§"));
+							}
+						}
+						Bukkit.getPluginManager().callEvent(new PlayerNickEvent(arg0, arg1));
+						return arg1;
+					} else if(!arg0.isNickNameUsed(arg1)) {
 						if(!pl.nickedPlayers.contains(arg2 + arg1)) {
 							pl.nickedPlayers.add(arg2 + arg1);
 						} else {
