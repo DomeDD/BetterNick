@@ -163,7 +163,7 @@ public class NickedPlayer implements Player, Listener {
 			this.nickname = v1_10_R1.setRandomNickName(getNickedPlayer(), arg0, arg1, arg2);
 			break;
 		case v1_11_R1:
-			this.nickname = v1_10_R1.setRandomNickName(getNickedPlayer(), arg0, arg1, arg2);
+			this.nickname = v1_11_R1.setRandomNickName(getNickedPlayer(), arg0, arg1, arg2);
 			break;
 		case v1_12_R1:
 			this.nickname = v1_12_R1.setRandomNickName(getNickedPlayer(), arg0, arg1, arg2);
@@ -392,7 +392,7 @@ public class NickedPlayer implements Player, Listener {
 	public boolean isNickNameUsed(String arg0) {
 		if(pl.getConfig().getBoolean("MySQL.Enabled")) {
 			try {
-				ResultSet rs = pl.mysql.result("SELECT NICKED FROM BetterNick WHERE NICKNAME='" + arg0 + "'");
+				ResultSet rs = pl.mysql.result("SELECT NICKNAME FROM BetterNick WHERE NICKNAME='" + arg0 + "'");
 				if(rs.next()) {
 					return true;
 				}
@@ -484,7 +484,18 @@ public class NickedPlayer implements Player, Listener {
 		return this;
 	}
 	public String getNickName() {
-		return this.nickname;
+		if(pl.getConfig().getBoolean("MySQL.Enabled")) {
+			try {
+		    	ResultSet rs = pl.mysql.result("SELECT NICKNAME FROM BetterNick WHERE UUID='" + this.p.getUniqueId() + "'");
+		    	if(rs.next() && rs.getString("NICKNAME") == null);
+				return rs.getString("NICKNAME");
+		    } catch (SQLException e) {
+		    	e.printStackTrace();
+		    }
+		} else {
+			return NickedPlayersFile.cfg.getString("NickedPlayers." + this.p.getUniqueId() + ".Name");
+		}
+		return null;
 	}
 	public String getRealName() {
 		if(pl.getConfig().getBoolean("MySQL.Enabled")) {
