@@ -9,11 +9,13 @@
  */
 package de.domedd.betternick.listeners;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 import de.domedd.betternick.BetterNick;
+import de.domedd.betternick.api.nickedplayer.NickedPlayer;
 
 public class PlayerDeath implements Listener {
 
@@ -25,8 +27,13 @@ public class PlayerDeath implements Listener {
 	
 	@EventHandler
 	public void onDeath(PlayerDeathEvent e) {
+		Player p = e.getEntity();
 		if(pl.getConfig().getBoolean("Config.Skin Self Update")) {
-			e.setDeathMessage(null);
+			NickedPlayer np = new NickedPlayer(p);
+			if(np.exists()) {
+				e.setKeepInventory(true);
+				e.setDeathMessage(null);
+			}
 		}
 	}
 }
