@@ -21,6 +21,7 @@ import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 
+import com.gmail.filoghost.coloredtags.ColoredTags;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import com.nametagedit.plugin.NametagEdit;
@@ -33,6 +34,8 @@ import de.domedd.betternick.api.events.PlayerSkinResetEvent;
 import de.domedd.betternick.api.events.PlayerSkinSetEvent;
 import de.domedd.betternick.api.events.PlayerUnNickEvent;
 import de.domedd.betternick.api.nickedplayer.NickedPlayer;
+import de.domedd.betternick.files.NickedPlayersFile;
+import de.dytanic.cloudnet.bridge.CloudServer;
 import net.minecraft.server.v1_12_R1.IChatBaseComponent;
 import net.minecraft.server.v1_12_R1.Packet;
 import net.minecraft.server.v1_12_R1.PacketPlayInClientCommand;
@@ -98,12 +101,23 @@ public class v1_12_R1 implements Listener {
 							}
 						}, 2);
 						if(pl.chat != null) {
-							if(!defaultPermsPrefix.containsKey(arg0)) {
-								defaultPermsPrefix.put(arg0, pl.chat.getPlayerPrefix(arg0));
+							if(!pl.getConfig().getBoolean("Config.Keep NickName On Quit")) {
+								if(!defaultPermsPrefix.containsKey(arg0.getPlayer())) {
+									defaultPermsPrefix.put(arg0.getPlayer(), pl.chat.getPlayerPrefix(arg0.getPlayer()));
+								}
+							} else {
+								NickedPlayersFile.cfg.set("NickedPlayers." + arg0.getUniqueId() + ".DefaultPrefix", pl.chat.getPlayerPrefix(arg0.getPlayer()));
 							}
 							for(World w : Bukkit.getWorlds()) {
-								pl.chat.setPlayerPrefix(w.getName(), arg0, pl.getConfig().getString("Config.Permissions System Player Prefix").replace("&", "§"));
+								pl.chat.setPlayerPrefix(w.getName(), arg0.getPlayer(), ((!pl.getConfig().getBoolean("Config.Keep NickName On Quit")) ? defaultPermsPrefix.get(arg0.getPlayer()) : NickedPlayersFile.cfg.getString("NickedPlayers." + arg0.getUniqueId() + ".DefaultPrefix")));
 							}
+						}
+						if(pl.cloudnet) {
+							CloudServer.getInstance().updateNameTags(arg0.getPlayer());
+						}
+						if(pl.coloredtags) {
+							ColoredTags.updateNametag(arg0.getPlayer());
+							ColoredTags.updateTab(arg0.getPlayer());
 						}
 						Bukkit.getPluginManager().callEvent(new PlayerNickEvent(arg0, arg1));
 						return arg1;
@@ -143,12 +157,23 @@ public class v1_12_R1 implements Listener {
 							}
 						}, 2);
 						if(pl.chat != null) {
-							if(!defaultPermsPrefix.containsKey(arg0)) {
-								defaultPermsPrefix.put(arg0, pl.chat.getPlayerPrefix(arg0));
+							if(!pl.getConfig().getBoolean("Config.Keep NickName On Quit")) {
+								if(!defaultPermsPrefix.containsKey(arg0.getPlayer())) {
+									defaultPermsPrefix.put(arg0.getPlayer(), pl.chat.getPlayerPrefix(arg0.getPlayer()));
+								}
+							} else {
+								NickedPlayersFile.cfg.set("NickedPlayers." + arg0.getUniqueId() + ".DefaultPrefix", pl.chat.getPlayerPrefix(arg0.getPlayer()));
 							}
 							for(World w : Bukkit.getWorlds()) {
-								pl.chat.setPlayerPrefix(w.getName(), arg0, pl.getConfig().getString("Config.Permissions System Player Prefix").replace("&", "§"));
+								pl.chat.setPlayerPrefix(w.getName(), arg0.getPlayer(), ((!pl.getConfig().getBoolean("Config.Keep NickName On Quit")) ? defaultPermsPrefix.get(arg0.getPlayer()) : NickedPlayersFile.cfg.getString("NickedPlayers." + arg0.getUniqueId() + ".DefaultPrefix")));
 							}
+						}
+						if(pl.cloudnet) {
+							CloudServer.getInstance().updateNameTags(arg0.getPlayer());
+						}
+						if(pl.coloredtags) {
+							ColoredTags.updateNametag(arg0.getPlayer());
+							ColoredTags.updateTab(arg0.getPlayer());
 						}
 						Bukkit.getPluginManager().callEvent(new PlayerNickEvent(arg0, arg1));
 						return arg1;
@@ -159,10 +184,9 @@ public class v1_12_R1 implements Listener {
 					setRandomNickName(arg0, arg1, arg2, arg3);
 				}
 			} else {
-				if(pl.getConfig().getBoolean("Config.Messages.Enabled")) {
-					arg0.sendMessage(pl.getConfig().getString("Messages.Nick Set Error").replace("[NAME]", arg1).replace("&", "§"));
+				if(pl.getConfig().getBoolean("Messages.Enabled")) {
+					arg0.sendMessage(pl.getConfig().getString("Messages.Nick Set Error").replace("&", "§"));
 				}
-				throw new NumberFormatException("Number is too high");
 			}
 		} else {
 			arg0.create();
@@ -213,12 +237,23 @@ public class v1_12_R1 implements Listener {
 							}
 						}, 2);
 						if(pl.chat != null) {
-							if(!defaultPermsPrefix.containsKey(arg0)) {
-								defaultPermsPrefix.put(arg0, pl.chat.getPlayerPrefix(arg0));
+							if(!pl.getConfig().getBoolean("Config.Keep NickName On Quit")) {
+								if(!defaultPermsPrefix.containsKey(arg0.getPlayer())) {
+									defaultPermsPrefix.put(arg0.getPlayer(), pl.chat.getPlayerPrefix(arg0.getPlayer()));
+								}
+							} else {
+								NickedPlayersFile.cfg.set("NickedPlayers." + arg0.getUniqueId() + ".DefaultPrefix", pl.chat.getPlayerPrefix(arg0.getPlayer()));
 							}
 							for(World w : Bukkit.getWorlds()) {
-								pl.chat.setPlayerPrefix(w.getName(), arg0, pl.getConfig().getString("Config.Permissions System Player Prefix").replace("&", "§"));
+								pl.chat.setPlayerPrefix(w.getName(), arg0.getPlayer(), ((!pl.getConfig().getBoolean("Config.Keep NickName On Quit")) ? defaultPermsPrefix.get(arg0.getPlayer()) : NickedPlayersFile.cfg.getString("NickedPlayers." + arg0.getUniqueId() + ".DefaultPrefix")));
 							}
+						}
+						if(pl.cloudnet) {
+							CloudServer.getInstance().updateNameTags(arg0.getPlayer());
+						}
+						if(pl.coloredtags) {
+							ColoredTags.updateNametag(arg0.getPlayer());
+							ColoredTags.updateTab(arg0.getPlayer());
 						}
 						Bukkit.getPluginManager().callEvent(new PlayerNickEvent(arg0, namelist.get(i)));
 						return namelist.get(i);
@@ -229,10 +264,9 @@ public class v1_12_R1 implements Listener {
 					setRandomNickName(arg0, arg1, arg2, arg3);
 				}
 			} else {
-				if(pl.getConfig().getBoolean("Config.Messages.Enabled")) {
-					arg0.sendMessage(pl.getConfig().getString("Messages.Nick Set Error").replace("[NAME]", arg1).replace("&", "§"));
+				if(pl.getConfig().getBoolean("Messages.Enabled")) {
+					arg0.sendMessage(pl.getConfig().getString("Messages.Nick Set Error").replace("&", "§"));
 				}
-				throw new NumberFormatException("Number is too high");
 			}
 		} else {
 			arg0.create();
@@ -264,9 +298,22 @@ public class v1_12_R1 implements Listener {
 			arg0.setPlayerListName(arg0.getRealName());
 			if(pl.chat != null) {
 				for(World w : Bukkit.getWorlds()) {
-					pl.chat.setPlayerPrefix(w.getName(), arg0, defaultPermsPrefix.get(arg0));
+					pl.chat.setPlayerPrefix(w.getName(), arg0.getPlayer(), ((!pl.getConfig().getBoolean("Config.Keep NickName On Quit")) ? defaultPermsPrefix.get(arg0.getPlayer()) : NickedPlayersFile.cfg.getString("NickedPlayers." + arg0.getUniqueId() + ".DefaultPrefix")));
 				}
-				defaultPermsPrefix.remove(arg0);
+				if(!pl.getConfig().getBoolean("Config.Keep NickName On Quit")) {
+					if(defaultPermsPrefix.containsKey(arg0.getPlayer())) {
+						defaultPermsPrefix.remove(arg0.getPlayer());
+					}
+				} else {
+					NickedPlayersFile.cfg.set("NickedPlayers." + arg0.getUniqueId() + ".DefaultPrefix", null);
+				}
+			}
+			if(pl.cloudnet) {
+				CloudServer.getInstance().updateNameTags(arg0.getPlayer());
+			}
+			if(pl.coloredtags) {
+				ColoredTags.updateNametag(arg0.getPlayer());
+				ColoredTags.updateTab(arg0.getPlayer());
 			}
 			Bukkit.getPluginManager().callEvent(new PlayerUnNickEvent(arg0));
 		} else {
@@ -283,9 +330,9 @@ public class v1_12_R1 implements Listener {
 		if(pl.getConfig().getBoolean("Config.Skin Self Update")) {
 			destroy(cp);
 			removeFromTablist(cp);
-			location.put(arg0, arg0.getLocation().add(0, 1, 0));
-			health.put(arg0, arg0.getHealth());
-			food.put(arg0, arg0.getFoodLevel());
+			location.put(arg0.getPlayer(), arg0.getLocation().add(0, 1, 0));
+			health.put(arg0.getPlayer(), arg0.getHealth());
+			food.put(arg0.getPlayer(), arg0.getFoodLevel());
 			arg0.setHealth(0);
 			Bukkit.getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
 				@Override
@@ -293,9 +340,9 @@ public class v1_12_R1 implements Listener {
 					addToTablist(cp);
 					spawn(cp);
 					respawn(cp);
-					arg0.setHealth(health.get(arg0));
-					arg0.setFoodLevel(food.get(arg0));
-					arg0.teleport(location.get(arg0));
+					arg0.setHealth(health.get(arg0.getPlayer()));
+					arg0.setFoodLevel(food.get(arg0.getPlayer()));
+					arg0.teleport(location.get(arg0.getPlayer()));
 				}
 			}, 4);
 		} else {
@@ -323,9 +370,9 @@ public class v1_12_R1 implements Listener {
 		if(pl.getConfig().getBoolean("Config.Skin Self Update")) {
 			destroy(cp);
 			removeFromTablist(cp);
-			location.put(arg0, arg0.getLocation().add(0, 1, 0));
-			health.put(arg0, arg0.getHealth());
-			food.put(arg0, arg0.getFoodLevel());
+			location.put(arg0.getPlayer(), arg0.getLocation().add(0, 1, 0));
+			health.put(arg0.getPlayer(), arg0.getHealth());
+			food.put(arg0.getPlayer(), arg0.getFoodLevel());
 			arg0.setHealth(0);
 			Bukkit.getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
 				@Override
@@ -333,9 +380,9 @@ public class v1_12_R1 implements Listener {
 					addToTablist(cp);
 					spawn(cp);
 					respawn(cp);
-					arg0.setHealth(health.get(arg0));
-					arg0.setFoodLevel(food.get(arg0));
-					arg0.teleport(location.get(arg0));
+					arg0.setHealth(health.get(arg0.getPlayer()));
+					arg0.setFoodLevel(food.get(arg0.getPlayer()));
+					arg0.teleport(location.get(arg0.getPlayer()));
 				}
 			}, 4);
 		} else {
@@ -361,9 +408,9 @@ public class v1_12_R1 implements Listener {
 		if(pl.getConfig().getBoolean("Config.Skin Self Update")) {
 			destroy(cp);
 			removeFromTablist(cp);
-			location.put(arg0, arg0.getLocation().add(0, 1, 0));
-			health.put(arg0, arg0.getHealth());
-			food.put(arg0, arg0.getFoodLevel());
+			location.put(arg0.getPlayer(), arg0.getLocation().add(0, 1, 0));
+			health.put(arg0.getPlayer(), arg0.getHealth());
+			food.put(arg0.getPlayer(), arg0.getFoodLevel());
 			arg0.setHealth(0);
 			Bukkit.getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
 				@Override
@@ -371,9 +418,9 @@ public class v1_12_R1 implements Listener {
 					addToTablist(cp);
 					spawn(cp);
 					respawn(cp);
-					arg0.setHealth(health.get(arg0));
-					arg0.setFoodLevel(food.get(arg0));
-					arg0.teleport(location.get(arg0));
+					arg0.setHealth(health.get(arg0.getPlayer()));
+					arg0.setFoodLevel(food.get(arg0.getPlayer()));
+					arg0.teleport(location.get(arg0.getPlayer()));
 				}
 			}, 4);
 		} else {
@@ -406,9 +453,11 @@ public class v1_12_R1 implements Listener {
 			arg0.setPlayerListName(arg0.getRealName());
 			if(pl.chat != null) {
 				for(World w : Bukkit.getWorlds()) {
-					pl.chat.setPlayerPrefix(w.getName(), arg0, defaultPermsPrefix.get(arg0));
+					pl.chat.setPlayerPrefix(w.getName(), arg0.getPlayer(), defaultPermsPrefix.get(arg0.getPlayer()));
 				}
-				defaultPermsPrefix.remove(arg0);
+				if(defaultPermsPrefix.containsKey(arg0.getPlayer())) {
+					defaultPermsPrefix.remove(arg0.getPlayer());
+				}
 			}
 			Bukkit.getPluginManager().callEvent(new PlayerUnNickEvent(arg0));
 		} else {
