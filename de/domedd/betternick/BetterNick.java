@@ -29,7 +29,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.mojang.authlib.GameProfile;
 
-import de.domedd.betternick.addons.AutoNickItem;
+import de.domedd.betternick.addons.autonickitem.AutoNickItem;
+import de.domedd.betternick.addons.randomnickgui.RandomNickGui;
+import de.domedd.betternick.api.VanishManager;
 import de.domedd.betternick.api.nickedplayer.NickedOfflinePlayer;
 import de.domedd.betternick.api.nickedplayer.NickedPlayer;
 import de.domedd.betternick.commands.AutoNickCMD;
@@ -58,8 +60,10 @@ public class BetterNick extends JavaPlugin implements Listener {
 	public MySQL mysql;
 	public Field nameField;
 	public Chat chat = null;
-	public Logger log = this.getLogger();
 	public boolean nte = false;
+	public boolean cloudnet = false;
+	public boolean coloredtags = false;
+	public Logger log = this.getLogger();
 	public ArrayList<String> nickedPlayers = new ArrayList<String>();
 	
 	@Override
@@ -69,37 +73,37 @@ public class BetterNick extends JavaPlugin implements Listener {
 			log.warning("Minecraft version v1_8_R1 is not supported");
 			break;
 		case v1_8_R2:
-			log.info("Hooking into v1_8_R2");
+			log.info("Hooking into v1_8_R2...");
 			this.getServer().getPluginManager().registerEvents(new v1_8_R2(this), this);
 			loadPlugin();
 			break;
 		case v1_8_R3:
-			log.info("Hooking into v1_8_R3");
+			log.info("Hooking into v1_8_R3...");
 			this.getServer().getPluginManager().registerEvents(new v1_8_R3(this), this);
 			loadPlugin();
 			break;
 		case v1_9_R1:
-			log.info("Hooking into v1_9_R1");
+			log.info("Hooking into v1_9_R1...");
 			this.getServer().getPluginManager().registerEvents(new v1_9_R1(this), this);
 			loadPlugin();
 			break;
 		case v1_9_R2:
-			log.info("Hooking into v1_9_R2");
+			log.info("Hooking into v1_9_R2...");
 			this.getServer().getPluginManager().registerEvents(new v1_9_R2(this), this);
 			loadPlugin();
 			break;
 		case v1_10_R1:
-			log.info("Hooking into v1_10_R1");
+			log.info("Hooking into v1_10_R1...");
 			this.getServer().getPluginManager().registerEvents(new v1_10_R1(this), this);
 			loadPlugin();
 			break;
 		case v1_11_R1:
-			log.info("Hooking into v1_11_R1");
+			log.info("Hooking into v1_11_R1...");
 			this.getServer().getPluginManager().registerEvents(new v1_11_R1(this), this);
 			loadPlugin();
 			break;
 		case v1_12_R1:
-			log.info("Hooking into v1_12_R1");
+			log.info("Hooking into v1_12_R1...");
 			this.getServer().getPluginManager().registerEvents(new v1_12_R1(this), this);
 			loadPlugin();
 			break;
@@ -124,8 +128,11 @@ public class BetterNick extends JavaPlugin implements Listener {
 		} else {
 			this.getServer().getPluginManager().registerEvents(new AutoNick(this), this);
 			this.getServer().getPluginManager().registerEvents(new BetterNickEvents(this), this);
-			if(this.getConfig().getBoolean("Addons.AutoNickItem.Enabled")) {
+			if(this.getConfig().getBoolean("Addons.AutoNick Item.Enabled")) {
 				this.getServer().getPluginManager().registerEvents(new AutoNickItem(this), this);
+			}
+			if(this.getConfig().getBoolean("Addons.Random Nick Gui.Enabled")) {
+				this.getServer().getPluginManager().registerEvents(new RandomNickGui(this), this);
 			}
 			getCommand("nick").setExecutor(new NickCMD(this));
 			getCommand("unnick").setExecutor(new UnNickCMD());
@@ -135,13 +142,27 @@ public class BetterNick extends JavaPlugin implements Listener {
 			getCommand("autonick").setExecutor(new AutoNickCMD(this));
 		}
 		if(Bukkit.getPluginManager().getPlugin("NametagEdit") != null) {
+			log.info("Hooking into NametagEdit...");
 			nte = true;
+		}
+		if(Bukkit.getPluginManager().getPlugin("SuperVanish") != null || Bukkit.getPluginManager().getPlugin("PremiumVanish") != null) {
+			log.info("Hooking into SuperVanish/PremiumVanish...");
+			this.getServer().getPluginManager().registerEvents(new VanishManager(this), this);
 		}
     	if(getConfig().getBoolean("Config.Use Vault")) {
     		RegisteredServiceProvider<Chat> chatProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.chat.Chat.class);
             if (chatProvider != null) {
+            	log.info("Hooking into " + chatProvider.getProvider().getName() + " via Vault...");
                 chat = chatProvider.getProvider();
             }
+    	}
+    	if(Bukkit.getPluginManager().getPlugin("CloudNetAPI") != null) {
+    		log.info("Hooking into CloudNetAPI...");
+			cloudnet = true;
+		}
+    	if(Bukkit.getPluginManager().getPlugin("ColoredTags") != null) {
+    		log.info("Hooking into ColoredTags...");
+    		coloredtags = true;
     	}
     	if(this.getConfig().getBoolean("MySQL.Enabled")) {
 			this.mysql = new MySQL(this.getConfig().getString("MySQL.Username"), this.getConfig().getString("MySQL.Password"), this.getConfig().getString("MySQL.Database"), this.getConfig().getString("MySQL.Host"), this.getConfig().getString("MySQL.Port"));
