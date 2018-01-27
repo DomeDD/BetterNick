@@ -10,7 +10,6 @@
 package de.domedd.betternick.listeners;
 
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -26,40 +25,64 @@ public class AutoNick implements Listener {
 	public AutoNick(BetterNick main) {
 		this.pl = main;
 	}
-
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent e) {
-		Player p = e.getPlayer();
+		NickedPlayer p = new NickedPlayer(e.getPlayer());
 		String nameprefix = pl.getConfig().getString("Config.Display Name Prefix").replace("&", "§");
 		String nametagprefix = pl.getConfig().getString("Config.Name Tag Prefix").replace("&", "§");
 		String tablistprefix = pl.getConfig().getString("Config.Tablist Name Prefix").replace("&", "§");
 		if(p.hasPermission("BetterNick.Nick")) {
-			NickedPlayer np = new NickedPlayer(p);
-			if(!np.exists()) {
-				np.create();
+			if(!p.exists()) {
+				p.create();
 			}
 			if(!pl.getConfig().getBoolean("Config.Lobby Mode")) {
-				if(np.hasAutoNick()) {
-					Bukkit.getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
-						@Override
-						public void run() {
-							np.setRandomNickName(nameprefix, nametagprefix, tablistprefix);
-							np.setRandomSkin();
-						}
-					}, 2);
-					
+				if(p.hasAutoNick()) {
+					if(p.isNicked()) {
+						String nick = p.getNickName();
+						Bukkit.getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
+							@Override
+							public void run() {
+								p.setNickName(nick, nameprefix, nametagprefix, tablistprefix);
+								p.setRandomSkin();
+							}
+						}, 2);
+					} else {
+						Bukkit.getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
+							@Override
+							public void run() {
+								p.setRandomNickName(nameprefix, nametagprefix, tablistprefix);
+								p.setRandomSkin();
+							}
+						}, 2);
+					}
+				} else {
+					if(p.isNicked()) {
+						Bukkit.getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
+							@Override
+							public void run() {
+								p.setNickName(p.getNickName(), nameprefix, nametagprefix, tablistprefix);
+								p.setRandomSkin();
+							}
+						}, 2);
+					}
 				}
 			}
 		}
 	}
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent e) {
-		Player p = e.getPlayer();
-		if(p.hasPermission("BetterNick.UnNick")) {
-			NickedPlayer np = new NickedPlayer(p);
-			if(np.isNicked()) {
-				np.unNickOnLeave();
-			}			
+		NickedPlayer p = new NickedPlayer(e.getPlayer());
+		if(!pl.getConfig().getBoolean("Config.Keep NickName On Quit")) {
+			if(p.hasPermission("BetterNick.UnNick")) {
+				if(p.isNicked()) {
+					p.unNickOnLeave();
+				}			
+			}
+		} else {
+			if(pl.players.containsKey(p)) {
+				pl.players.remove(p);
+			}
 		}
 	}
+	
 }

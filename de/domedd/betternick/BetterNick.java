@@ -19,10 +19,11 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -34,6 +35,7 @@ import de.domedd.betternick.addons.randomnickgui.RandomNickGui;
 import de.domedd.betternick.api.VanishManager;
 import de.domedd.betternick.api.nickedplayer.NickedOfflinePlayer;
 import de.domedd.betternick.api.nickedplayer.NickedPlayer;
+import de.domedd.betternick.api.nickedplayer.NickedPlayers;
 import de.domedd.betternick.commands.AutoNickCMD;
 import de.domedd.betternick.commands.NickCMD;
 import de.domedd.betternick.commands.NickListCMD;
@@ -64,7 +66,7 @@ public class BetterNick extends JavaPlugin implements Listener {
 	public boolean cloudnet = false;
 	public boolean coloredtags = false;
 	public Logger log = this.getLogger();
-	public ArrayList<String> nickedPlayers = new ArrayList<String>();
+	public HashMap<Player, String> players = new HashMap<Player, String>();
 	
 	@Override
 	public void onEnable() {
@@ -121,6 +123,7 @@ public class BetterNick extends JavaPlugin implements Listener {
 		nameField = getField(GameProfile.class, "name");
 		this.getServer().getPluginManager().registerEvents(new PlayerDeath(this), this);
 		this.getServer().getPluginManager().registerEvents(new NickedPlayer(this), this);
+		this.getServer().getPluginManager().registerEvents(new NickedPlayers(this), this);
 		this.getServer().getPluginManager().registerEvents(new NickedOfflinePlayer(this), this);
 		this.getServer().getPluginManager().registerEvents(new MySQL(this), this);
 		if(getConfig().getBoolean("Config.API Mode")) {

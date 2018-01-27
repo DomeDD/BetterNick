@@ -12,6 +12,7 @@ package de.domedd.betternick.files;
 import java.io.File;
 import java.io.IOException;
 
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -30,5 +31,12 @@ public class NickedPlayersFile {
 	public static void loadDefaultFile() {
 		cfg.options().copyDefaults(true);
 		save();
+	}
+	public static void reload() {
+		try {
+			cfg.load(file);
+		} catch (IOException | InvalidConfigurationException e) {
+			e.printStackTrace();
+		}
 	}
 }

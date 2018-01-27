@@ -66,11 +66,11 @@ public class v1_12_R1 implements Listener {
 			if(arg1.length() <= 14) {
 				if(!blacklist.contains(arg1)) {
 					if(arg0.isNicked()) {
-						if(!pl.nickedPlayers.contains(arg2 + arg1)) {
-							pl.nickedPlayers.add(arg2 + arg1);
+						if(!pl.players.containsKey(arg0.getPlayer())) {
+							pl.players.put(arg0.getPlayer(), arg1);
 						} else {
-							pl.nickedPlayers.remove(arg2 + arg1);
-							pl.nickedPlayers.add(arg2 + arg1);
+							pl.players.remove(arg0.getPlayer());
+							pl.players.put(arg0.getPlayer(), arg1);
 						}
 						try {
 							if(pl.nte) {
@@ -122,11 +122,11 @@ public class v1_12_R1 implements Listener {
 						Bukkit.getPluginManager().callEvent(new PlayerNickEvent(arg0, arg1));
 						return arg1;
 					} else if(!arg0.isNickNameUsed(arg1)) {
-						if(!pl.nickedPlayers.contains(arg2 + arg1)) {
-							pl.nickedPlayers.add(arg2 + arg1);
+						if(!pl.players.containsKey(arg0.getPlayer())) {
+							pl.players.put(arg0.getPlayer(), arg1);
 						} else {
-							pl.nickedPlayers.remove(arg2 + arg1);
-							pl.nickedPlayers.add(arg2 + arg1);
+							pl.players.remove(arg0.getPlayer());
+							pl.players.put(arg0.getPlayer(), arg1);
 						}
 						try {
 							if(pl.nte) {
@@ -203,11 +203,11 @@ public class v1_12_R1 implements Listener {
 			if(namelist.get(i).length() <= 14) {
 				if(!blacklist.contains(namelist.get(i))) {
 					if(!arg0.isNickNameUsed(namelist.get(i))) {
-						if(!pl.nickedPlayers.contains(arg1 + namelist.get(i))) {
-							pl.nickedPlayers.add(arg1 + namelist.get(i));
+						if(!pl.players.containsKey(arg0.getPlayer())) {
+							pl.players.put(arg0.getPlayer(), namelist.get(i));
 						} else {
-							pl.nickedPlayers.remove(arg1 + namelist.get(i));
-							pl.nickedPlayers.add(arg1 + namelist.get(i));
+							pl.players.remove(arg0.getPlayer());
+							pl.players.put(arg0.getPlayer(), namelist.get(i));
 						}
 						try {
 							if(pl.nte) {
@@ -277,8 +277,8 @@ public class v1_12_R1 implements Listener {
 	public static void unNick(NickedPlayer arg0) {
 		CraftPlayer cp = (CraftPlayer) arg0.getPlayer();
 		if(arg0.exists()) {
-			if(pl.nickedPlayers.contains(arg0.getDisplayName())) {
-				pl.nickedPlayers.remove(arg0.getDisplayName());
+			if(pl.players.containsKey(arg0.getPlayer())) {
+				pl.players.remove(arg0.getPlayer());
 			}
 			try {
 				pl.nameField.set(cp.getProfile(), arg0.getRealName());
@@ -439,8 +439,8 @@ public class v1_12_R1 implements Listener {
 	public static void unNickOnLeave(NickedPlayer arg0) {
 		CraftPlayer cp = (CraftPlayer) arg0.getPlayer();
 		if(arg0.exists()) {
-			if(pl.nickedPlayers.contains(arg0.getDisplayName())) {
-				pl.nickedPlayers.remove(arg0.getDisplayName());
+			if(pl.players.containsKey(arg0.getPlayer())) {
+				pl.players.remove(arg0.getPlayer());
 			}
 			try {
 				pl.nameField.set(cp.getProfile(), arg0.getRealName());

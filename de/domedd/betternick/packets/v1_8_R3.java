@@ -34,6 +34,7 @@ import de.domedd.betternick.api.events.PlayerSkinResetEvent;
 import de.domedd.betternick.api.events.PlayerSkinSetEvent;
 import de.domedd.betternick.api.events.PlayerUnNickEvent;
 import de.domedd.betternick.api.nickedplayer.NickedPlayer;
+import de.domedd.betternick.files.NickedPlayersFile;
 import de.dytanic.cloudnet.bridge.CloudServer;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent;
 import net.minecraft.server.v1_8_R3.Packet;
@@ -65,11 +66,11 @@ public class v1_8_R3 implements Listener {
 			if(arg1.length() <= 14) {
 				if(!blacklist.contains(arg1)) {
 					if(arg0.isNicked()) {
-						if(!pl.nickedPlayers.contains(arg2 + arg1)) {
-							pl.nickedPlayers.add(arg2 + arg1);
+						if(!pl.players.containsKey(arg0.getPlayer())) {
+							pl.players.put(arg0.getPlayer(), arg1);
 						} else {
-							pl.nickedPlayers.remove(arg2 + arg1);
-							pl.nickedPlayers.add(arg2 + arg1);
+							pl.players.remove(arg0.getPlayer());
+							pl.players.put(arg0.getPlayer(), arg1);
 						}
 						try {
 							if(pl.nte) {
@@ -100,11 +101,15 @@ public class v1_8_R3 implements Listener {
 							}
 						}, 2);
 						if(pl.chat != null) {
-							if(!defaultPermsPrefix.containsKey(arg0.getPlayer())) {
-								defaultPermsPrefix.put(arg0.getPlayer(), pl.chat.getPlayerPrefix(arg0.getPlayer()));
+							if(!pl.getConfig().getBoolean("Config.Keep NickName On Quit")) {
+								if(!defaultPermsPrefix.containsKey(arg0.getPlayer())) {
+									defaultPermsPrefix.put(arg0.getPlayer(), pl.chat.getPlayerPrefix(arg0.getPlayer()));
+								}
+							} else {
+								NickedPlayersFile.cfg.set("NickedPlayers." + arg0.getUniqueId() + ".DefaultPrefix", pl.chat.getPlayerPrefix(arg0.getPlayer()));
 							}
 							for(World w : Bukkit.getWorlds()) {
-								pl.chat.setPlayerPrefix(w.getName(), arg0.getPlayer(), pl.getConfig().getString("Config.Permissions System Player Prefix").replace("&", "§"));
+								pl.chat.setPlayerPrefix(w.getName(), arg0.getPlayer(), ((!pl.getConfig().getBoolean("Config.Keep NickName On Quit")) ? defaultPermsPrefix.get(arg0.getPlayer()) : NickedPlayersFile.cfg.getString("NickedPlayers." + arg0.getUniqueId() + ".DefaultPrefix")));
 							}
 						}
 						if(pl.cloudnet) {
@@ -117,11 +122,11 @@ public class v1_8_R3 implements Listener {
 						Bukkit.getPluginManager().callEvent(new PlayerNickEvent(arg0, arg1));
 						return arg1;
 					} else if(!arg0.isNickNameUsed(arg1)) {
-						if(!pl.nickedPlayers.contains(arg2 + arg1)) {
-							pl.nickedPlayers.add(arg2 + arg1);
+						if(!pl.players.containsKey(arg0.getPlayer())) {
+							pl.players.put(arg0.getPlayer(), arg1);
 						} else {
-							pl.nickedPlayers.remove(arg2 + arg1);
-							pl.nickedPlayers.add(arg2 + arg1);
+							pl.players.remove(arg0.getPlayer());
+							pl.players.put(arg0.getPlayer(), arg1);
 						}
 						try {
 							if(pl.nte) {
@@ -152,11 +157,15 @@ public class v1_8_R3 implements Listener {
 							}
 						}, 2);
 						if(pl.chat != null) {
-							if(!defaultPermsPrefix.containsKey(arg0.getPlayer())) {
-								defaultPermsPrefix.put(arg0.getPlayer(), pl.chat.getPlayerPrefix(arg0.getPlayer()));
+							if(!pl.getConfig().getBoolean("Config.Keep NickName On Quit")) {
+								if(!defaultPermsPrefix.containsKey(arg0.getPlayer())) {
+									defaultPermsPrefix.put(arg0.getPlayer(), pl.chat.getPlayerPrefix(arg0.getPlayer()));
+								}
+							} else {
+								NickedPlayersFile.cfg.set("NickedPlayers." + arg0.getUniqueId() + ".DefaultPrefix", pl.chat.getPlayerPrefix(arg0.getPlayer()));
 							}
 							for(World w : Bukkit.getWorlds()) {
-								pl.chat.setPlayerPrefix(w.getName(), arg0.getPlayer(), pl.getConfig().getString("Config.Permissions System Player Prefix").replace("&", "§"));
+								pl.chat.setPlayerPrefix(w.getName(), arg0.getPlayer(), ((!pl.getConfig().getBoolean("Config.Keep NickName On Quit")) ? defaultPermsPrefix.get(arg0.getPlayer()) : NickedPlayersFile.cfg.getString("NickedPlayers." + arg0.getUniqueId() + ".DefaultPrefix")));
 							}
 						}
 						if(pl.cloudnet) {
@@ -194,11 +203,11 @@ public class v1_8_R3 implements Listener {
 			if(namelist.get(i).length() <= 14) {
 				if(!blacklist.contains(namelist.get(i))) {
 					if(!arg0.isNickNameUsed(namelist.get(i))) {
-						if(!pl.nickedPlayers.contains(arg1 + namelist.get(i))) {
-							pl.nickedPlayers.add(arg1 + namelist.get(i));
+						if(!pl.players.containsKey(arg0.getPlayer())) {
+							pl.players.put(arg0.getPlayer(), namelist.get(i));
 						} else {
-							pl.nickedPlayers.remove(arg1 + namelist.get(i));
-							pl.nickedPlayers.add(arg1 + namelist.get(i));
+							pl.players.remove(arg0.getPlayer());
+							pl.players.put(arg0.getPlayer(), namelist.get(i));
 						}
 						try {
 							if(pl.nte) {
@@ -229,11 +238,15 @@ public class v1_8_R3 implements Listener {
 							}
 						}, 2);
 						if(pl.chat != null) {
-							if(!defaultPermsPrefix.containsKey(arg0.getPlayer())) {
-								defaultPermsPrefix.put(arg0.getPlayer(), pl.chat.getPlayerPrefix(arg0.getPlayer()));
+							if(!pl.getConfig().getBoolean("Config.Keep NickName On Quit")) {
+								if(!defaultPermsPrefix.containsKey(arg0.getPlayer())) {
+									defaultPermsPrefix.put(arg0.getPlayer(), pl.chat.getPlayerPrefix(arg0.getPlayer()));
+								}
+							} else {
+								NickedPlayersFile.cfg.set("NickedPlayers." + arg0.getUniqueId() + ".DefaultPrefix", pl.chat.getPlayerPrefix(arg0.getPlayer()));
 							}
 							for(World w : Bukkit.getWorlds()) {
-								pl.chat.setPlayerPrefix(w.getName(), arg0.getPlayer(), pl.getConfig().getString("Config.Permissions System Player Prefix").replace("&", "§"));
+								pl.chat.setPlayerPrefix(w.getName(), arg0.getPlayer(), ((!pl.getConfig().getBoolean("Config.Keep NickName On Quit")) ? defaultPermsPrefix.get(arg0.getPlayer()) : NickedPlayersFile.cfg.getString("NickedPlayers." + arg0.getUniqueId() + ".DefaultPrefix")));
 							}
 						}
 						if(pl.cloudnet) {
@@ -265,8 +278,8 @@ public class v1_8_R3 implements Listener {
 	public static void unNick(NickedPlayer arg0) {
 		CraftPlayer cp = (CraftPlayer) arg0.getPlayer();
 		if(arg0.exists()) {
-			if(pl.nickedPlayers.contains(arg0.getDisplayName())) {
-				pl.nickedPlayers.remove(arg0.getDisplayName());
+			if(pl.players.containsKey(arg0.getPlayer())) {
+				pl.players.remove(arg0.getPlayer());
 			}
 			try {
 				pl.nameField.set(cp.getProfile(), arg0.getRealName());
@@ -286,10 +299,14 @@ public class v1_8_R3 implements Listener {
 			arg0.setPlayerListName(arg0.getRealName());
 			if(pl.chat != null) {
 				for(World w : Bukkit.getWorlds()) {
-					pl.chat.setPlayerPrefix(w.getName(), arg0.getPlayer(), defaultPermsPrefix.get(arg0.getPlayer()));
+					pl.chat.setPlayerPrefix(w.getName(), arg0.getPlayer(), ((!pl.getConfig().getBoolean("Config.Keep NickName On Quit")) ? defaultPermsPrefix.get(arg0.getPlayer()) : NickedPlayersFile.cfg.getString("NickedPlayers." + arg0.getUniqueId() + ".DefaultPrefix")));
 				}
-				if(defaultPermsPrefix.containsKey(arg0.getPlayer())) {
-					defaultPermsPrefix.remove(arg0.getPlayer());
+				if(!pl.getConfig().getBoolean("Config.Keep NickName On Quit")) {
+					if(defaultPermsPrefix.containsKey(arg0.getPlayer())) {
+						defaultPermsPrefix.remove(arg0.getPlayer());
+					}
+				} else {
+					NickedPlayersFile.cfg.set("NickedPlayers." + arg0.getUniqueId() + ".DefaultPrefix", null);
 				}
 			}
 			if(pl.cloudnet) {
@@ -423,8 +440,8 @@ public class v1_8_R3 implements Listener {
 	public static void unNickOnLeave(NickedPlayer arg0) {
 		CraftPlayer cp = (CraftPlayer) arg0.getPlayer();
 		if(arg0.exists()) {
-			if(pl.nickedPlayers.contains(arg0.getDisplayName())) {
-				pl.nickedPlayers.remove(arg0.getDisplayName());
+			if(pl.players.containsKey(arg0.getPlayer())) {
+				pl.players.remove(arg0.getPlayer());
 			}
 			try {
 				pl.nameField.set(cp.getProfile(), arg0.getRealName());

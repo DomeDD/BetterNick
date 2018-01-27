@@ -41,7 +41,12 @@ public class AutoNickItem implements Listener {
 		if(pl.getConfig().getBoolean("Addons.AutoNick Item.Get On Server Join")) {
 			if(p.hasPermission("BetterNick.JoinItem")) {
 				String[] item = pl.getConfig().getString("Addons.AutoNick Item.Item").split(", ");
-				p.getInventory().setItem(Integer.valueOf(item[2]), getItemFromString(pl.getConfig().getString("Addons.AutoNick Item.Item")));
+				Bukkit.getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
+					@Override
+					public void run() {
+						p.getInventory().setItem(Integer.valueOf(item[2]), getItemFromString(pl.getConfig().getString("Addons.AutoNick Item.Item")));
+					}
+				}, 10);
 			}
 		}
 	}
@@ -51,7 +56,12 @@ public class AutoNickItem implements Listener {
 		if(pl.getConfig().getStringList("Addons.AutoNick Item.Get On World Change").contains(p.getWorld().getName())) {
 			if(p.hasPermission("BetterNick.JoinItem")) {
 				String[] item = pl.getConfig().getString("Addons.AutoNick Item.Item").split(", ");
-				p.getInventory().setItem(Integer.valueOf(item[2]), getItemFromString(pl.getConfig().getString("Addons.AutoNick Item.Item")));
+				Bukkit.getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
+					@Override
+					public void run() {
+						p.getInventory().setItem(Integer.valueOf(item[2]), getItemFromString(pl.getConfig().getString("Addons.AutoNick Item.Item")));
+					}
+				}, 10);
 			}
 		}
 	}

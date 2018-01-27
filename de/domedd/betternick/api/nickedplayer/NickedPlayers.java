@@ -11,8 +11,9 @@ package de.domedd.betternick.api.nickedplayer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 
 import de.domedd.betternick.BetterNick;
@@ -28,8 +29,11 @@ public class NickedPlayers implements Listener {
 	public NickedPlayers() {}
 	public List<NickedPlayer> getAll() {
 		List<NickedPlayer> list = new ArrayList<NickedPlayer>();
-		for(String names : pl.nickedPlayers) {
-			list.add(new NickedPlayer(Bukkit.getPlayer(names)));
+		if(!pl.players.isEmpty()) {
+			for(Map.Entry<Player, String> all : pl.players.entrySet()) {
+				NickedPlayer np = new NickedPlayer(all.getKey());
+				list.add(np);
+			}
 		}
 		return list;
 	}

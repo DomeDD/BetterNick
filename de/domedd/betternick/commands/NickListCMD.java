@@ -17,6 +17,7 @@ import org.bukkit.entity.Player;
 
 import de.domedd.betternick.BetterNick;
 import de.domedd.betternick.api.nickedplayer.NickedPlayer;
+import de.domedd.betternick.api.nickedplayer.NickedPlayers;
 
 public class NickListCMD implements CommandExecutor {
 
@@ -32,33 +33,37 @@ public class NickListCMD implements CommandExecutor {
 			Player p = (Player) sender;
 			if(args.length == 0) {
 				if(p.hasPermission("BetterNick.NickList")) {
-					if(pl.nickedPlayers.isEmpty()) {
+					if(pl.players.isEmpty()) {
 						p.sendMessage(pl.getConfig().getString("Messages.Get Nicked Players Error").replace("&", "§"));
 					} else {
+						int i = 1;
 						p.sendMessage(pl.getConfig().getString("Messages.Get Nicked Players Header").replace("&", "§"));
-						for(int i = 0; i < pl.nickedPlayers.size(); i++) {
-							NickedPlayer np = new NickedPlayer(Bukkit.getPlayer(pl.nickedPlayers.get(i)));
+						NickedPlayers nps = new NickedPlayers();
+						for(NickedPlayer all : nps.getAll()) {
 							p.sendMessage(pl.getConfig().getString("Messages.Get Nicked Players")
-									.replace("[ID]", Integer.valueOf(i + 1).toString())
-									.replace("[PLAYER]", Bukkit.getPlayer(pl.nickedPlayers.get(i)).getDisplayName())
-									.replace("[NAME]", np.getRealName())
+									.replace("[ID]", Integer.valueOf(i).toString())
+									.replace("[PLAYER]", all
+											.getDisplayName().replaceAll("§((?i)[0-9a-fk-or])", ""))
+									.replace("[NAME]", all.getRealName())
 									.replace("&", "§"));
+							i++;
 						}
 					}
 				}
 			}
 		} else {
-			if(pl.nickedPlayers.isEmpty()) {
+			if(pl.players.isEmpty()) {
 				Bukkit.getConsoleSender().sendMessage(pl.getConfig().getString("Messages.Get Nicked Players Error").replace("&", "§"));
 			} else {
+				int i = 1;
 				Bukkit.getConsoleSender().sendMessage(pl.getConfig().getString("Messages.Get Nicked Players Header").replace("&", "§"));
-				for(int i = 0; i < pl.nickedPlayers.size(); i++) {
-					NickedPlayer np = new NickedPlayer(Bukkit.getPlayer(pl.nickedPlayers.get(i)));
+				for(NickedPlayer all : new NickedPlayers().getAll()) {
 					Bukkit.getConsoleSender().sendMessage(pl.getConfig().getString("Messages.Get Nicked Players")
-							.replace("[ID]", Integer.valueOf(i + 1).toString())
-							.replace("[PLAYER]", Bukkit.getPlayer(pl.nickedPlayers.get(i)).getDisplayName())
-							.replace("[NAME]", np.getRealName())
+							.replace("[ID]", Integer.valueOf(i).toString())
+							.replace("[PLAYER]", all.getDisplayName().replaceAll("§((?i)[0-9a-fk-or])", ""))
+							.replace("[NAME]", all.getRealName())
 							.replace("&", "§"));
+					i++;
 				}
 			}
 		}

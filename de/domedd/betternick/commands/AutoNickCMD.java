@@ -32,10 +32,10 @@ public class AutoNickCMD implements CommandExecutor {
 			if(p.hasPermission("BetterNick.JoinItem")) {
 				if(p.hasAutoNick()) {
 					p.setAutoNick(false);
-					p.sendMessage(pl.getConfig().getString("Messages.AutoNick Turned Off").replace("&", "ยง"));
+					p.sendMessage(pl.getConfig().getString("Messages.AutoNick Turned Off").replace("&", "ง"));
 				} else {
 					p.setAutoNick(true);
-					p.sendMessage(pl.getConfig().getString("Messages.AutoNick Turned On").replace("&", "ยง"));
+					p.sendMessage(pl.getConfig().getString("Messages.AutoNick Turned On").replace("&", "ง"));
 				}
 			}
 		}

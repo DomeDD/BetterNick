@@ -9,13 +9,16 @@
  */
 package de.domedd.betternick.commands;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import de.domedd.betternick.BetterNick;
+import de.domedd.betternick.addons.randomnickgui.RandomNickGui;
 import de.domedd.betternick.api.nickedplayer.NickedPlayer;
+import de.domedd.betternick.files.NickedPlayersFile;
 
 public class NickCMD implements CommandExecutor {
 
@@ -28,23 +31,40 @@ public class NickCMD implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String cmdlabel, String[] args) {
 		if(sender instanceof Player) {
-			NickedPlayer p = new NickedPlayer((Player) sender);
+			Player p = (Player) sender;
+			NickedPlayer np = new NickedPlayer((Player) sender);
 			if(args.length == 0) {
 				if(p.hasPermission("BetterNick.RandomNick")) {
-					String nameprefix = pl.getConfig().getString("Config.Display Name Prefix").replace("&", "§");
-					String nametagprefix = pl.getConfig().getString("Config.Name Tag Prefix").replace("&", "§");
-					String tablistprefix = pl.getConfig().getString("Config.Tablist Name Prefix").replace("&", "§");
-					p.setRandomNickName(nameprefix, nametagprefix, tablistprefix);
-					p.setRandomSkin();
+					if(!pl.getConfig().getBoolean("Addons.Random Nick Gui.Enabled")) {
+						String nameprefix = pl.getConfig().getString("Config.Display Name Prefix").replace("&", "§");
+						String nametagprefix = pl.getConfig().getString("Config.Name Tag Prefix").replace("&", "§");
+						String tablistprefix = pl.getConfig().getString("Config.Tablist Name Prefix").replace("&", "§");
+						np.setRandomNickName(nameprefix, nametagprefix, tablistprefix);
+						np.setRandomSkin();
+					} else {
+						p.openInventory(RandomNickGui.randomNicksInventory(p));
+					}
 				}
 			}
 			if(args.length == 1) {
-				if(p.hasPermission("BetterNick.Nick")) {
+				if(args[0].equalsIgnoreCase("reload")) {
+					pl.reloadConfig();
+					NickedPlayersFile.reload();
+					p.sendMessage(pl.getConfig().getString("Messages.Reloaded").replace("&", "§"));
+				} else {
 					String nameprefix = pl.getConfig().getString("Config.Display Name Prefix").replace("&", "§");
 					String nametagprefix = pl.getConfig().getString("Config.Name Tag Prefix").replace("&", "§");
 					String tablistprefix = pl.getConfig().getString("Config.Tablist Name Prefix").replace("&", "§");
-					p.setNickName(args[0], nameprefix, nametagprefix, tablistprefix);
-					p.setRandomSkin();
+					np.setNickName(args[0], nameprefix, nametagprefix, tablistprefix);
+					np.setRandomSkin();
+				}
+			}
+		} else {
+			if(args.length == 1) {
+				if(args[0].equalsIgnoreCase("reload")) {
+					pl.reloadConfig();
+					NickedPlayersFile.reload();
+					Bukkit.getConsoleSender().sendMessage(pl.getConfig().getString("Messages.Reloaded").replace("&", "§"));
 				}
 			}
 		}
