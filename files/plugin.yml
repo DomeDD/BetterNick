@@ -13,7 +13,7 @@ commands:
      realname:
           description: RealName Command
      nicklist:
-          description: RealName Command
+          description: NickList Command
           aliases: [nicks]
      autonick:
           description: AutoNick Command
