@@ -109,7 +109,7 @@ public class v1_8_R2 implements Listener {
 								NickedPlayersFile.cfg.set("NickedPlayers." + arg0.getUniqueId() + ".DefaultPrefix", pl.chat.getPlayerPrefix(arg0.getPlayer()));
 							}
 							for(World w : Bukkit.getWorlds()) {
-								pl.chat.setPlayerPrefix(w.getName(), arg0.getPlayer(), ((!pl.getConfig().getBoolean("Config.Keep NickName On Quit")) ? defaultPermsPrefix.get(arg0.getPlayer()) : NickedPlayersFile.cfg.getString("NickedPlayers." + arg0.getUniqueId() + ".DefaultPrefix")));
+								pl.chat.setPlayerPrefix(w.getName(), arg0.getPlayer(), ((!pl.getConfig().getBoolean("Config.Keep NickName On Quit")) ? pl.getConfig().getString("Config.Permissions System Player Prefix").replace("&", "§") : NickedPlayersFile.cfg.getString("NickedPlayers." + arg0.getUniqueId() + ".DefaultPrefix")));
 							}
 						}
 						if(pl.cloudnet) {
@@ -165,7 +165,7 @@ public class v1_8_R2 implements Listener {
 								NickedPlayersFile.cfg.set("NickedPlayers." + arg0.getUniqueId() + ".DefaultPrefix", pl.chat.getPlayerPrefix(arg0.getPlayer()));
 							}
 							for(World w : Bukkit.getWorlds()) {
-								pl.chat.setPlayerPrefix(w.getName(), arg0.getPlayer(), ((!pl.getConfig().getBoolean("Config.Keep NickName On Quit")) ? defaultPermsPrefix.get(arg0.getPlayer()) : NickedPlayersFile.cfg.getString("NickedPlayers." + arg0.getUniqueId() + ".DefaultPrefix")));
+								pl.chat.setPlayerPrefix(w.getName(), arg0.getPlayer(), ((!pl.getConfig().getBoolean("Config.Keep NickName On Quit")) ? pl.getConfig().getString("Config.Permissions System Player Prefix").replace("&", "§") : NickedPlayersFile.cfg.getString("NickedPlayers." + arg0.getUniqueId() + ".DefaultPrefix")));
 							}
 						}
 						if(pl.cloudnet) {
@@ -246,7 +246,7 @@ public class v1_8_R2 implements Listener {
 								NickedPlayersFile.cfg.set("NickedPlayers." + arg0.getUniqueId() + ".DefaultPrefix", pl.chat.getPlayerPrefix(arg0.getPlayer()));
 							}
 							for(World w : Bukkit.getWorlds()) {
-								pl.chat.setPlayerPrefix(w.getName(), arg0.getPlayer(), ((!pl.getConfig().getBoolean("Config.Keep NickName On Quit")) ? defaultPermsPrefix.get(arg0.getPlayer()) : NickedPlayersFile.cfg.getString("NickedPlayers." + arg0.getUniqueId() + ".DefaultPrefix")));
+								pl.chat.setPlayerPrefix(w.getName(), arg0.getPlayer(), ((!pl.getConfig().getBoolean("Config.Keep NickName On Quit")) ? pl.getConfig().getString("Config.Permissions System Player Prefix").replace("&", "§") : NickedPlayersFile.cfg.getString("NickedPlayers." + arg0.getUniqueId() + ".DefaultPrefix")));
 							}
 						}
 						if(pl.cloudnet) {

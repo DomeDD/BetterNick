@@ -493,7 +493,7 @@ public class NickedPlayer implements Player, Listener {
 		    	e.printStackTrace();
 		    }
 		} else {
-			return NickedPlayersFile.cfg.getString("NickedPlayers." + this.p.getUniqueId() + ".Name");
+			return NickedPlayersFile.cfg.getString("NickedPlayers." + this.p.getUniqueId() + ".NickName");
 		}
 		return null;
 	}

@@ -41,6 +41,10 @@ public class RealNameCMD implements CommandExecutor {
 					} else {
 						p.sendMessage(pl.getConfig().getString("Messages.See Real Name Error").replace("&", "§"));
 					}
+				} else {
+					if(pl.getConfig().getBoolean("Messages.Enabled")) {
+						p.sendMessage(pl.getConfig().getString("Messages.No Permissions").replace("&", "§"));
+					}
 				}
 			}
 		} else {

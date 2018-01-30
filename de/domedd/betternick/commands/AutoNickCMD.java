@@ -37,6 +37,10 @@ public class AutoNickCMD implements CommandExecutor {
 					p.setAutoNick(true);
 					p.sendMessage(pl.getConfig().getString("Messages.AutoNick Turned On").replace("&", "§"));
 				}
+			} else {
+				if(pl.getConfig().getBoolean("Messages.Enabled")) {
+					p.sendMessage(pl.getConfig().getString("Messages.No Permissions").replace("&", "§"));
+				}
 			}
 		}
 		return true;

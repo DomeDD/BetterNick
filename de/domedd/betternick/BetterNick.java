@@ -40,6 +40,7 @@ import de.domedd.betternick.commands.AutoNickCMD;
 import de.domedd.betternick.commands.NickCMD;
 import de.domedd.betternick.commands.NickListCMD;
 import de.domedd.betternick.commands.RealNameCMD;
+import de.domedd.betternick.commands.SeeNickCMD;
 import de.domedd.betternick.commands.SkinCMD;
 import de.domedd.betternick.commands.UnNickCMD;
 import de.domedd.betternick.files.NickedPlayersFile;
@@ -140,8 +141,9 @@ public class BetterNick extends JavaPlugin implements Listener {
 			getCommand("nick").setExecutor(new NickCMD(this));
 			getCommand("unnick").setExecutor(new UnNickCMD());
 			getCommand("realname").setExecutor(new RealNameCMD(this));
-			getCommand("skin").setExecutor(new SkinCMD());
+			getCommand("skin").setExecutor(new SkinCMD(this));
 			getCommand("nicklist").setExecutor(new NickListCMD(this));
+			getCommand("seenick").setExecutor(new SeeNickCMD(this));
 			getCommand("autonick").setExecutor(new AutoNickCMD(this));
 		}
 		if(Bukkit.getPluginManager().getPlugin("NametagEdit") != null) {

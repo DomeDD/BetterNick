@@ -49,6 +49,10 @@ public class NickListCMD implements CommandExecutor {
 							i++;
 						}
 					}
+				} else {
+					if(pl.getConfig().getBoolean("Messages.Enabled")) {
+						p.sendMessage(pl.getConfig().getString("Messages.No Permissions").replace("&", "§"));
+					}
 				}
 			}
 		} else {

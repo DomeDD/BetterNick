@@ -44,19 +44,35 @@ public class NickCMD implements CommandExecutor {
 					} else {
 						p.openInventory(RandomNickGui.randomNicksInventory(p));
 					}
+				} else {
+					if(pl.getConfig().getBoolean("Messages.Enabled")) {
+						p.sendMessage(pl.getConfig().getString("Messages.No Permissions").replace("&", "§"));
+					}
 				}
 			}
 			if(args.length == 1) {
 				if(args[0].equalsIgnoreCase("reload")) {
-					pl.reloadConfig();
-					NickedPlayersFile.reload();
-					p.sendMessage(pl.getConfig().getString("Messages.Reloaded").replace("&", "§"));
+					if(p.hasPermission("BetterNick.Reload")) {
+						pl.reloadConfig();
+						NickedPlayersFile.reload();
+						p.sendMessage(pl.getConfig().getString("Messages.Reloaded").replace("&", "§"));
+					} else {
+						if(pl.getConfig().getBoolean("Messages.Enabled")) {
+							p.sendMessage(pl.getConfig().getString("Messages.No Permissions").replace("&", "§"));
+						}
+					}
 				} else {
-					String nameprefix = pl.getConfig().getString("Config.Display Name Prefix").replace("&", "§");
-					String nametagprefix = pl.getConfig().getString("Config.Name Tag Prefix").replace("&", "§");
-					String tablistprefix = pl.getConfig().getString("Config.Tablist Name Prefix").replace("&", "§");
-					np.setNickName(args[0], nameprefix, nametagprefix, tablistprefix);
-					np.setRandomSkin();
+					if(p.hasPermission("BetterNick.Nick")) {
+						String nameprefix = pl.getConfig().getString("Config.Display Name Prefix").replace("&", "§");
+						String nametagprefix = pl.getConfig().getString("Config.Name Tag Prefix").replace("&", "§");
+						String tablistprefix = pl.getConfig().getString("Config.Tablist Name Prefix").replace("&", "§");
+						np.setNickName(args[0], nameprefix, nametagprefix, tablistprefix);
+						np.setRandomSkin();
+					} else {
+						if(pl.getConfig().getBoolean("Messages.Enabled")) {
+							p.sendMessage(pl.getConfig().getString("Messages.No Permissions").replace("&", "§"));
+						}
+					}
 				}
 			}
 		} else {
