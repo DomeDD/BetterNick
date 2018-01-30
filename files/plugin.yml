@@ -1,5 +1,5 @@
 name: BetterNick
-version: 5.7
+version: 5.8
 author: DomeDD
 main: de.domedd.betternick.BetterNick
 softdepend: [CloudNetAPI, SuperVanish, Vault, NametagEdit, ColoredTags]
@@ -15,6 +15,9 @@ commands:
      nicklist:
           description: NickList Command
           aliases: [nicks]
+     seenick:
+          description: SeeNick Command
+          aliases: [nickinfo]
      autonick:
           description: AutoNick Command
 permissions:
@@ -29,3 +32,4 @@ permissions:
             BetterNick.RealName: true
             BetterNick.NickList: true
             BetterNick.JoinItem: true
+            BetterNick.SeeNick: true

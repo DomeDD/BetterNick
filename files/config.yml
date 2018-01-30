@@ -38,13 +38,15 @@ Messages:
     Skin Set Error: '&8[&5BetterNick&8] &7Your skin could not be changed.'
     See Real Name: '&8[&5BetterNick&8] &7The real name of &3[PLAYER] &7is &e[NAME]&7.'
     See Real Name Error: '&8[&5BetterNick&8] &7This Player is not online!'
+    See Nick: '&8[&5BetterNick&8] &7Your nickname is &e[NAME]&7.'
     Get Nicked Players Header: '&8[&5BetterNick&8] &7Listing all nicked players and their real names...'
     Get Nicked Players: '&8[&5BetterNick&8] &6[ID]&7: The real name of &3[PLAYER] &7is &e[NAME]&7.'
     Get Nicked Players Error: '&8[&5BetterNick&8] &7At the moment no player is nicked.'
-    Nicked Actionbar: '&eYou are nicked as &3[NAME]&e.'
+    Nicked Actionbar: '&8[&5BetterNick&8] &eYou are nicked as &3[NAME]&e.'
     AutoNick Turned On: '&8[&5BetterNick&8] &7You turned on autonick.'
     AutoNick Turned Off: '&8[&5BetterNick&8] &7You turned off autonick.'
     Reloaded: '&8[&5BetterNick&8] &7You successfully reloaded the config files.'
+    No Permissions: '&8[&5BetterNick&8] &7You don''t have the permissions to do that.'
 Addons:
     AutoNick Item:
         Enabled: false
