@@ -13,6 +13,7 @@ class PlayerCallSkinEvent extends Event implements Cancellable {
 	
 	/**
 	 * constructor
+	 * Call this when a player should a new skin
 	 * @param player The player
 	 *
 	 */
