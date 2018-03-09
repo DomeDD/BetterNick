@@ -13,6 +13,7 @@ class PlayerCallSkinResetEvent extends Event implements Cancellable {
 	
 	/**
 	 * constructor
+	 * Call this when a player should reset his/her skin.
 	 * @param player The player
 	 *
 	 */

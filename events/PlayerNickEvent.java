@@ -13,6 +13,7 @@ class PlayerNickEvent extends Event implements Cancellable {
 
 	/**
 	 * constructor
+	 * DON'T call this event
 	 * @param player The player
 	 * @param nickname The nickname
 	 *

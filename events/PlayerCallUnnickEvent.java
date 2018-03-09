@@ -13,6 +13,7 @@ class PlayerCallUnnickEvent extends Event implements Cancellable {
 	
 	/**
 	 * constructor
+	 * Call this when a player should unnick.
 	 * @param player The player
 	 *
 	 */
