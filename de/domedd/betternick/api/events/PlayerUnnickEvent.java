@@ -16,7 +16,7 @@ import org.bukkit.event.HandlerList;
 
 import de.domedd.betternick.api.betternickapi.BetterNickAPI;
 
-public class PlayerSkinResetEvent extends Event implements Cancellable {
+public class PlayerUnnickEvent extends Event implements Cancellable {
 	
 	public static HandlerList handlers = new HandlerList();
 	private Player player;
@@ -27,8 +27,8 @@ public class PlayerSkinResetEvent extends Event implements Cancellable {
 	 * @param player The player
 	 *
 	 */
-	public PlayerSkinResetEvent(Player player) {
-		this.player = player;
+	public PlayerUnnickEvent(Player arg0) {
+		player = arg0;
 		cancelled = false;
 	}
 	
@@ -41,19 +41,19 @@ public class PlayerSkinResetEvent extends Event implements Cancellable {
 	}
 	
 	/**
-	 * @return String The players skin
-	 *
-	 */
-	public String getSkin() {
-		return BetterNickAPI.getApi().getRealName(player);
-	}
-	
-	/**
 	 * Call this method to send the player a message.
 	 *
 	 */
-	public void setSkinResetMessage(String message) {
+	public void setUnNickMessage(String message) {
 		player.sendMessage(message);
+	}
+	
+	/**
+	 * Call this method to stop sending the player an actionbar message.
+	 *
+	 */
+	public void stopNickActionbarMessage() {
+		BetterNickAPI.getApi().stopPlayerActionbar(player);
 	}
 	@Override
 	public HandlerList getHandlers() {

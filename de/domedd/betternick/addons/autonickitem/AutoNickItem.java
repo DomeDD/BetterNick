@@ -1,10 +1,10 @@
 /*
- * All rights by DomeDD
+ * All rights by DomeDD (2017)
  * You are allowed to modify this code
  * You are allowed to use this code in your plugins for private projects
- * You are allowed to publish your plugin including this code as long as your plugin is for free 
- * You are NOT allowed to claim this plugin as your own
- * You are NOT allowed to publish this plugin or your modified version of this plugin
+ * You are allowed to publish your plugin including this code as long as your plugin is for free and as long as you mention me (DomeDD) 
+ * You are NOT allowed to claim this plugin (BetterNick) as your own
+ * You are NOT allowed to publish this plugin (BetterNick) or your modified version of this plugin (BetterNick)
  * 
  */
 package de.domedd.betternick.addons.autonickitem;
@@ -25,7 +25,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import de.domedd.betternick.BetterNick;
-import de.domedd.betternick.api.nickedplayer.NickedPlayer;
+import de.domedd.betternick.api.betternickapi.BetterNickAPI;
 
 public class AutoNickItem implements Listener {
 	
@@ -67,7 +67,7 @@ public class AutoNickItem implements Listener {
 	}
 	@EventHandler
 	public void onInteract(PlayerInteractEvent e) {
-		NickedPlayer p = new NickedPlayer(e.getPlayer());
+		Player p = e.getPlayer();
 		String[] autoNItem = pl.getConfig().getString("Addons.AutoNick Item.Item").split(", ");
 		try {
 			if(e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
@@ -75,7 +75,7 @@ public class AutoNickItem implements Listener {
 					if(e.getItem().hasItemMeta() && e.getItem().getItemMeta().getDisplayName().equalsIgnoreCase(autoNItem[1].replace("&", "§"))) {
 						if(p.hasPermission("BetterNick.JoinItem")) {
 							e.setCancelled(true);
-							if(p.hasAutoNick()) {
+							if(BetterNickAPI.getApi().hasPlayerAutoNick(p)) {
 								openTrueNickInv(p);
 							} else {
 								openFalseNickInv(p);
@@ -100,7 +100,7 @@ public class AutoNickItem implements Listener {
 	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onANIInvClick(InventoryClickEvent e) {
-		NickedPlayer p = new NickedPlayer((Player)e.getWhoClicked());
+		Player p = (Player) e.getWhoClicked();
 		String[] autoNItemID = pl.getConfig().getString("Addons.AutoNick Item.Item").split(":");
 		try {
 			if(e.getCurrentItem().getTypeId() == Integer.valueOf(autoNItemID[0])) {
@@ -113,7 +113,7 @@ public class AutoNickItem implements Listener {
 				String[] autoTrue = pl.getConfig().getString("Addons.AutoNick Item.Inventory.AutoNick True").split(", ");
 				String[] autoFalse = pl.getConfig().getString("Addons.AutoNick Item.Inventory.AutoNick False").split(", ");
 				if(e.getCurrentItem().getItemMeta().getDisplayName() != null && e.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(autoTrue[1].replace("&", "§"))) {
-					p.setAutoNick(false);
+					BetterNickAPI.getApi().setPlayerAutoNick(p, false);
 					e.setCurrentItem(getItemFromString(pl.getConfig().getString("Addons.AutoNick Item.Inventory.AutoNick False")));
 					ItemStack is = e.getCurrentItem();
 					ItemMeta im = is.getItemMeta();
@@ -122,7 +122,7 @@ public class AutoNickItem implements Listener {
 					p.updateInventory();
 					p.sendMessage(pl.getConfig().getString("Messages.AutoNick Turned Off").replace("&", "§"));
 				} else if(e.getCurrentItem().getItemMeta().getDisplayName() != null && e.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(autoFalse[1].replace("&", "§"))) {
-					p.setAutoNick(true);
+					BetterNickAPI.getApi().setPlayerAutoNick(p, true);
 					e.setCurrentItem(getItemFromString(pl.getConfig().getString("Addons.AutoNick Item.Inventory.AutoNick True")));
 					ItemStack is1 = e.getCurrentItem();
 					ItemMeta im1 = is1.getItemMeta();

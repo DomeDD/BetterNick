@@ -1,22 +1,26 @@
 /*
- * All rights by DomeDD
+ * All rights by DomeDD (2018)
  * You are allowed to modify this code
  * You are allowed to use this code in your plugins for private projects
- * You are allowed to publish your plugin including this code as long as your plugin is for free 
- * You are NOT allowed to claim this plugin as your own
- * You are NOT allowed to publish this plugin or your modified version of this plugin
+ * You are allowed to publish your plugin including this code as long as your plugin is for free and as long as you mention me (DomeDD) 
+ * You are NOT allowed to claim this plugin (BetterNick) as your own
+ * You are NOT allowed to publish this plugin (BetterNick) or your modified version of this plugin (BetterNick)
  * 
  */
 package de.domedd.betternick.listeners;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import de.domedd.betternick.BetterNick;
-import de.domedd.betternick.api.nickedplayer.NickedPlayer;
+import de.domedd.betternick.api.betternickapi.BetterNickAPI;
+import de.domedd.betternick.api.events.PlayerCallNickEvent;
+import de.domedd.betternick.api.events.PlayerCallRandomNickEvent;
+import de.domedd.betternick.api.events.PlayerCallRandomSkinEvent;
 
 public class AutoNick implements Listener {
 	
@@ -25,43 +29,40 @@ public class AutoNick implements Listener {
 	public AutoNick(BetterNick main) {
 		this.pl = main;
 	}
+	
 	@EventHandler
-	public void onPlayerJoin(PlayerJoinEvent e) {
-		NickedPlayer p = new NickedPlayer(e.getPlayer());
-		String nameprefix = pl.getConfig().getString("Config.Display Name Prefix").replace("&", "§");
-		String nametagprefix = pl.getConfig().getString("Config.Name Tag Prefix").replace("&", "§");
-		String tablistprefix = pl.getConfig().getString("Config.Tablist Name Prefix").replace("&", "§");
+	public void onJoin(PlayerJoinEvent e) {
+		Player p = e.getPlayer();
 		if(p.hasPermission("BetterNick.Nick")) {
-			if(!p.exists()) {
-				p.create();
+			if(!BetterNickAPI.getApi().playerExists(p)) {
+				BetterNickAPI.getApi().createPlayer(p);
 			}
-			if(!pl.getConfig().getBoolean("Config.Lobby Mode")) {
-				if(p.hasAutoNick()) {
-					if(p.isNicked()) {
-						String nick = p.getNickName();
+			if(!pl.getConfig().getBoolean("Config.Nick on Join")) {
+				if(BetterNickAPI.getApi().hasPlayerAutoNick(p)) {
+					if(BetterNickAPI.getApi().isPlayerNicked(p)) {
 						Bukkit.getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
 							@Override
 							public void run() {
-								p.setNickName(nick, nameprefix, nametagprefix, tablistprefix);
-								p.setRandomSkin();
+								Bukkit.getPluginManager().callEvent(new PlayerCallNickEvent(p, BetterNickAPI.getApi().getNickName(p)));
+								Bukkit.getPluginManager().callEvent(new PlayerCallRandomSkinEvent(p));
 							}
 						}, 2);
 					} else {
 						Bukkit.getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
 							@Override
 							public void run() {
-								p.setRandomNickName(nameprefix, nametagprefix, tablistprefix);
-								p.setRandomSkin();
+								Bukkit.getPluginManager().callEvent(new PlayerCallRandomNickEvent(p));
+								Bukkit.getPluginManager().callEvent(new PlayerCallRandomSkinEvent(p));
 							}
 						}, 2);
 					}
 				} else {
-					if(p.isNicked()) {
+					if(BetterNickAPI.getApi().isPlayerNicked(p)) {
 						Bukkit.getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
 							@Override
 							public void run() {
-								p.setNickName(p.getNickName(), nameprefix, nametagprefix, tablistprefix);
-								p.setRandomSkin();
+								Bukkit.getPluginManager().callEvent(new PlayerCallNickEvent(p, BetterNickAPI.getApi().getNickName(p)));
+								Bukkit.getPluginManager().callEvent(new PlayerCallRandomSkinEvent(p));
 							}
 						}, 2);
 					}
@@ -71,18 +72,16 @@ public class AutoNick implements Listener {
 	}
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent e) {
-		NickedPlayer p = new NickedPlayer(e.getPlayer());
-		if(!pl.getConfig().getBoolean("Config.Keep NickName On Quit")) {
-			if(p.hasPermission("BetterNick.UnNick")) {
-				if(p.isNicked()) {
-					p.unNickOnLeave();
-				}			
-			}
-		} else {
-			if(pl.players.containsKey(p)) {
-				pl.players.remove(p);
+		Player p = e.getPlayer();
+		if(BetterNickAPI.getApi().isPlayerNicked(p)) {
+			if(!pl.getConfig().getBoolean("Config.Keep NickName On Quit")) {
+				BetterNickAPI.getApi().resetPlayerChatName(p);
+				BetterNickAPI.getApi().resetPlayerDisplayName(p);
+				BetterNickAPI.getApi().resetPlayerTablistName(p);
+				BetterNickAPI.getApi().resetPlayerNickName(p);
+			} else {
+				
 			}
 		}
 	}
-	
 }

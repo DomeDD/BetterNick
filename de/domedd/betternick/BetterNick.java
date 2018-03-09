@@ -1,10 +1,10 @@
 /*
- * All rights by DomeDD
+ * All rights by DomeDD (2018)
  * You are allowed to modify this code
  * You are allowed to use this code in your plugins for private projects
- * You are allowed to publish your plugin including this code as long as your plugin is for free 
- * You are NOT allowed to claim this plugin as your own
- * You are NOT allowed to publish this plugin or your modified version of this plugin
+ * You are allowed to publish your plugin including this code as long as your plugin is for free and as long as you mention me (DomeDD) 
+ * You are NOT allowed to claim this plugin (BetterNick) as your own
+ * You are NOT allowed to publish this plugin (BetterNick) or your modified version of this plugin (BetterNick)
  * 
  */
 package de.domedd.betternick;
@@ -19,34 +19,27 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
-import java.util.HashMap;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.mojang.authlib.GameProfile;
 
-import de.domedd.betternick.addons.autonickitem.AutoNickItem;
-import de.domedd.betternick.addons.randomnickgui.RandomNickGui;
-import de.domedd.betternick.api.VanishManager;
-import de.domedd.betternick.api.nickedplayer.NickedOfflinePlayer;
-import de.domedd.betternick.api.nickedplayer.NickedPlayer;
-import de.domedd.betternick.api.nickedplayer.NickedPlayers;
-import de.domedd.betternick.commands.AutoNickCMD;
-import de.domedd.betternick.commands.NickCMD;
-import de.domedd.betternick.commands.NickListCMD;
-import de.domedd.betternick.commands.RealNameCMD;
-import de.domedd.betternick.commands.SeeNickCMD;
-import de.domedd.betternick.commands.SkinCMD;
-import de.domedd.betternick.commands.UnNickCMD;
-import de.domedd.betternick.files.NickedPlayersFile;
+import de.domedd.betternick.api.Metrics;
+import de.domedd.betternick.api.betternickapi.BetterNickAPI;
+import de.domedd.betternick.api.betternickapi.PlayerData;
+import de.domedd.betternick.commands.AutoNickCommand;
+import de.domedd.betternick.commands.NickCommand;
+import de.domedd.betternick.commands.NickListCommand;
+import de.domedd.betternick.commands.RealNameCommand;
+import de.domedd.betternick.commands.SeeNickCommand;
+import de.domedd.betternick.commands.SkinCommand;
+import de.domedd.betternick.commands.UnnickCommand;
 import de.domedd.betternick.listeners.AutoNick;
 import de.domedd.betternick.listeners.BetterNickEvents;
-import de.domedd.betternick.listeners.PlayerDeath;
 import de.domedd.betternick.mysqlconnection.MySQL;
 import de.domedd.betternick.packets.VersionChecker;
 import de.domedd.betternick.packets.v1_10_R1;
@@ -57,108 +50,128 @@ import de.domedd.betternick.packets.v1_8_R3;
 import de.domedd.betternick.packets.v1_9_R1;
 import de.domedd.betternick.packets.v1_9_R2;
 import net.milkbowl.vault.chat.Chat;
+import net.milkbowl.vault.economy.Economy;
 
 public class BetterNick extends JavaPlugin implements Listener {
 	
-	public MySQL mysql;
-	public Field nameField;
-	public Chat chat = null;
-	public boolean nte = false;
-	public boolean cloudnet = false;
-	public boolean coloredtags = false;
 	public Logger log = this.getLogger();
-	public HashMap<Player, String> players = new HashMap<Player, String>();
+	public Field nameField;
+	public MySQL mysql;
+	public Chat chat = null;
+	public Economy econ = null;
+	public boolean nte = false;
+	public boolean coloredtags = false;
+	public boolean cloudnet = false;
+	public String prefix;
 	
 	@Override
 	public void onEnable() {
 		switch(VersionChecker.getBukkitVersion()) {
 		case v1_8_R1:
-			log.warning("Minecraft version v1_8_R1 is not supported");
+			log.warning("Bukkit version v1_8_R1 is not supported!");
 			break;
 		case v1_8_R2:
 			log.info("Hooking into v1_8_R2...");
 			this.getServer().getPluginManager().registerEvents(new v1_8_R2(this), this);
+			hookIntoAdditionalPlugins();
 			loadPlugin();
 			break;
 		case v1_8_R3:
 			log.info("Hooking into v1_8_R3...");
 			this.getServer().getPluginManager().registerEvents(new v1_8_R3(this), this);
+			hookIntoAdditionalPlugins();
 			loadPlugin();
 			break;
 		case v1_9_R1:
 			log.info("Hooking into v1_9_R1...");
 			this.getServer().getPluginManager().registerEvents(new v1_9_R1(this), this);
+			hookIntoAdditionalPlugins();
 			loadPlugin();
 			break;
 		case v1_9_R2:
 			log.info("Hooking into v1_9_R2...");
 			this.getServer().getPluginManager().registerEvents(new v1_9_R2(this), this);
+			hookIntoAdditionalPlugins();
 			loadPlugin();
 			break;
 		case v1_10_R1:
 			log.info("Hooking into v1_10_R1...");
 			this.getServer().getPluginManager().registerEvents(new v1_10_R1(this), this);
+			hookIntoAdditionalPlugins();
 			loadPlugin();
 			break;
 		case v1_11_R1:
 			log.info("Hooking into v1_11_R1...");
 			this.getServer().getPluginManager().registerEvents(new v1_11_R1(this), this);
+			hookIntoAdditionalPlugins();
 			loadPlugin();
 			break;
 		case v1_12_R1:
 			log.info("Hooking into v1_12_R1...");
 			this.getServer().getPluginManager().registerEvents(new v1_12_R1(this), this);
+			hookIntoAdditionalPlugins();
 			loadPlugin();
+			break;
+		case v1_13_R1:
+			log.warning("Bukkit version v1_13_R1 is not supported!");
+			//this.getServer().getPluginManager().registerEvents(new v1_13_R1(this), this);
 			break;
 		}
 	}
-	@Override
-	public void onDisable() {
-		if(this.getConfig().getBoolean("MySQL.Enabled")) {
-			mysql.close();
-		}
+	public static BetterNickAPI getApi() {
+		return BetterNickAPI.getApi();
 	}
 	
 	private void loadPlugin() {
 		saveDefaultConfig();
+		prefix = getConfig().getString("Messages.Prefix").replace("&", "§");
 		nameField = getField(GameProfile.class, "name");
-		this.getServer().getPluginManager().registerEvents(new PlayerDeath(this), this);
-		this.getServer().getPluginManager().registerEvents(new NickedPlayer(this), this);
-		this.getServer().getPluginManager().registerEvents(new NickedPlayers(this), this);
-		this.getServer().getPluginManager().registerEvents(new NickedOfflinePlayer(this), this);
-		this.getServer().getPluginManager().registerEvents(new MySQL(this), this);
-		if(getConfig().getBoolean("Config.API Mode")) {
-	    	log.info("Plugin activated in API mode");
-		} else {
-			this.getServer().getPluginManager().registerEvents(new AutoNick(this), this);
+		this.getServer().getPluginManager().registerEvents(new PlayerData(this), this);
+		this.getServer().getPluginManager().registerEvents(new BetterNickAPI(this), this);
+		this.getServer().getPluginManager().registerEvents(new AutoNick(this), this);
+		this.getServer().getPluginManager().registerEvents(new MySQL(this), this);		
+		if(!getConfig().getBoolean("Config.API Mode")) {
+			getCommand("nick").setExecutor(new NickCommand(this));
+			getCommand("skin").setExecutor(new SkinCommand(this));
+			getCommand("unnick").setExecutor(new UnnickCommand(this));
+			getCommand("autonick").setExecutor(new AutoNickCommand(this));
+			getCommand("nicklist").setExecutor(new NickListCommand(this));
+			getCommand("realname").setExecutor(new RealNameCommand(this));
+			getCommand("seenick").setExecutor(new SeeNickCommand(this));			
 			this.getServer().getPluginManager().registerEvents(new BetterNickEvents(this), this);
-			if(this.getConfig().getBoolean("Addons.AutoNick Item.Enabled")) {
-				this.getServer().getPluginManager().registerEvents(new AutoNickItem(this), this);
-			}
-			if(this.getConfig().getBoolean("Addons.Random Nick Gui.Enabled")) {
-				this.getServer().getPluginManager().registerEvents(new RandomNickGui(this), this);
-			}
-			getCommand("nick").setExecutor(new NickCMD(this));
-			getCommand("unnick").setExecutor(new UnNickCMD());
-			getCommand("realname").setExecutor(new RealNameCMD(this));
-			getCommand("skin").setExecutor(new SkinCMD(this));
-			getCommand("nicklist").setExecutor(new NickListCMD(this));
-			getCommand("seenick").setExecutor(new SeeNickCMD(this));
-			getCommand("autonick").setExecutor(new AutoNickCMD(this));
+		} else {
+			log.info("activated in API mode...");
 		}
+		getApi();
+		if(getConfig().getBoolean("MySQL.Enabled")) {
+			connectToMySQL();
+		}
+		if(getConfig().getBoolean("Config.Auto Update Check")) {
+			checkForUpdates();
+		}
+		if(getConfig().getBoolean("Config.Send Metrics")) {
+			sendMetrics();
+		}
+	}
+	private void hookIntoAdditionalPlugins() {
 		if(Bukkit.getPluginManager().getPlugin("NametagEdit") != null) {
 			log.info("Hooking into NametagEdit...");
 			nte = true;
 		}
 		if(Bukkit.getPluginManager().getPlugin("SuperVanish") != null || Bukkit.getPluginManager().getPlugin("PremiumVanish") != null) {
 			log.info("Hooking into SuperVanish/PremiumVanish...");
-			this.getServer().getPluginManager().registerEvents(new VanishManager(this), this);
+			//this.getServer().getPluginManager().registerEvents(new VanishManager(this), this);
 		}
     	if(getConfig().getBoolean("Config.Use Vault")) {
     		RegisteredServiceProvider<Chat> chatProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.chat.Chat.class);
-            if (chatProvider != null) {
+    		RegisteredServiceProvider<Economy> econProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
+            if(chatProvider != null) {
             	log.info("Hooking into " + chatProvider.getProvider().getName() + " via Vault...");
                 chat = chatProvider.getProvider();
+            }
+            if(econProvider != null) {
+            	log.info("Hooking into " + econProvider.getProvider().getName() + " via Vault...");
+                econ = econProvider.getProvider();
             }
     	}
     	if(Bukkit.getPluginManager().getPlugin("CloudNetAPI") != null) {
@@ -169,16 +182,15 @@ public class BetterNick extends JavaPlugin implements Listener {
     		log.info("Hooking into ColoredTags...");
     		coloredtags = true;
     	}
-    	if(this.getConfig().getBoolean("MySQL.Enabled")) {
-			this.mysql = new MySQL(this.getConfig().getString("MySQL.Username"), this.getConfig().getString("MySQL.Password"), this.getConfig().getString("MySQL.Database"), this.getConfig().getString("MySQL.Host"), this.getConfig().getString("MySQL.Port"));
-			this.mysql.connect();
-			this.mysql.addTable();
-		} else {
-			NickedPlayersFile.loadDefaultFile();
-		}
-		if(this.getConfig().getBoolean("Config.Auto Update Check")) {
-			checkForUpdates();
-		}
+	}
+	private void sendMetrics() {
+		@SuppressWarnings("unused")
+		Metrics metrics = new Metrics(this);
+	}
+	private void connectToMySQL() {
+		mysql = new MySQL(getConfig().getString("MySQL.Username"), getConfig().getString("MySQL.Password"), getConfig().getString("MySQL.Database"), getConfig().getString("MySQL.Host"), getConfig().getString("MySQL.Port"));
+		mysql.connect();
+		mysql.createTable();
 	}
 	private void checkForUpdates() {
 		log.info("Checking for updates...");

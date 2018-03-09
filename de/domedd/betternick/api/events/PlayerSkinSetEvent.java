@@ -1,10 +1,10 @@
 /*
- * All rights by DomeDD
+ * All rights by DomeDD (2018)
  * You are allowed to modify this code
  * You are allowed to use this code in your plugins for private projects
- * You are allowed to publish your plugin including this code as long as your plugin is for free 
- * You are NOT allowed to claim this plugin as your own
- * You are NOT allowed to publish this plugin or your modified version of this plugin
+ * You are allowed to publish your plugin including this code as long as your plugin is for free and as long as you mention me (DomeDD) 
+ * You are NOT allowed to claim this plugin (BetterNick) as your own
+ * You are NOT allowed to publish this plugin (BetterNick) or your modified version of this plugin (BetterNick)
  * 
  */
 package de.domedd.betternick.api.events;
@@ -14,31 +14,46 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-import de.domedd.betternick.api.nickedplayer.NickedPlayer;
-
 public class PlayerSkinSetEvent extends Event implements Cancellable {
 	
 	public static HandlerList handlers = new HandlerList();
-	private NickedPlayer player;
-	private String pSkin;
+	private Player player;
+	private String skin;
 	private boolean cancelled;
 	
-	public PlayerSkinSetEvent(NickedPlayer arg0, String arg1) {
-		player = arg0;
-		pSkin = arg1;
+	/**
+	 * constructor
+	 * @param player The player
+	 *
+	 */
+	public PlayerSkinSetEvent(Player player, String skin) {
+		this.player = player;
+		this.skin = skin;
 		cancelled = false;
 	}
-	public NickedPlayer getNickedPlayer() {
-		return player;
-	}
+	
+	/**
+	 * @return Player The player
+	 *
+	 */
 	public Player getPlayer() {
 		return player;
 	}
-	public String getPlayerSkinName() {
-		return pSkin;
+	
+	/**
+	 * @return String The players skin
+	 *
+	 */
+	public String getSkin() {
+		return skin;
 	}
-	public void setSkinSetMessage(String arg0) {
-		player.sendMessage(arg0);
+	
+	/**
+	 * Call this method to send the player a message.
+	 *
+	 */
+	public void setSkinSetMessage(String message) {
+		player.sendMessage(message);
 	}
 	@Override
 	public HandlerList getHandlers() {

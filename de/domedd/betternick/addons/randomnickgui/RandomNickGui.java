@@ -1,10 +1,10 @@
 /*
- * All rights by DomeDD
+ * All rights by DomeDD (2017)
  * You are allowed to modify this code
  * You are allowed to use this code in your plugins for private projects
- * You are allowed to publish your plugin including this code as long as your plugin is for free 
- * You are NOT allowed to claim this plugin as your own
- * You are NOT allowed to publish this plugin or your modified version of this plugin
+ * You are allowed to publish your plugin including this code as long as your plugin is for free and as long as you mention me (DomeDD) 
+ * You are NOT allowed to claim this plugin (BetterNick) as your own
+ * You are NOT allowed to publish this plugin (BetterNick) or your modified version of this plugin (BetterNick)
  * 
  */
 package de.domedd.betternick.addons.randomnickgui;
@@ -24,7 +24,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import de.domedd.betternick.BetterNick;
-import de.domedd.betternick.api.nickedplayer.NickedPlayer;
+import de.domedd.betternick.api.events.PlayerCallNickEvent;
 
 public class RandomNickGui implements Listener {
 
@@ -50,15 +50,12 @@ private static BetterNick pl;
 	}
 	@EventHandler
 	public void onRNGInvClick(InventoryClickEvent e) {
-		NickedPlayer p = new NickedPlayer((Player)e.getWhoClicked());
+		Player p = (Player) e.getWhoClicked();
 		try {
 			if(e.getInventory().getName() != null && e.getInventory().getName().equalsIgnoreCase(pl.getConfig().getString("Addons.Random Nick Gui.Inventory.Name").replace("&", "§"))) {
 				e.setCancelled(true);
 				if(e.getCurrentItem().getType() == Material.NAME_TAG) {
-					String nameprefix = pl.getConfig().getString("Config.Display Name Prefix").replace("&", "§");
-					String nametagprefix = pl.getConfig().getString("Config.Name Tag Prefix").replace("&", "§");
-					String tablistprefix = pl.getConfig().getString("Config.Tablist Name Prefix").replace("&", "§");
-					p.setNickName(e.getCurrentItem().getItemMeta().getDisplayName().replaceAll("§((?i)[0-9a-fk-or])", ""), nameprefix, nametagprefix, tablistprefix);
+					Bukkit.getPluginManager().callEvent(new PlayerCallNickEvent(p, e.getCurrentItem().getItemMeta().getDisplayName().replaceAll("§((?i)[0-9a-fk-or])", "")));
 					p.closeInventory();
 				}
 			}
