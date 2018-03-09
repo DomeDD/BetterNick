@@ -13,6 +13,7 @@ class PlayerCallRandomNickEvent extends Event implements Cancellable {
 
 	/**
 	 * constructor
+	 * Call this when a player should get random nicked
 	 * @param player The player
 	 *
 	 */
