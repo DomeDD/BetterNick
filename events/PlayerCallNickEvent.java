@@ -31,6 +31,7 @@ class PlayerCallNickEvent extends Event implements Cancellable {
 	 * If NametagEdit or ColoredTags is NOT installed on your server,
 	 * you can't set a nametag suffix and only a nametag prefix with the length of 2 chars.
 	 *
+	 * @param nickname The nickname
 	 * @param nametagprefix The nametag prefix
 	 * @param nametagsuffix The nametag suffix
 	 *
