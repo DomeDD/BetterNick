@@ -78,9 +78,14 @@ public class AutoNick implements Listener {
 				BetterNickAPI.getApi().resetPlayerChatName(p);
 				BetterNickAPI.getApi().resetPlayerDisplayName(p);
 				BetterNickAPI.getApi().resetPlayerTablistName(p);
-				BetterNickAPI.getApi().resetPlayerNickName(p);
+				BetterNickAPI.getApi().resetPlayerNickNameOnQuit(p, false);
+				BetterNickAPI.getApi().removeNickedPlayer(p);
 			} else {
-				
+				BetterNickAPI.getApi().resetPlayerChatName(p);
+				BetterNickAPI.getApi().resetPlayerDisplayName(p);
+				BetterNickAPI.getApi().resetPlayerTablistName(p);
+				BetterNickAPI.getApi().resetPlayerNickNameOnQuit(p, true);
+				BetterNickAPI.getApi().removeNickedPlayer(p);
 			}
 		}
 	}

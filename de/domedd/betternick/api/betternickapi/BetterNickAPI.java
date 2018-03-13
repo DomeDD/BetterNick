@@ -42,6 +42,7 @@ import de.domedd.betternick.packets.v1_8_R2;
 import de.domedd.betternick.packets.v1_8_R3;
 import de.domedd.betternick.packets.v1_9_R1;
 import de.domedd.betternick.packets.v1_9_R2;
+import de.dytanic.cloudnet.bridge.CloudServer;
 
 public class BetterNickAPI implements Listener {
 
@@ -193,7 +194,7 @@ public class BetterNickAPI implements Listener {
 					break;
 				case v1_13_R1:
 					break;
-				}				
+				}
 				Bukkit.getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
 					@Override
 					public void run() {
@@ -228,6 +229,9 @@ public class BetterNickAPI implements Listener {
 									ColoredTags.updateTab(player);
 								}
 							}
+						}
+						if(pl.cloudnet) {
+							CloudServer.getInstance().updateNameTags(player);
 						}
 					}
 				}, 2);
@@ -366,10 +370,6 @@ public class BetterNickAPI implements Listener {
 				case v1_13_R1:
 					break;
 				}
-				for(Player all : Bukkit.getOnlinePlayers()) {
-					all.hidePlayer(pl, player);
-					all.showPlayer(pl, player);
-				}
 				Bukkit.getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
 					@Override
 					public void run() {
@@ -404,6 +404,9 @@ public class BetterNickAPI implements Listener {
 									ColoredTags.updateTab(player);
 								}
 							}
+						}
+						if(pl.cloudnet) {
+							CloudServer.getInstance().updateNameTags(player);
 						}
 					}
 				}, 2);
@@ -506,11 +509,7 @@ public class BetterNickAPI implements Listener {
 		}
 		PlayerData pd = players.get(player);
 		String defaultname = pd.getDefaultName();
-		pl.log.info(defaultname);
 		pd.setNickName(defaultname);
-		/*
-		 * Per Version den Spielernamen mit namefield ändern (nametag) (defaultname)
-		 */
 		switch(VersionChecker.getBukkitVersion()) {
 		case v1_8_R1:
 			break;
@@ -594,8 +593,115 @@ public class BetterNickAPI implements Listener {
 		case v1_13_R1:
 			break;
 		}
+		if(pl.cloudnet) {
+			CloudServer.getInstance().updateNameTags(player);
+		}
 		updateData(player, "NICKNAME", pd.getDefaultName());
 		updateData(player, "NICKED", false);
+		Bukkit.getPluginManager().callEvent(new PlayerUnnickEvent(player));
+	}
+	
+	/**
+	 * Call this method to reset the players nickname, nametag prefix and nametag suffix on quit.
+	 *
+	 * @param player The player
+	 * @param keepNick If the player keeps his/her nick for next join or not
+	 *
+	 */
+	public void resetPlayerNickNameOnQuit(Player player, boolean keepNick) {
+		if(!players.containsKey(player)) {
+			players.put(player, new PlayerData(player));
+		}
+		PlayerData pd = players.get(player);
+		String defaultname = pd.getDefaultName();
+		String nickname = pd.getNickName();		
+		pd.setNickName(defaultname);
+		switch(VersionChecker.getBukkitVersion()) {
+		case v1_8_R1:
+			break;
+		case v1_8_R2:
+			try {
+				v1_8_R2.setNameField(player, pd.getDefaultName());
+			} catch (IllegalArgumentException | IllegalAccessException e) {
+				if(pl.getConfig().getBoolean("Messages.Enabled")) {
+					player.sendMessage(pl.prefix + pl.getConfig().getString("Messages.Nick Set Error").replace("&", "§"));
+				}
+			}
+			v1_8_R2.removeFromTablist(player);
+			break;
+		case v1_8_R3:
+			try {
+				v1_8_R3.setNameField(player, pd.getDefaultName());
+			} catch (IllegalArgumentException | IllegalAccessException e) {
+				if(pl.getConfig().getBoolean("Messages.Enabled")) {
+					player.sendMessage(pl.prefix + pl.getConfig().getString("Messages.Nick Set Error").replace("&", "§"));
+				}
+			}
+			v1_8_R3.removeFromTablist(player);
+			break;
+		case v1_9_R1:
+			try {
+				v1_9_R1.setNameField(player, pd.getDefaultName());
+			} catch (IllegalArgumentException | IllegalAccessException e) {
+				if(pl.getConfig().getBoolean("Messages.Enabled")) {
+					player.sendMessage(pl.prefix + pl.getConfig().getString("Messages.Nick Set Error").replace("&", "§"));
+				}
+			}
+			v1_9_R1.removeFromTablist(player);
+			break;
+		case v1_9_R2:
+			try {
+				v1_9_R2.setNameField(player, pd.getDefaultName());
+			} catch (IllegalArgumentException | IllegalAccessException e) {
+				if(pl.getConfig().getBoolean("Messages.Enabled")) {
+					player.sendMessage(pl.prefix + pl.getConfig().getString("Messages.Nick Set Error").replace("&", "§"));
+				}
+			}
+			v1_9_R2.removeFromTablist(player);
+			break;
+		case v1_10_R1:
+			try {
+				v1_10_R1.setNameField(player, pd.getDefaultName());
+			} catch (IllegalArgumentException | IllegalAccessException e) {
+				if(pl.getConfig().getBoolean("Messages.Enabled")) {
+					player.sendMessage(pl.prefix + pl.getConfig().getString("Messages.Nick Set Error").replace("&", "§"));
+				}
+			}
+			v1_10_R1.removeFromTablist(player);
+			break;
+		case v1_11_R1:
+			try {
+				v1_11_R1.setNameField(player, pd.getDefaultName());
+			} catch (IllegalArgumentException | IllegalAccessException e) {
+				if(pl.getConfig().getBoolean("Messages.Enabled")) {
+					player.sendMessage(pl.prefix + pl.getConfig().getString("Messages.Nick Set Error").replace("&", "§"));
+				}
+			}
+			v1_11_R1.removeFromTablist(player);
+			break;
+		case v1_12_R1:
+			try {
+				v1_12_R1.setNameField(player, defaultname);
+			} catch (IllegalArgumentException | IllegalAccessException e) {
+				if(pl.getConfig().getBoolean("Messages.Enabled")) {
+					player.sendMessage(pl.prefix + pl.getConfig().getString("Messages.Nick Set Error").replace("&", "§"));
+				}
+			}
+			v1_12_R1.removeFromTablist(player);
+			break;
+		case v1_13_R1:
+			break;
+		}
+		if(pl.cloudnet) {
+			CloudServer.getInstance().updateNameTags(player);
+		}
+		if(keepNick) {
+			updateData(player, "NICKNAME", nickname);
+			updateData(player, "NICKED", true);
+		} else {
+			updateData(player, "NICKNAME", pd.getDefaultName());
+			updateData(player, "NICKED", false);
+		}
 		Bukkit.getPluginManager().callEvent(new PlayerUnnickEvent(player));
 	}
 	
@@ -655,6 +761,7 @@ public class BetterNickAPI implements Listener {
 	 * @param skin The new skin
 	 *
 	 */
+	@SuppressWarnings("deprecation")
 	public void setPlayerSkin(Player player, String skin) {
 		if(!players.containsKey(player)) {
 			players.put(player, new PlayerData(player));
@@ -728,8 +835,13 @@ public class BetterNickAPI implements Listener {
 			break;
 		}
 		for(Player all : Bukkit.getOnlinePlayers()) {
-			all.hidePlayer(pl, player);
-			all.showPlayer(pl, player);
+			try {
+				all.hidePlayer(pl, player);
+				all.showPlayer(pl, player);
+			} catch (NoSuchMethodError e) {
+				all.hidePlayer(player);
+				all.showPlayer(player);
+			}
 		}
 		pd.saveData();
 		pd.setNickedPlayerData();
@@ -742,6 +854,7 @@ public class BetterNickAPI implements Listener {
 	 * @param player The player
 	 *
 	 */
+	@SuppressWarnings("deprecation")
 	public void setRandomPlayerSkin(Player player) {
 		if(!players.containsKey(player)) {
 			players.put(player, new PlayerData(player));
@@ -815,8 +928,13 @@ public class BetterNickAPI implements Listener {
 			break;
 		}
 		for(Player all : Bukkit.getOnlinePlayers()) {
-			all.hidePlayer(pl, player);
-			all.showPlayer(pl, player);
+			try {
+				all.hidePlayer(pl, player);
+				all.showPlayer(pl, player);
+			} catch (NoSuchMethodError e) {
+				all.hidePlayer(player);
+				all.showPlayer(player);
+			}
 		}
 		pd.saveData();
 		pd.setNickedPlayerData();
@@ -829,6 +947,7 @@ public class BetterNickAPI implements Listener {
 	 * @param player The player
 	 *
 	 */
+	@SuppressWarnings("deprecation")
 	public void resetPlayerSkin(Player player) {
 		if(!players.containsKey(player)) {
 			players.put(player, new PlayerData(player));
@@ -904,8 +1023,13 @@ public class BetterNickAPI implements Listener {
 			break;
 		}
 		for(Player all : Bukkit.getOnlinePlayers()) {
-			all.hidePlayer(pl, player);
-			all.showPlayer(pl, player);
+			try {
+				all.hidePlayer(pl, player);
+				all.showPlayer(pl, player);
+			} catch (NoSuchMethodError e) {
+				all.hidePlayer(player);
+				all.showPlayer(player);
+			}
 		}
 		pd.saveData();
 		pd.setNickedPlayerData();

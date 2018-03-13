@@ -72,12 +72,12 @@ public class v1_12_R1 implements Listener {
 		}
 	}
 	
-	public static void sendPacket(Packet<?> packet) {
+	private static void sendPacket(Packet<?> packet) {
 		for(Player all : Bukkit.getOnlinePlayers()) {
 			((CraftPlayer)all).getHandle().playerConnection.sendPacket(packet);
 		}
 	}
-	public static void sendPacket(Player player, Packet<?> packet) {
+	private static void sendPacket(Player player, Packet<?> packet) {
 		((CraftPlayer)player).getHandle().playerConnection.sendPacket(packet);
 	}
 }

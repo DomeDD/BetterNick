@@ -118,6 +118,12 @@ public class BetterNick extends JavaPlugin implements Listener {
 			break;
 		}
 	}
+	@Override
+	public void onDisable() {
+		if(getConfig().getBoolean("MySQL.Enabled")) {
+			mysql.disconnect();
+		}
+	}
 	public static BetterNickAPI getApi() {
 		return BetterNickAPI.getApi();
 	}
