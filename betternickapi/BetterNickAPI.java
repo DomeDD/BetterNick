@@ -11,13 +11,11 @@ package de.domedd.betternick.api;
 
 class BetterNickAPI implements Listener {
 
-
 	/**
 	 * @return BetterNickAPI
 	 *
 	 */
 	BetterNickAPI getApi();
-	
 	
 	/**
 	 * Call this method to set a player a nickname, a nametag prefix and a nametag suffix.
@@ -32,7 +30,6 @@ class BetterNickAPI implements Listener {
 	 */
 	void setPlayerNickName(Player player, String nickname, String nametagprefix, String nametagsuffix);
 	
-	
 	/**
 	 * Call this method to set a player a random nickname, a nametag prefix and a nametag suffix.
 	 * The nick name will be chosen from a list in the config.yml
@@ -45,7 +42,6 @@ class BetterNickAPI implements Listener {
 	 *
 	 */
 	void setRandomPlayerNickName(Player player, String nametagprefix, String nametagsuffix);
-	
 	
 	/**
 	 * Call this method to set a player a chat nickname, a chatname prefix and a chatname suffix.
@@ -60,7 +56,6 @@ class BetterNickAPI implements Listener {
 	 */
 	void setPlayerChatName(Player player, String nickname, String chatprefix, String chatsuffix);
 	
-	
 	/**
 	 * Call this method to set a player a display nickname, a displayname prefix and a displayname suffix.
 	 *
@@ -71,7 +66,6 @@ class BetterNickAPI implements Listener {
 	 *
 	 */
 	void setPlayerDisplayName(Player player, String nickname, String displaynameprefix, String displaynamesuffix);
-	
 	
 	/**
 	 * Call this method to set a player a tablist nickname, a tablist prefix and a tablist suffix.
@@ -84,7 +78,6 @@ class BetterNickAPI implements Listener {
 	 */
 	void setPlayerTablistName(Player player, String nickname, String tablistprefix, String tablistsuffix);
 	
-	
 	/**
 	 * Call this method to reset the players nickname, nametag prefix and nametag suffix.
 	 *
@@ -93,6 +86,14 @@ class BetterNickAPI implements Listener {
 	 */
 	void resetPlayerNickName(Player player);
 	
+	/**
+	 * Call this method to reset the players nickname, nametag prefix and nametag suffix on quit.
+	 *
+	 * @param player The player
+	 * @param keepNick If the player keeps his/her nick for next join or not
+	 *
+	 */
+	void resetPlayerNickNameOnQuit(Player player, boolean keepNick);
 	
 	/**
 	 * Call this method to reset the players chatname, chatname prefix and chatname suffix.
