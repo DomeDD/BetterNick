@@ -1,8 +1,9 @@
 To-Do List:
-
 - Add CloudNet support (Tablist and Chat)
 - After /nick or /skin or /unnick the world doesn't load properly
 - Add iConomy support (fake accounts)
+- Add a new NickBookGui addon
+- Add a new CustomPrefix addon
 
 
 Things to check:
