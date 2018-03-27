@@ -1,11 +1,9 @@
 To-Do List:
-- Add CloudNet support (Tablist and Chat)
-- After /nick or /skin or /unnick the world doesn't load properly
-- Add iConomy support (fake accounts)
+- Sometimes the world doesn't load properly after /nick or /skin or /unnick
 - Add a new NickBookGui addon
 - Add a new CustomPrefix addon
 - Add AuthMe support
 
 
 Things to check:
-- Wrong player rotation after /nick or /skin or /unnick when near spawnlocation (https://www.spigotmc.org/threads/better-nick-api-1-8-3-1-12-2.233851/page-20#post-2921278)
+- /
