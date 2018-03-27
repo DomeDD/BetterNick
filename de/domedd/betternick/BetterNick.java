@@ -236,7 +236,7 @@ public class BetterNick extends JavaPlugin implements Listener {
 				log.info("Download the update here: https://www.spigotmc.org/resources/better-nick-api-1-8-3-1-12-2.39633/");
 			}
 		} else {
-			log.info("No new version available");
+			log.info("No new version available. You are up to date");
 		}
 	}
 	private Field getField(Class<?> clazz, String name) {

@@ -64,10 +64,19 @@ public class PlayerData implements Listener {
 		}
 	}
 	
-	public void newBalance(double newBalance) {
+	public void setNewBalance(double newBalance) {
 		newbalance = newBalance;
 	}
-	public void updateBalance() {
+	public void createNewBalance() {
+		if(!pl.econ.hasAccount(p)) {
+			pl.econ.createPlayerAccount(p);
+		}
+		pl.econ.depositPlayer(p, oldbalance);
+	}
+	public void deleteNewBalance() {
+		pl.econ.deleteBank(p.getName().toLowerCase());
+	}
+	public void updateOldBalance() {
 		if(!pl.econ.hasAccount(p)) {
 			pl.econ.createPlayerAccount(p);
 		}

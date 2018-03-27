@@ -61,7 +61,7 @@ public class v1_9_R1 implements Listener {
 	public static void respawn(Player player) {
 		@SuppressWarnings("deprecation")
 		PacketPlayOutRespawn packet = new PacketPlayOutRespawn(((CraftPlayer) player).getWorld().getEnvironment().getId(), EnumDifficulty.getById(((CraftPlayer) player).getWorld().getDifficulty().getValue()), WorldType.getType(((CraftPlayer) player).getWorld().getWorldType().getName()), EnumGamemode.getById(((CraftPlayer) player).getGameMode().getValue()));
-		sendPacket(packet);
+		sendPacket(player, packet);
 	}
 	public static void sendActionBar(Player player, String message) {
 		if(player.isOnline()) {

@@ -42,7 +42,9 @@ import de.domedd.betternick.packets.v1_8_R2;
 import de.domedd.betternick.packets.v1_8_R3;
 import de.domedd.betternick.packets.v1_9_R1;
 import de.domedd.betternick.packets.v1_9_R2;
+import de.dytanic.cloudnet.api.CloudAPI;
 import de.dytanic.cloudnet.bridge.CloudServer;
+import de.dytanic.cloudnet.lib.player.CloudPlayer;
 
 public class BetterNickAPI implements Listener {
 
@@ -232,9 +234,13 @@ public class BetterNickAPI implements Listener {
 						}
 						if(pl.cloudnet) {
 							CloudServer.getInstance().updateNameTags(player);
+							CloudAPI.getInstance().updatePlayer((CloudPlayer) player);
 						}
 					}
 				}, 2);
+				if(pl.econ != null) {
+					pd.createNewBalance();
+				}
 				updateData(player, "NICKNAME", nickname);
 				updateData(player, "NICKED", true);
 				Bukkit.getPluginManager().callEvent(new PlayerNickEvent(player, nickname));
@@ -407,9 +413,13 @@ public class BetterNickAPI implements Listener {
 						}
 						if(pl.cloudnet) {
 							CloudServer.getInstance().updateNameTags(player);
+							CloudAPI.getInstance().updatePlayer((CloudPlayer) player);
 						}
 					}
 				}, 2);
+				if(pl.econ != null) {
+					pd.createNewBalance();
+				}
 				updateData(player, "NICKNAME", nickname);
 				updateData(player, "NICKED", true);
 				Bukkit.getPluginManager().callEvent(new PlayerNickEvent(player, nickname));
@@ -510,6 +520,10 @@ public class BetterNickAPI implements Listener {
 		PlayerData pd = players.get(player);
 		String defaultname = pd.getDefaultName();
 		pd.setNickName(defaultname);
+		if(pl.econ != null) {
+			pd.setNewBalance(pl.econ.getBalance(player));
+			pd.deleteNewBalance();
+		}
 		switch(VersionChecker.getBukkitVersion()) {
 		case v1_8_R1:
 			break;
@@ -595,6 +609,10 @@ public class BetterNickAPI implements Listener {
 		}
 		if(pl.cloudnet) {
 			CloudServer.getInstance().updateNameTags(player);
+			CloudAPI.getInstance().updatePlayer((CloudPlayer) player);
+		}
+		if(pl.econ != null) {
+			pd.updateOldBalance();
 		}
 		updateData(player, "NICKNAME", pd.getDefaultName());
 		updateData(player, "NICKED", false);
@@ -694,6 +712,10 @@ public class BetterNickAPI implements Listener {
 		}
 		if(pl.cloudnet) {
 			CloudServer.getInstance().updateNameTags(player);
+			CloudAPI.getInstance().updatePlayer((CloudPlayer) player);
+		}
+		if(pl.econ != null) {
+			pd.updateOldBalance();
 		}
 		if(keepNick) {
 			updateData(player, "NICKNAME", nickname);

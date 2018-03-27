@@ -37,7 +37,7 @@ public class AutoNick implements Listener {
 			if(!BetterNickAPI.getApi().playerExists(p)) {
 				BetterNickAPI.getApi().createPlayer(p);
 			}
-			if(!pl.getConfig().getBoolean("Config.Nick on Join")) {
+			if(pl.getConfig().getBoolean("Config.Nick on Join")) {
 				if(BetterNickAPI.getApi().hasPlayerAutoNick(p)) {
 					if(BetterNickAPI.getApi().isPlayerNicked(p)) {
 						Bukkit.getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
