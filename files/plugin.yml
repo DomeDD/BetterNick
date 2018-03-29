@@ -1,5 +1,5 @@
 name: BetterNick
-version: 6.3
+version: 6.4
 author: DomeDD
 main: de.domedd.betternick.BetterNick
 softdepend: [CloudNetAPI, SuperVanish, Vault, NametagEdit, ColoredTags]
