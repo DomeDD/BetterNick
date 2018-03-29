@@ -72,7 +72,7 @@ public class AutoNickItem implements Listener {
 		try {
 			if(e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
 				if(pl.getConfig().getStringList("Addons.AutoNick Item.Enabled Worlds").contains(p.getWorld().getName())) {
-					if(e.getItem().hasItemMeta() && e.getItem().getItemMeta().getDisplayName().equalsIgnoreCase(autoNItem[1].replace("&", "ง"))) {
+					if(e.getItem().hasItemMeta() && e.getItem().getItemMeta().getDisplayName().equalsIgnoreCase(autoNItem[1].replace("&", "ยง"))) {
 						if(p.hasPermission("BetterNick.JoinItem")) {
 							e.setCancelled(true);
 							if(BetterNickAPI.getApi().hasPlayerAutoNick(p)) {
@@ -91,7 +91,7 @@ public class AutoNickItem implements Listener {
 	public void onDrop(PlayerDropItemEvent e) {
 		String[] autoNItemID = pl.getConfig().getString("Addons.AutoNick Item.Item").split(":");
 		String[] autoNItem = pl.getConfig().getString("Addons.AutoNick Item.Item").split(", ");
-		if(e.getItemDrop().getItemStack().getTypeId() == Integer.valueOf(autoNItemID[0]) && e.getItemDrop().getItemStack().getItemMeta().getDisplayName().equalsIgnoreCase(autoNItem[1].replace("&", "ง"))) {
+		if(e.getItemDrop().getItemStack().getTypeId() == Integer.valueOf(autoNItemID[0]) && e.getItemDrop().getItemStack().getItemMeta().getDisplayName().equalsIgnoreCase(autoNItem[1].replace("&", "ยง"))) {
 			if(!pl.getConfig().getBoolean("Addons.AutoNick Item.Item Moveable")) {
 				e.setCancelled(true);
 			}
@@ -108,39 +108,39 @@ public class AutoNickItem implements Listener {
 					e.setCancelled(true);
 				}
 			}
-			if(e.getInventory().getName() != null && e.getInventory().getName().equalsIgnoreCase(pl.getConfig().getString("Addons.AutoNick Item.Inventory.Name").replace("&", "ง"))) {
+			if(e.getInventory().getName() != null && e.getInventory().getName().equalsIgnoreCase(pl.getConfig().getString("Addons.AutoNick Item.Inventory.Name").replace("&", "ยง"))) {
 				e.setCancelled(true);
 				String[] autoTrue = pl.getConfig().getString("Addons.AutoNick Item.Inventory.AutoNick True").split(", ");
 				String[] autoFalse = pl.getConfig().getString("Addons.AutoNick Item.Inventory.AutoNick False").split(", ");
-				if(e.getCurrentItem().getItemMeta().getDisplayName() != null && e.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(autoTrue[1].replace("&", "ง"))) {
+				if(e.getCurrentItem().getItemMeta().getDisplayName() != null && e.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(autoTrue[1].replace("&", "ยง"))) {
 					BetterNickAPI.getApi().setPlayerAutoNick(p, false);
 					e.setCurrentItem(getItemFromString(pl.getConfig().getString("Addons.AutoNick Item.Inventory.AutoNick False")));
 					ItemStack is = e.getCurrentItem();
 					ItemMeta im = is.getItemMeta();
-					im.setDisplayName(autoFalse[1].replace("&", "ง"));
+					im.setDisplayName(autoFalse[1].replace("&", "ยง"));
 					is.setItemMeta(im);
 					p.updateInventory();
-					p.sendMessage(pl.getConfig().getString("Messages.AutoNick Turned Off").replace("&", "ง"));
-				} else if(e.getCurrentItem().getItemMeta().getDisplayName() != null && e.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(autoFalse[1].replace("&", "ง"))) {
+					p.sendMessage(pl.prefix + pl.getConfig().getString("Messages.AutoNick Turned Off").replace("&", "ยง"));
+				} else if(e.getCurrentItem().getItemMeta().getDisplayName() != null && e.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(autoFalse[1].replace("&", "ยง"))) {
 					BetterNickAPI.getApi().setPlayerAutoNick(p, true);
 					e.setCurrentItem(getItemFromString(pl.getConfig().getString("Addons.AutoNick Item.Inventory.AutoNick True")));
 					ItemStack is1 = e.getCurrentItem();
 					ItemMeta im1 = is1.getItemMeta();
-					im1.setDisplayName(autoTrue[1].replace("&", "ง"));
+					im1.setDisplayName(autoTrue[1].replace("&", "ยง"));
 					is1.setItemMeta(im1);
 					p.updateInventory();
-					p.sendMessage(pl.getConfig().getString("Messages.AutoNick Turned On").replace("&", "ง"));
+					p.sendMessage(pl.prefix + pl.getConfig().getString("Messages.AutoNick Turned On").replace("&", "ยง"));
 				}
 			}
 			
 		} catch(NullPointerException ex) {}
 	}
 	private void openFalseNickInv(Player p) {
-		Inventory inv = Bukkit.createInventory(p, 9, pl.getConfig().getString("Addons.AutoNick Item.Inventory.Name").replace("&", "ง"));
+		Inventory inv = Bukkit.createInventory(p, 9, pl.getConfig().getString("Addons.AutoNick Item.Inventory.Name").replace("&", "ยง"));
 		String[] autoFalse = pl.getConfig().getString("Addons.AutoNick Item.Inventory.AutoNick False").split(", ");
 		ItemStack isFalse = getItemFromString(pl.getConfig().getString("Addons.AutoNick Item.Inventory.AutoNick False"));
 		ItemMeta im = isFalse.getItemMeta();
-		im.setDisplayName(autoFalse[1].replace("&", "ง"));
+		im.setDisplayName(autoFalse[1].replace("&", "ยง"));
 		isFalse.setItemMeta(im);
 		for(int i = 0; i != 9; i++) {
 			inv.setItem(i, glassPane());
@@ -149,11 +149,11 @@ public class AutoNickItem implements Listener {
 		p.openInventory(inv);
 	}
 	private void openTrueNickInv(Player p) {
-		Inventory inv = Bukkit.createInventory(p, 9, pl.getConfig().getString("Addons.AutoNick Item.Inventory.Name").replace("&", "ง"));		
+		Inventory inv = Bukkit.createInventory(p, 9, pl.getConfig().getString("Addons.AutoNick Item.Inventory.Name").replace("&", "ยง"));		
 		String[] autoTrue = pl.getConfig().getString("Addons.AutoNick Item.Inventory.AutoNick True").split(", ");
 		ItemStack isTrue = getItemFromString(pl.getConfig().getString("Addons.AutoNick Item.Inventory.AutoNick True"));
 		ItemMeta im = isTrue.getItemMeta();
-		im.setDisplayName(autoTrue[1].replace("&", "ง"));
+		im.setDisplayName(autoTrue[1].replace("&", "ยง"));
 		isTrue.setItemMeta(im);
 		for(int i = 0; i != 9; i++) {
 			inv.setItem(i, glassPane());
@@ -181,14 +181,14 @@ public class AutoNickItem implements Listener {
 		@SuppressWarnings("deprecation")
 		ItemStack is = new ItemStack(ID, 1, (short) subID);
 		ItemMeta im = is.getItemMeta();
-		im.setDisplayName(name.replace("&", "ง"));
+		im.setDisplayName(name.replace("&", "ยง"));
 		is.setItemMeta(im);
 		return is;
 	}
 	private static ItemStack glassPane() {
 		ItemStack is = new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 15);
 		ItemMeta im = is.getItemMeta();
-		im.setDisplayName("งr");
+		im.setDisplayName("ยงr");
 		is.setItemMeta(im);
 		return is;
 	}
