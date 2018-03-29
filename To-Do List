@@ -1,8 +1,9 @@
 To-Do List:
-- Sometimes the world doesn't load properly after /nick or /skin or /unnick
-- Add a new NickBookGui addon
-- Add a new CustomPrefix addon
-- Add AuthMe support
+1. Sometimes the world doesn't load properly after /nick or /skin or /unnick
+2. Add Essential support
+3. Add TimoCloud support
+4. Add AuthMe support
+5. Add a new NickBookGui addon
 
 
 Things to check:
