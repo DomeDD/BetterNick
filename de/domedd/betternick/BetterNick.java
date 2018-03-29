@@ -130,12 +130,18 @@ public class BetterNick extends JavaPlugin implements Listener {
 	
 	private void loadPlugin() {
 		saveDefaultConfig();
-		prefix = getConfig().getString("Messages.Prefix").replace("&", "ง");
+		prefix = getConfig().getString("Messages.Prefix").replace("&", "ยง");
 		nameField = getField(GameProfile.class, "name");
 		this.getServer().getPluginManager().registerEvents(new PlayerData(this), this);
 		this.getServer().getPluginManager().registerEvents(new BetterNickAPI(this), this);
 		this.getServer().getPluginManager().registerEvents(new AutoNick(this), this);
-		this.getServer().getPluginManager().registerEvents(new MySQL(this), this);		
+		this.getServer().getPluginManager().registerEvents(new MySQL(this), this);
+		if(this.getConfig().getBoolean("Addons.AutoNick Item.Enabled")) {
+			this.getServer().getPluginManager().registerEvents(new AutoNickItem(this), this);
+		}
+		if(this.getConfig().getBoolean("Addons.Random Nick Gui.Enabled")) {
+			this.getServer().getPluginManager().registerEvents(new RandomNickGui(this), this);
+		}
 		if(!getConfig().getBoolean("Config.API Mode")) {
 			getCommand("nick").setExecutor(new NickCommand(this));
 			getCommand("skin").setExecutor(new SkinCommand(this));
