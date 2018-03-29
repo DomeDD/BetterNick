@@ -43,9 +43,10 @@ public class MySQL implements Listener {
 	public void connect() {
 		if(!connected()) {
 			try {
-				connection = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database + "?user=" + username + "&password=" + password + "&autoReconnect=true");
+				Class.forName("com.mysql.jdbc.Driver");
+				connection = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database, username, password);
 				pl.log.info("Successfully connected to a MySQL database");
-			} catch(SQLException s) {
+			} catch(SQLException | ClassNotFoundException s) {
 				pl.log.warning(s.getMessage());
 			}
 		} else {
@@ -59,8 +60,6 @@ public class MySQL implements Listener {
 			} catch(SQLException s) {
 				pl.log.warning(s.getMessage());
 			}
-		} else {
-			pl.log.warning("You are not connected to a MySQL database");
 		}
 	}
 	public void createTable() {
@@ -70,8 +69,6 @@ public class MySQL implements Listener {
 			} catch (SQLException s) {
 				pl.log.warning(s.getMessage());
 			}
-		} else {
-			pl.log.warning("You are not connected to a MySQL database");
 		}
 	}
 	public void update(String query) {
@@ -81,8 +78,6 @@ public class MySQL implements Listener {
 			} catch (SQLException s) {
 				pl.log.warning(s.getMessage());
 			}
-		} else {
-			pl.log.warning("You are not connected to a MySQL database");
 		}
 	}
 	public ResultSet result(String query) {
