@@ -15,6 +15,13 @@ Config:
     Skin Self Update: true
     Nicked Actionbar: true
     Keep NickName On Quit: false
+MySQL:
+    Enabled: false
+    Username: root
+    Password: password
+    Database: nicknames
+    Host: localhost
+    Port: '3306'
 Nick Options:
     # If NametagEdit or ColoredTags is installed you can use longer prefixes than 2 chars
     Nametag Prefix: '&7'
@@ -51,13 +58,6 @@ Messages:
     Player Not Online Error: '&7This Player is not online.'
     Files Reloaded: '&7You successfully reloaded the config files.'
     No Permissions: '&7You don''t have the permissions to do that.'
-MySQL:
-    Enabled: false
-    Username: root
-    Password: password
-    Database: nicknames
-    Host: localhost
-    Port: '3306'
 Addons:
     AutoNick Item:
         Enabled: false
