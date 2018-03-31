@@ -132,7 +132,7 @@ public class BetterNick extends JavaPlugin implements Listener {
 	
 	private void loadPlugin() {
 		saveDefaultConfig();
-		prefix = getConfig().getString("Messages.Prefix").replace("&", "ง");
+		prefix = getConfig().getString("Messages.Prefix").replace("&", "ยง");
 		nameField = getField(GameProfile.class, "name");
 		this.getServer().getPluginManager().registerEvents(new PlayerData(this), this);
 		this.getServer().getPluginManager().registerEvents(new BetterNickAPI(this), this);
@@ -174,7 +174,7 @@ public class BetterNick extends JavaPlugin implements Listener {
 		}
 		if(Bukkit.getPluginManager().getPlugin("SuperVanish") != null || Bukkit.getPluginManager().getPlugin("PremiumVanish") != null) {
 			log.info("Hooking into SuperVanish/PremiumVanish...");
-			//this.getServer().getPluginManager().registerEvents(new VanishManager(this), this);
+			this.getServer().getPluginManager().registerEvents(new VanishManager(this), this);
 		}
     	if(getConfig().getBoolean("Config.Use Vault")) {
     		RegisteredServiceProvider<Chat> chatProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.chat.Chat.class);
