@@ -42,6 +42,7 @@ import de.domedd.betternick.commands.SkinCommand;
 import de.domedd.betternick.commands.UnnickCommand;
 import de.domedd.betternick.listeners.AutoNick;
 import de.domedd.betternick.listeners.BetterNickEvents;
+import de.domedd.betternick.listeners.VanishManager;
 import de.domedd.betternick.mysqlconnection.MySQL;
 import de.domedd.betternick.packets.VersionChecker;
 import de.domedd.betternick.packets.v1_10_R1;
@@ -132,7 +133,7 @@ public class BetterNick extends JavaPlugin implements Listener {
 	
 	private void loadPlugin() {
 		saveDefaultConfig();
-		prefix = getConfig().getString("Messages.Prefix").replace("&", "ยง");
+		prefix = getConfig().getString("Messages.Prefix").replace("&", "ง");
 		nameField = getField(GameProfile.class, "name");
 		this.getServer().getPluginManager().registerEvents(new PlayerData(this), this);
 		this.getServer().getPluginManager().registerEvents(new BetterNickAPI(this), this);

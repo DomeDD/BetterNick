@@ -18,7 +18,6 @@ import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.Inventory;
@@ -98,17 +97,13 @@ public class PlayerData implements Listener {
 	public void setChatPrefix(String prefix) {
 		chatprefix = prefix;
 		if(pl.chat != null) {
-			for(World w : Bukkit.getWorlds()) {
-				pl.chat.setPlayerPrefix(w.getName(), p, prefix);
-			}
+			pl.chat.setPlayerPrefix(p.getWorld().getName(), p, prefix);
 		}
 	}
 	public void setChatSuffix(String suffix) {
 		chatprefix = suffix;
 		if(pl.chat != null) {
-			for(World w : Bukkit.getWorlds()) {
-				pl.chat.setPlayerSuffix(w.getName(), p, suffix);
-			}
+			pl.chat.setPlayerSuffix(p.getWorld().getName(), p, suffix);
 		}
 	}
 	public void setDisplayName(String displayname) {
@@ -117,7 +112,12 @@ public class PlayerData implements Listener {
 	}
 	public void setTablistName(String tablistname) {
 		this.tablistname = tablistname;
-		p.setPlayerListName(tablistname);
+		Bukkit.getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
+			@Override
+			public void run() {
+				p.setPlayerListName(tablistname);
+			}
+		}, 20);
 	}
 	
 	public String getSkin() {
