@@ -8,8 +8,6 @@ Config:
     Send Metrics: true
     # In API mode, all commands and listeners will be disabled that you can make your one ones
     API Mode: false
-    # If true, the plugin will hook into your Vault compatible chat and economy plugin if installed
-    Use Vault: false
     # If true, you will get a nickname on join if the client enabled AutoJoin and has the permissions
     Nick on Join: true
     Skin Self Update: true
