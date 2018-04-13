@@ -44,7 +44,7 @@ public class MySQL implements Listener {
 		if(!connected()) {
 			try {
 				Class.forName("com.mysql.jdbc.Driver");
-				connection = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database, username, password);
+				connection = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database + "?autoReconnect=true", username, password);
 				pl.log.info("Successfully connected to a MySQL database");
 			} catch(SQLException | ClassNotFoundException s) {
 				pl.log.warning(s.getMessage());

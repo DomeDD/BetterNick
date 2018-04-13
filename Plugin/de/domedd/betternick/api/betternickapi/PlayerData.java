@@ -45,6 +45,7 @@ public class PlayerData implements Listener {
 	public PlayerData(BetterNick main) {
 		this.pl = main;
 	}
+	
 	public PlayerData(Player player) {
 		p = player;
 		skin = player.getName();
@@ -66,6 +67,7 @@ public class PlayerData implements Listener {
 	public void setNewBalance(double newBalance) {
 		newbalance = newBalance;
 	}
+	
 	public void createNewBalance() {
 		if(!pl.econ.hasAccount(p)) {
 			pl.econ.createPlayerAccount(p);
@@ -73,8 +75,9 @@ public class PlayerData implements Listener {
 		pl.econ.depositPlayer(p, oldbalance);
 	}
 	public void deleteNewBalance() {
-		pl.econ.deleteBank(p.getName().toLowerCase());
+		pl.econ.deleteBank(p.getName());
 	}
+	
 	public void updateOldBalance() {
 		if(!pl.econ.hasAccount(p)) {
 			pl.econ.createPlayerAccount(p);
@@ -85,6 +88,9 @@ public class PlayerData implements Listener {
 		} else if(oldbalance > newbalance) {
 			double balance = oldbalance - newbalance;
 			pl.econ.withdrawPlayer(p, balance);
+		}
+		if(pl.econ.getName().equals("Essentials Economy")) {
+			pl.econ.withdrawPlayer(p, 100);
 		}
 	}
 	

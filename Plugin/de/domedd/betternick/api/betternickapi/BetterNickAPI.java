@@ -234,7 +234,6 @@ public class BetterNickAPI implements Listener {
 						}
 						if(pl.cloudnet) {
 							CloudServer.getInstance().updateNameTags(player);
-							CloudAPI.getInstance().updatePlayer((CloudPlayer) player);
 						}
 					}
 				}, 2);
@@ -413,7 +412,6 @@ public class BetterNickAPI implements Listener {
 						}
 						if(pl.cloudnet) {
 							CloudServer.getInstance().updateNameTags(player);
-							CloudAPI.getInstance().updatePlayer((CloudPlayer) player);
 						}
 					}
 				}, 2);
@@ -455,6 +453,12 @@ public class BetterNickAPI implements Listener {
 		if(chatsuffix != null) {
 			pd.setChatSuffix(chatsuffix);
 		}
+		
+		// Experimental
+		if(pl.cloudnet) {
+			CloudPlayer cp = CloudAPI.getInstance().getOnlinePlayer(player.getUniqueId());
+			CloudAPI.getInstance().updatePlayer(cp);
+		}
 	}
 	
 	/**
@@ -480,6 +484,12 @@ public class BetterNickAPI implements Listener {
 			displayname = nickname + displaynamesuffix;
 		}
 		pd.setDisplayName(displayname);
+		
+		// Experimental
+		if(pl.cloudnet) {
+			CloudPlayer cp = CloudAPI.getInstance().getOnlinePlayer(player.getUniqueId());
+			CloudAPI.getInstance().updatePlayer(cp);
+		}
 	}
 	
 	/**

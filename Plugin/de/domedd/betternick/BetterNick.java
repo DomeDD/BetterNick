@@ -22,6 +22,7 @@ import java.nio.channels.ReadableByteChannel;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -29,7 +30,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.mojang.authlib.GameProfile;
 
 import de.domedd.betternick.addons.autonickitem.AutoNickItem;
+import de.domedd.betternick.addons.essentialschat.EssentialsChatHook;
 import de.domedd.betternick.addons.randomnickgui.RandomNickGui;
+import de.domedd.betternick.addons.supervanish.SuperVanishHook;
 import de.domedd.betternick.api.Metrics;
 import de.domedd.betternick.api.betternickapi.BetterNickAPI;
 import de.domedd.betternick.api.betternickapi.PlayerData;
@@ -42,7 +45,6 @@ import de.domedd.betternick.commands.SkinCommand;
 import de.domedd.betternick.commands.UnnickCommand;
 import de.domedd.betternick.listeners.AutoNick;
 import de.domedd.betternick.listeners.BetterNickEvents;
-import de.domedd.betternick.listeners.VanishManager;
 import de.domedd.betternick.mysqlconnection.MySQL;
 import de.domedd.betternick.packets.VersionChecker;
 import de.domedd.betternick.packets.v1_10_R1;
@@ -52,6 +54,8 @@ import de.domedd.betternick.packets.v1_8_R2;
 import de.domedd.betternick.packets.v1_8_R3;
 import de.domedd.betternick.packets.v1_9_R1;
 import de.domedd.betternick.packets.v1_9_R2;
+import me.clip.placeholderapi.PlaceholderAPI;
+import me.clip.placeholderapi.PlaceholderHook;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 
@@ -162,7 +166,7 @@ public class BetterNick extends JavaPlugin implements Listener {
 			connectToMySQL();
 		}
 		if(getConfig().getBoolean("Config.Auto Update Check")) {
-			checkForUpdates();
+			checkForUpdatesExperimental();
 		}
 		if(getConfig().getBoolean("Config.Send Metrics")) {
 			sendMetrics();
@@ -175,10 +179,10 @@ public class BetterNick extends JavaPlugin implements Listener {
 		}
 		if(Bukkit.getPluginManager().getPlugin("SuperVanish") != null || Bukkit.getPluginManager().getPlugin("PremiumVanish") != null) {
 			log.info("Hooking into SuperVanish/PremiumVanish...");
-			this.getServer().getPluginManager().registerEvents(new VanishManager(this), this);
+			this.getServer().getPluginManager().registerEvents(new SuperVanishHook(this), this);
 		}
-    	if(getConfig().getBoolean("Config.Use Vault")) {
-    		RegisteredServiceProvider<Chat> chatProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.chat.Chat.class);
+		if(Bukkit.getPluginManager().getPlugin("Vault") != null) {
+			RegisteredServiceProvider<Chat> chatProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.chat.Chat.class);
     		RegisteredServiceProvider<Economy> econProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
             if(chatProvider != null) {
             	log.info("Hooking into " + chatProvider.getProvider().getName() + " via Vault...");
@@ -188,6 +192,10 @@ public class BetterNick extends JavaPlugin implements Listener {
             	log.info("Hooking into " + econProvider.getProvider().getName() + " via Vault...");
                 econ = econProvider.getProvider();
             }
+		}
+    	if(Bukkit.getPluginManager().getPlugin("EssentialsChat") != null) {
+    		log.info("Hooking into EssentialsChat...");
+    		this.getServer().getPluginManager().registerEvents(new EssentialsChatHook(this), this);
     	}
     	if(Bukkit.getPluginManager().getPlugin("CloudNetAPI") != null) {
     		log.info("Hooking into CloudNetAPI...");
@@ -196,6 +204,38 @@ public class BetterNick extends JavaPlugin implements Listener {
     	if(Bukkit.getPluginManager().getPlugin("ColoredTags") != null) {
     		log.info("Hooking into ColoredTags...");
     		coloredtags = true;
+    	}
+    	if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+    		PlaceholderAPI.getPlaceholders().put("%nickName%", new PlaceholderHook() {
+				@Override
+				public String onPlaceholderRequest(Player arg0, String arg1) {
+					if(getApi().isPlayerNicked(arg0)) {
+						return getApi().getNickName(arg0);
+					} else {
+						return arg0.getName();
+					}
+				}
+			});
+    		PlaceholderAPI.getPlaceholders().put("%nickPrefix%", new PlaceholderHook() {
+				@Override
+				public String onPlaceholderRequest(Player arg0, String arg1) {
+					if(getApi().isPlayerNicked(arg0)) {
+						return getConfig().getString("Nick Options.Chat Prefix").replace("&", "§");
+					} else {
+						return chat.getPlayerPrefix(arg0).replace("&", "§");
+					}
+				}
+			});
+    		PlaceholderAPI.getPlaceholders().put("%nickSuffix%", new PlaceholderHook() {
+				@Override
+				public String onPlaceholderRequest(Player arg0, String arg1) {
+					if(getApi().isPlayerNicked(arg0)) {
+						return getConfig().getString("Nick Options.Chat Suffix").replace("&", "§");
+					} else {
+						return chat.getPlayerSuffix(arg0).replace("&", "§");
+					}
+				}
+			});
     	}
 	}
 	private void sendMetrics() {
@@ -207,6 +247,56 @@ public class BetterNick extends JavaPlugin implements Listener {
 		mysql.connect();
 		mysql.createTable();
 	}
+	private void checkForUpdatesExperimental() {
+		log.info("Checking for updates...");
+		ReadableByteChannel channel = null;
+		String newVersionString = "";
+		double oldVersion = 0.0;
+		double newVersion = 0.0;
+		File file = new File("plugins", "BetterNick 1.8.3 - 1.12.2.jar");
+		try {
+			URL versionURL = new URL("https://api.spigotmc.org/legacy/update.php?resource=39633");
+			BufferedReader reader = new BufferedReader(new InputStreamReader(versionURL.openStream()));
+			newVersionString = reader.readLine();
+			reader.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		if(!newVersionString.equals(getDescription().getVersion())) {
+			newVersion = Double.valueOf(newVersionString.replace("-SNAPSHOT", ""));
+			oldVersion = Double.valueOf(getDescription().getVersion().replace("-SNAPSHOT", ""));
+			if(newVersion > oldVersion || getDescription().getVersion().contains("-SNAPSHOT") && newVersion == oldVersion) {
+				log.info("Found a new version (v" + newVersionString + ")");
+				if(getConfig().getBoolean("Config.Auto Update Download")) {
+					log.info("Starting download...");
+					try {
+						HttpURLConnection downloadURL = (HttpURLConnection) new URL(String.format("http://api.spiget.org/v2/resources/%s/download", 39633)).openConnection();
+						downloadURL.setRequestProperty("User-Agent", "SpigetResourceUpdater/Bukkit");
+						channel = Channels.newChannel(downloadURL.getInputStream());
+					} catch (IOException e) {
+						throw new RuntimeException("Download failed", e);
+					}
+					try {
+						FileOutputStream output = new FileOutputStream(file);
+						output.getChannel().transferFrom(channel, 0, Long.MAX_VALUE);
+						output.flush();
+						output.close();
+					} catch (IOException e) {
+						throw new RuntimeException("File could not be saved", e);
+					}
+					log.info("Successfully updated plugin to v" + newVersion + ". Please restart your server");
+					log.info("Checkout the newest update description to find out if you need to update your config.yml: https://www.spigotmc.org/resources/better-nick-api-1-8-3-1-12-2.39633/updates");
+				} else {
+					log.info("Download the update here: https://www.spigotmc.org/resources/better-nick-api-1-8-3-1-12-2.39633/");
+				}
+			} else {
+				log.info("No new version available. You are up to date");
+			}
+		} else {
+			log.info("No new version available. You are up to date");
+		}
+	}
+	/*
 	private void checkForUpdates() {
 		log.info("Checking for updates...");
 		ReadableByteChannel channel = null;
@@ -248,6 +338,7 @@ public class BetterNick extends JavaPlugin implements Listener {
 			log.info("No new version available. You are up to date");
 		}
 	}
+	*/
 	private Field getField(Class<?> clazz, String name) {
 		try {
 			Field field = clazz.getDeclaredField(name);
