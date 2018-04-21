@@ -31,6 +31,7 @@ import com.mojang.authlib.GameProfile;
 
 import de.domedd.betternick.addons.autonickitem.AutoNickItem;
 import de.domedd.betternick.addons.essentialschat.EssentialsChatHook;
+import de.domedd.betternick.addons.joinquitmessage.JoinQuitMessage;
 import de.domedd.betternick.addons.randomnickgui.RandomNickGui;
 import de.domedd.betternick.addons.supervanish.SuperVanishHook;
 import de.domedd.betternick.api.Metrics;
@@ -148,6 +149,9 @@ public class BetterNick extends JavaPlugin implements Listener {
 		}
 		if(this.getConfig().getBoolean("Addons.Random Nick Gui.Enabled")) {
 			this.getServer().getPluginManager().registerEvents(new RandomNickGui(this), this);
+		}
+		if(this.getConfig().getBoolean("Addons.Join / Quit Message.Enabled")) {
+			this.getServer().getPluginManager().registerEvents(new JoinQuitMessage(this), this);
 		}
 		if(!getConfig().getBoolean("Config.API Mode")) {
 			getCommand("nick").setExecutor(new NickCommand(this));

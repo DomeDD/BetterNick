@@ -619,7 +619,6 @@ public class BetterNickAPI implements Listener {
 		}
 		if(pl.cloudnet) {
 			CloudServer.getInstance().updateNameTags(player);
-			CloudAPI.getInstance().updatePlayer((CloudPlayer) player);
 		}
 		if(pl.econ != null) {
 			pd.updateOldBalance();
@@ -722,7 +721,6 @@ public class BetterNickAPI implements Listener {
 		}
 		if(pl.cloudnet) {
 			CloudServer.getInstance().updateNameTags(player);
-			CloudAPI.getInstance().updatePlayer((CloudPlayer) player);
 		}
 		if(pl.econ != null) {
 			pd.updateOldBalance();
@@ -756,6 +754,11 @@ public class BetterNickAPI implements Listener {
 		if(pd.getDefaultChatSuffix() != null) {
 			pd.setChatSuffix(pd.getDefaultChatSuffix());
 		}
+		// Experimental
+		if(pl.cloudnet) {
+			CloudPlayer cp = CloudAPI.getInstance().getOnlinePlayer(player.getUniqueId());
+			CloudAPI.getInstance().updatePlayer(cp);
+		}
 	}
 	
 	/**
@@ -770,6 +773,11 @@ public class BetterNickAPI implements Listener {
 		}
 		PlayerData pd = players.get(player);
 		pd.setDisplayName(pd.getDefaultDisplayName());
+		// Experimental
+		if(pl.cloudnet) {
+			CloudPlayer cp = CloudAPI.getInstance().getOnlinePlayer(player.getUniqueId());
+			CloudAPI.getInstance().updatePlayer(cp);
+		}
 	}
 	
 	/**

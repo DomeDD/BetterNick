@@ -80,6 +80,10 @@ Addons:
             # Only change the colorcode. Don't add anything else
             Nick Item Name: '&5[NAME]'
             Nick Item Lore: '&7Click to set a new nickname.'
+    Join / Quit Message:
+        Enabled: false
+        Join Message: '&3[NAME] &7joined the game.'
+        Quit Message: '&3[NAME] &7left the game.'
 NickNames List:
 - 'abcplayer'
 - 'xxHolyMolyxx'

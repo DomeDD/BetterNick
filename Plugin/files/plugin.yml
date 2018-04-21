@@ -1,5 +1,5 @@
 name: BetterNick
-version: 6.7-SNAPSHOT
+version: 6.7
 author: DomeDD
 main: de.domedd.betternick.BetterNick
 softdepend: [Essentials, EssentialsChat, PlaceholderAPI, CloudNetAPI, SuperVanish, Vault, NametagEdit, ColoredTags]
