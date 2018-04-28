@@ -25,9 +25,9 @@ Nick Options:
     Nametag Prefix: '&7'
     # If NametagEdit or ColoredTags is installed you can use this, otherwise leave it empty
     Nametag Suffix: ''
-    # If Vault and a Vault compatible chat plugin is installed you can use this, otherwise leave it empty
+    # If Vault and a Vault compatible chat & permissions plugin is installed you can use this, otherwise leave it empty
     Chat Prefix: ''
-    # If Vault and a Vault compatible chat plugin is installed you can use this, otherwise leave it empty
+    # If Vault and a Vault compatible chat & permissions plugin is installed you can use this, otherwise leave it empty
     Chat Suffix: ''
     Displayname Prefix: ''
     Displayname Suffix: ''
@@ -82,8 +82,10 @@ Addons:
             Nick Item Lore: '&7Click to set a new nickname.'
     Join / Quit Message:
         Enabled: false
-        Join Message: '&3[NAME] &7joined the game.'
-        Quit Message: '&3[NAME] &7left the game.'
+        # If using [PREFIX] and/or [SUFFIX] make sure a Vault compatible chat & permissions plugin is installed
+        Join Message: '[PREFIX]&3[NAME]&r[SUFFIX] &7joined the game.'
+        # If using [PREFIX] and/or [SUFFIX] make sure a Vault compatible chat & permissions plugin is installed
+        Quit Message: '[PREFIX]&3[NAME]&r[SUFFIX] &7left the game.'
 NickNames List:
 - 'abcplayer'
 - 'xxHolyMolyxx'

@@ -1,25 +1,30 @@
 name: BetterNick
-version: 6.7
+version: 6.8
 author: DomeDD
 main: de.domedd.betternick.BetterNick
 softdepend: [Essentials, EssentialsChat, PlaceholderAPI, CloudNetAPI, SuperVanish, Vault, NametagEdit, ColoredTags]
 commands:
      nick:
           description: Nick Command
+          aliases: [disguise, n]
      skin:
           description: Skin Command
+          aliases: [changeskin, s]
      unnick:
           description: UnNick Command
+          aliases: [undisguise, un]
      realname:
           description: RealName Command
+          aliases: [rn]
      nicklist:
           description: NickList Command
-          aliases: [nicks]
+          aliases: [nicks, nl]
      seenick:
           description: SeeNick Command
-          aliases: [nickinfo]
+          aliases: [nickinfo, mynick, sn]
      autonick:
           description: AutoNick Command
+          aliases: [an]
 permissions:
      BetterNick.*:
          children:
