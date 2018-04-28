@@ -170,7 +170,7 @@ public class BetterNick extends JavaPlugin implements Listener {
 			connectToMySQL();
 		}
 		if(getConfig().getBoolean("Config.Auto Update Check")) {
-			checkForUpdatesExperimental();
+			checkForUpdates();
 		}
 		if(getConfig().getBoolean("Config.Send Metrics")) {
 			sendMetrics();
@@ -251,7 +251,7 @@ public class BetterNick extends JavaPlugin implements Listener {
 		mysql.connect();
 		mysql.createTable();
 	}
-	private void checkForUpdatesExperimental() {
+	private void checkForUpdates() {
 		log.info("Checking for updates...");
 		ReadableByteChannel channel = null;
 		String newVersionString = "";
@@ -300,49 +300,6 @@ public class BetterNick extends JavaPlugin implements Listener {
 			log.info("No new version available. You are up to date");
 		}
 	}
-	/*
-	private void checkForUpdates() {
-		log.info("Checking for updates...");
-		ReadableByteChannel channel = null;
-		double newVersion = 0;
-		File file = new File("plugins", "BetterNick 1.8.3 - 1.12.2.jar");
-		try {
-			URL versionURL = new URL("https://api.spigotmc.org/legacy/update.php?resource=39633");
-			BufferedReader reader = new BufferedReader(new InputStreamReader(versionURL.openStream()));
-			newVersion = Double.valueOf(reader.readLine());
-			reader.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		if(newVersion > Double.valueOf(getDescription().getVersion())) {
-			log.info("Found a new version (v" + newVersion + ")");
-			if(getConfig().getBoolean("Config.Auto Update Download")) {
-				log.info("Starting download...");
-				try {
-					HttpURLConnection downloadURL = (HttpURLConnection) new URL(String.format("http://api.spiget.org/v2/resources/%s/download", 39633)).openConnection();
-					downloadURL.setRequestProperty("User-Agent", "SpigetResourceUpdater/Bukkit");
-					channel = Channels.newChannel(downloadURL.getInputStream());
-				} catch (IOException e) {
-					throw new RuntimeException("Download failed", e);
-				}
-				try {
-					FileOutputStream output = new FileOutputStream(file);
-					output.getChannel().transferFrom(channel, 0, Long.MAX_VALUE);
-					output.flush();
-					output.close();
-				} catch (IOException e) {
-					throw new RuntimeException("File could not be saved", e);
-				}
-				log.info("Successfully updated plugin to v" + newVersion + ". Please restart your server");
-				log.info("Checkout the newest update description to find out if you need to update your config.yml: https://www.spigotmc.org/resources/better-nick-api-1-8-3-1-12-2.39633/updates");
-			} else {
-				log.info("Download the update here: https://www.spigotmc.org/resources/better-nick-api-1-8-3-1-12-2.39633/");
-			}
-		} else {
-			log.info("No new version available. You are up to date");
-		}
-	}
-	*/
 	private Field getField(Class<?> clazz, String name) {
 		try {
 			Field field = clazz.getDeclaredField(name);

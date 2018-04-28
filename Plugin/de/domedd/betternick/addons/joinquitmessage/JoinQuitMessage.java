@@ -35,9 +35,9 @@ public class JoinQuitMessage implements Listener {
 			@Override
 			public void run() {
 				if(BetterNickAPI.getApi().isPlayerNicked(p)) {
-					Bukkit.broadcastMessage(pl.getConfig().getString("Addons.Join / Quit Message.Join Message").replace("[NAME]", BetterNickAPI.getApi().getNickName(p)).replace("&", "§"));
+					Bukkit.broadcastMessage(pl.getConfig().getString("Addons.Join / Quit Message.Join Message").replace("[PREFIX]", pl.getConfig().getString("Nick Options.Chat Prefix").replace("&", "§")).replace("[SUFFIX]", pl.getConfig().getString("Nick Options.Chat Suffix").replace("&", "§")).replace("[NAME]", BetterNickAPI.getApi().getNickName(p)).replace("&", "§"));
 				} else {
-					Bukkit.broadcastMessage(pl.getConfig().getString("Addons.Join / Quit Message.Join Message").replace("[NAME]", p.getName()).replace("&", "§"));
+					Bukkit.broadcastMessage(pl.getConfig().getString("Addons.Join / Quit Message.Join Message").replace("[PREFIX]", pl.chat.getPlayerPrefix(p).replace("&", "§")).replace("[SUFFIX]", pl.chat.getPlayerSuffix(p).replace("&", "§")).replace("[NAME]", p.getName()).replace("&", "§"));
 				}
 			}
 		}, 5);
@@ -50,9 +50,9 @@ public class JoinQuitMessage implements Listener {
 			@Override
 			public void run() {
 				if(BetterNickAPI.getApi().isPlayerNicked(p)) {
-					Bukkit.broadcastMessage(pl.getConfig().getString("Addons.Join / Quit Message.Quit Message").replace("[NAME]", BetterNickAPI.getApi().getNickName(p)).replace("&", "§"));
+					Bukkit.broadcastMessage(pl.getConfig().getString("Addons.Join / Quit Message.Quit Message").replace("[PREFIX]", pl.getConfig().getString("Nick Options.Chat Prefix").replace("&", "§")).replace("[SUFFIX]", pl.getConfig().getString("Nick Options.Chat Suffix").replace("&", "§")).replace("[NAME]", BetterNickAPI.getApi().getNickName(p)).replace("&", "§"));
 				} else {
-					Bukkit.broadcastMessage(pl.getConfig().getString("Addons.Join / Quit Message.Quit Message").replace("[NAME]", p.getName()).replace("&", "§"));
+					Bukkit.broadcastMessage(pl.getConfig().getString("Addons.Join / Quit Message.Quit Message").replace("[PREFIX]", pl.chat.getPlayerPrefix(p).replace("&", "§")).replace("[SUFFIX]", pl.chat.getPlayerSuffix(p).replace("&", "§")).replace("[NAME]", p.getName()).replace("&", "§"));
 				}
 			}
 		}, 3);

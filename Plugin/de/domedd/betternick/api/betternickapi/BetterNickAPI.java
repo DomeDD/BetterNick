@@ -1084,17 +1084,21 @@ public class BetterNickAPI implements Listener {
 	 *
 	 */
 	public String getNickName(Player player) {
-		if(pl.getConfig().getBoolean("MySQL.Enabled")) {
-			try {
-				ResultSet rs = pl.mysql.result("SELECT NICKNAME FROM BetterNick WHERE UUID='" + player.getUniqueId() + "'");
-				if(rs.next()) {
-					return rs.getString("NICKNAME");
+		if(isPlayerNicked(player)) {
+			if(pl.getConfig().getBoolean("MySQL.Enabled")) {
+				try {
+					ResultSet rs = pl.mysql.result("SELECT NICKNAME FROM BetterNick WHERE UUID='" + player.getUniqueId() + "'");
+					if(rs.next()) {
+						return rs.getString("NICKNAME");
+					}
+				} catch(SQLException s) {
+					pl.log.warning(s.getMessage());
 				}
-			} catch(SQLException s) {
-				pl.log.warning(s.getMessage());
+			} else {
+				return NickedPlayersFile.cfg.getString(player.getUniqueId() + ".NICKNAME");
 			}
 		} else {
-			return NickedPlayersFile.cfg.getString(player.getUniqueId() + ".NICKNAME");
+			return player.getName();
 		}
 		return null;
 	}
