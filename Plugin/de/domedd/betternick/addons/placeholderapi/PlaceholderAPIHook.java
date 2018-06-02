@@ -1,3 +1,12 @@
+/*
+ * All rights by DomeDD (2018)
+ * You are allowed to modify this code
+ * You are allowed to use this code in your plugins for private projects
+ * You are allowed to publish your plugin including this code as long as your plugin is for free and as long as you mention me (DomeDD) 
+ * You are NOT allowed to claim this plugin (BetterNick) as your own
+ * You are NOT allowed to publish this plugin (BetterNick) or your modified version of this plugin (BetterNick)
+ * 
+ */
 package de.domedd.betternick.addons.placeholderapi;
 
 import org.bukkit.entity.Player;
@@ -24,15 +33,15 @@ public class PlaceholderAPIHook extends PlaceholderExpansion {
 			return BetterNickAPI.getApi().getNickName(p);
 		case "prefix":
 			if(BetterNickAPI.getApi().isPlayerNicked(p)) {
-				return pl.getConfig().getString("Nick Options.Chat Prefix").replace("&", "ง");
+				return pl.getConfig().getString("Nick Options.Chat Prefix").replace("&", "ยง");
 			} else {
-				return pl.chat.getPlayerPrefix(p).replace("&", "ง");
+				return pl.chat.getPlayerPrefix(p).replace("&", "ยง");
 			}
 		case "suffix":
 			if(BetterNickAPI.getApi().isPlayerNicked(p)) {
-				return pl.getConfig().getString("Nick Options.Chat Suffix").replace("&", "ง");
+				return pl.getConfig().getString("Nick Options.Chat Suffix").replace("&", "ยง");
 			} else {
-				return pl.chat.getPlayerSuffix(p).replace("&", "ง");
+				return pl.chat.getPlayerSuffix(p).replace("&", "ยง");
 			}
 		}
 		
