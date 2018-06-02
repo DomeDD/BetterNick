@@ -25,10 +25,10 @@ import net.minecraft.server.v1_8_R2.IChatBaseComponent;
 import net.minecraft.server.v1_8_R2.Packet;
 import net.minecraft.server.v1_8_R2.PacketPlayOutChat;
 import net.minecraft.server.v1_8_R2.PacketPlayOutPlayerInfo;
-import net.minecraft.server.v1_8_R2.PacketPlayOutRespawn;
-import net.minecraft.server.v1_8_R2.WorldType;
 import net.minecraft.server.v1_8_R2.PacketPlayOutPlayerInfo.EnumPlayerInfoAction;
+import net.minecraft.server.v1_8_R2.PacketPlayOutRespawn;
 import net.minecraft.server.v1_8_R2.WorldSettings.EnumGamemode;
+import net.minecraft.server.v1_8_R2.WorldType;
 
 public class v1_8_R2 implements Listener {
 	

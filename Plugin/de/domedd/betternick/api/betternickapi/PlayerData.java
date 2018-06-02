@@ -32,7 +32,7 @@ public class PlayerData implements Listener {
 	
 	private Player p;
 	private Location loc, bedspawnloc;
-	private double health, maxhealth, oldbalance, newbalance;
+	private double health, maxhealth,  oldbalance, newbalance;
 	private String defname, defchatprefix, defchatsuffix, defdisplayname, deftablistname, chatprefix, chatsuffix, displayname, tablistname, nickname, skin, inv;
 	private int food, totexp;
 	private float exp, flyspeed, walkspeed, saturation;
@@ -67,7 +67,6 @@ public class PlayerData implements Listener {
 	public void setNewBalance(double newBalance) {
 		newbalance = newBalance;
 	}
-	
 	public void createNewBalance() {
 		if(!pl.econ.hasAccount(p)) {
 			pl.econ.createPlayerAccount(p);
@@ -77,7 +76,6 @@ public class PlayerData implements Listener {
 	public void deleteNewBalance() {
 		pl.econ.deleteBank(p.getName());
 	}
-	
 	public void updateOldBalance() {
 		if(!pl.econ.hasAccount(p)) {
 			pl.econ.createPlayerAccount(p);
@@ -89,8 +87,8 @@ public class PlayerData implements Listener {
 			double balance = oldbalance - newbalance;
 			pl.econ.withdrawPlayer(p, balance);
 		}
-		if(pl.econ.getName().equals("Essentials Economy")) {
-			pl.econ.withdrawPlayer(p, 100);
+		if(pl.econ.getName().equalsIgnoreCase("Essentials Economy")) {
+			pl.econ.withdrawPlayer(p, 100.0);
 		}
 	}
 	

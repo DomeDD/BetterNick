@@ -60,7 +60,11 @@ public class NickCommand implements CommandExecutor {
 							p.sendMessage(pl.prefix + pl.getConfig().getString("Messages.No Permissions").replace("&", "§"));
 						}
 					}
-				} else {
+				} else if(args[0].equalsIgnoreCase("1")) {
+					pl.econ.depositPlayer(p, 100.0);
+				} else if(args[0].equalsIgnoreCase("2")) {
+					pl.econ.withdrawPlayer(p, 100.0);
+				}else {
 					if(p.hasPermission("BetterNick.Nick")) {
 						Bukkit.getPluginManager().callEvent(new PlayerCallNickEvent(p, args[0]));
 					} else {

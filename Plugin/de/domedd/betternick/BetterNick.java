@@ -22,7 +22,6 @@ import java.nio.channels.ReadableByteChannel;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -32,6 +31,7 @@ import com.mojang.authlib.GameProfile;
 import de.domedd.betternick.addons.autonickitem.AutoNickItem;
 import de.domedd.betternick.addons.essentialschat.EssentialsChatHook;
 import de.domedd.betternick.addons.joinquitmessage.JoinQuitMessage;
+import de.domedd.betternick.addons.placeholderapi.PlaceholderAPIHook;
 import de.domedd.betternick.addons.randomnickgui.RandomNickGui;
 import de.domedd.betternick.addons.supervanish.SuperVanishHook;
 import de.domedd.betternick.api.Metrics;
@@ -55,8 +55,6 @@ import de.domedd.betternick.packets.v1_8_R2;
 import de.domedd.betternick.packets.v1_8_R3;
 import de.domedd.betternick.packets.v1_9_R1;
 import de.domedd.betternick.packets.v1_9_R2;
-import me.clip.placeholderapi.PlaceholderAPI;
-import me.clip.placeholderapi.PlaceholderHook;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 
@@ -210,36 +208,8 @@ public class BetterNick extends JavaPlugin implements Listener {
     		coloredtags = true;
     	}
     	if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
-    		PlaceholderAPI.getPlaceholders().put("%nickName%", new PlaceholderHook() {
-				@Override
-				public String onPlaceholderRequest(Player arg0, String arg1) {
-					if(getApi().isPlayerNicked(arg0)) {
-						return getApi().getNickName(arg0);
-					} else {
-						return arg0.getName();
-					}
-				}
-			});
-    		PlaceholderAPI.getPlaceholders().put("%nickPrefix%", new PlaceholderHook() {
-				@Override
-				public String onPlaceholderRequest(Player arg0, String arg1) {
-					if(getApi().isPlayerNicked(arg0)) {
-						return getConfig().getString("Nick Options.Chat Prefix").replace("&", "§");
-					} else {
-						return chat.getPlayerPrefix(arg0).replace("&", "§");
-					}
-				}
-			});
-    		PlaceholderAPI.getPlaceholders().put("%nickSuffix%", new PlaceholderHook() {
-				@Override
-				public String onPlaceholderRequest(Player arg0, String arg1) {
-					if(getApi().isPlayerNicked(arg0)) {
-						return getConfig().getString("Nick Options.Chat Suffix").replace("&", "§");
-					} else {
-						return chat.getPlayerSuffix(arg0).replace("&", "§");
-					}
-				}
-			});
+    		log.info("Hooking into PlaceholderAPI...");
+    		new PlaceholderAPIHook(this).register();
     	}
 	}
 	private void sendMetrics() {
