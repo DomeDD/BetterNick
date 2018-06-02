@@ -44,7 +44,7 @@ public class NickCommand implements CommandExecutor {
 					}
 				} else {
 					if(pl.getConfig().getBoolean("Messages.Enabled")) {
-						p.sendMessage(pl.prefix + pl.getConfig().getString("Messages.No Permissions").replace("&", "ง"));
+						p.sendMessage(pl.prefix + pl.getConfig().getString("Messages.No Permissions").replace("&", "ยง"));
 					}
 				}
 			} else if(args.length == 1) {
@@ -53,23 +53,19 @@ public class NickCommand implements CommandExecutor {
 						pl.reloadConfig();
 						NickedPlayersFile.reload();
 						if(pl.getConfig().getBoolean("Messages.Enabled")) {
-							p.sendMessage(pl.prefix + pl.getConfig().getString("Messages.Files Reloaded").replace("&", "ง"));
+							p.sendMessage(pl.prefix + pl.getConfig().getString("Messages.Files Reloaded").replace("&", "ยง"));
 						}
 					} else {
 						if(pl.getConfig().getBoolean("Messages.Enabled")) {
-							p.sendMessage(pl.prefix + pl.getConfig().getString("Messages.No Permissions").replace("&", "ง"));
+							p.sendMessage(pl.prefix + pl.getConfig().getString("Messages.No Permissions").replace("&", "ยง"));
 						}
 					}
-				} else if(args[0].equalsIgnoreCase("1")) {
-					pl.econ.depositPlayer(p, 100.0);
-				} else if(args[0].equalsIgnoreCase("2")) {
-					pl.econ.withdrawPlayer(p, 100.0);
-				}else {
+				} else {
 					if(p.hasPermission("BetterNick.Nick")) {
 						Bukkit.getPluginManager().callEvent(new PlayerCallNickEvent(p, args[0]));
 					} else {
 						if(pl.getConfig().getBoolean("Messages.Enabled")) {
-							p.sendMessage(pl.prefix + pl.getConfig().getString("Messages.No Permissions").replace("&", "ง"));
+							p.sendMessage(pl.prefix + pl.getConfig().getString("Messages.No Permissions").replace("&", "ยง"));
 						}
 					}
 				}
@@ -79,7 +75,7 @@ public class NickCommand implements CommandExecutor {
 				if(args[0].equalsIgnoreCase("reload")) {
 					pl.reloadConfig();
 					NickedPlayersFile.reload();
-					Bukkit.getConsoleSender().sendMessage(pl.prefix + pl.getConfig().getString("Messages.Reloaded").replace("&", "ง"));
+					Bukkit.getConsoleSender().sendMessage(pl.prefix + pl.getConfig().getString("Messages.Reloaded").replace("&", "ยง"));
 				}
 			}
 		}
