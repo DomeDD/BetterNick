@@ -1,4 +1,4 @@
-/*
+/* 
  * All rights by DomeDD (2018)
  * You are allowed to modify this code
  * You are allowed to use this code in your plugins for private projects
