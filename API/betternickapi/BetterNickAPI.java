@@ -157,6 +157,15 @@ class BetterNickAPI implements Listener {
 	String getNickName(Player player);
 	
 	/**
+	 * Call this method to get the nickname of a player when logged out and enabled keepnick.
+	 *
+	 * @param player The player
+	 * @return String nickname of the player
+	 *
+	 */
+	String getLogoutNickName(Player player);
+	
+	/**
 	 * Call this method to get the real name of a player.
 	 *
 	 * @param player The player
@@ -164,6 +173,15 @@ class BetterNickAPI implements Listener {
 	 *
 	 */
 	String getRealName(Player player);
+	
+	/**
+	 * Call this method to get the autonick setting of a player.
+	 *
+	 * @param player The player
+	 * @return boolean True if the player enabled autonick
+	 *
+	 */
+	boolean hasPlayerNewSkin(Player player);
 	
 	/**
 	 * Call this method to get the skin of a player.
@@ -193,6 +211,24 @@ class BetterNickAPI implements Listener {
 	boolean hasPlayerAutoNick(Player player);
 	
 	/**
+	 * Call this method to set a player the keepnick setting.
+	 *
+	 * @param player The player
+	 * @param keepnick True or false
+	 *
+	 */
+	void setPlayerKeepNick(Player player, boolean keepnick);
+	
+	/**
+	 * Call this method to get the keepnick setting of a player.
+	 *
+	 * @param player The player
+	 * @return boolean True if the player enabled keepnick
+	 *
+	 */
+	boolean hasPlayerKeepNick(Player player);
+	
+	/**
 	 * Call this method to get if a player is nicked.
 	 *
 	 * @param player The player
@@ -200,6 +236,15 @@ class BetterNickAPI implements Listener {
 	 *
 	 */
 	boolean isPlayerNicked(Player player);
+	
+	/**
+	 * Call this method to get if a player was nicked when leaving the server.
+	 *
+	 * @param player The player
+	 * @return boolean True if the player is nicked
+	 *
+	 */
+	boolean wasPlayerNicked(Player player);
 	
 	/**
 	 * Call this method to get if a nickname is already in usage.
