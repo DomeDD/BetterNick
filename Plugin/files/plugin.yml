@@ -1,5 +1,5 @@
 name: BetterNick
-version: 6.8
+version: 6.9
 author: DomeDD
 main: de.domedd.betternick.BetterNick
 softdepend: [Essentials, EssentialsChat, PlaceholderAPI, CloudNetAPI, SuperVanish, Vault, NametagEdit, ColoredTags]
@@ -25,6 +25,9 @@ commands:
      autonick:
           description: AutoNick Command
           aliases: [an]
+     keepnick:
+          description: KeepNick Command
+          aliases: [kn]
 permissions:
      BetterNick.*:
          children:
@@ -38,3 +41,5 @@ permissions:
             BetterNick.NickList: true
             BetterNick.JoinItem: true
             BetterNick.SeeNick: true
+            BetterNick.AutoNick: true
+            BetterNick.KeepNick: true

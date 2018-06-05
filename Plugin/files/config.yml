@@ -12,7 +12,8 @@ Config:
     Nick on Join: true
     Skin Self Update: true
     Nicked Actionbar: true
-    Keep NickName On Quit: false
+    # If true, you will get a nickname and a skin on /nick; disabled this if your server runs in offline mode to only get a nickname
+    Nick And Skin Combination: true
 MySQL:
     Enabled: false
     Username: root
@@ -51,13 +52,15 @@ Messages:
     Get Nicked Players: '&6[ID]&7: The real name of &3[PLAYER] &7is &e[NAME]&7.'
     AutoNick Turned On: '&7You turned &2on &7autonick.'
     AutoNick Turned Off: '&7You turned &4off &7autonick.'
+    KeepNick Turned On: '&7You turned &2on &7keepnick.'
+    KeepNick Turned Off: '&7You turned &4off &7keepnick.'
     No Player Nicked Error: '&7At the moment no player is nicked.'
     Player Not Nicked Error: '&7This Player is not nicked.'
     Player Not Online Error: '&7This Player is not online.'
     Files Reloaded: '&7You successfully reloaded the config files.'
     No Permissions: '&7You don''t have the permissions to do that.'
 Addons:
-    AutoNick Item:
+    Nick Options Item:
         Enabled: false
         Get On Server Join: true
         Get On World Change:
@@ -65,14 +68,18 @@ Addons:
         Enabled Worlds:
         - world
         # ID:SubID, Displayname, Slot
-        Item: 421:0, &5Nick Tool, 4
+        Item: 421:0, &5Nick Options, 4
         Item Moveable: false
         Inventory:
-            Name: '&8[&5BetterNick&8] &5AutoNick'
-            # ID:SubID, Displayname, Slot (has to be the same slot as at "Addons.AutoNick Item.Inventory.AutoNick False")
-            AutoNick True: 348:0, &7AutoNick &8>> &2TRUE, 4
-            # ID:SubID, Displayname, Slot (has to be the same slot as at "Addons.AutoNick Item.Inventory.AutoNick True")
-            AutoNick False: 289:0, &7AutoNick &8>> &cFALSE, 4
+            Name: '&8[&5BetterNick&8] &5Options'
+            # ID:SubID, Displayname, Slot (has to be the same slot as at "Addons.Nick Options Item.Inventory.AutoNick False")
+            AutoNick True: 348:0, &7AutoNick &8>> &2TRUE, 3
+            # ID:SubID, Displayname, Slot (has to be the same slot as at "Addons.Nick Options Item.Inventory.AutoNick True")
+            AutoNick False: 289:0, &7AutoNick &8>> &cFALSE, 3
+            # ID:SubID, Displayname, Slot (has to be the same slot as at "Addons.Nick Options Item.Inventory.KeepNick False")
+            KeepNick True: 348:0, &7KeepNick &8>> &2TRUE, 5
+            # ID:SubID, Displayname, Slot (has to be the same slot as at "Addons.Nick Options Item.Inventory.KeepNick True")
+            KeepNick False: 289:0, &7KeepNick &8>> &cFALSE, 5
     Random Nick Gui:
         Enabled: false
         Inventory:
