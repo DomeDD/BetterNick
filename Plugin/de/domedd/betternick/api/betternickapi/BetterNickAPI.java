@@ -236,12 +236,22 @@ public class BetterNickAPI implements Listener {
 							CloudServer.getInstance().updateNameTags(player);
 						}
 					}
-				}, 2);
+				}, 5);
 				if(pl.econ != null) {
 					pd.createNewBalance();
 				}
-				updateData(player, "NICKNAME", nickname);
-				updateData(player, "NICKED", true);
+				if(pl.getConfig().getBoolean("MySQL.Enabled")) {
+					Bukkit.getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
+						@Override
+						public void run() {
+							updateData(player, "ONLINENICKNAME", nickname);
+							updateData(player, "ISNICKED", true);
+						}
+					}, 40);
+				} else {
+					updateData(player, "ONLINENICKNAME", nickname);
+					updateData(player, "ISNICKED", true);
+				}
 				Bukkit.getPluginManager().callEvent(new PlayerNickEvent(player, nickname));
 			} else {
 				setRandomPlayerNickName(player, nametagprefix, nametagsuffix);
@@ -414,12 +424,22 @@ public class BetterNickAPI implements Listener {
 							CloudServer.getInstance().updateNameTags(player);
 						}
 					}
-				}, 2);
+				}, 5);
 				if(pl.econ != null) {
 					pd.createNewBalance();
 				}
-				updateData(player, "NICKNAME", nickname);
-				updateData(player, "NICKED", true);
+				if(pl.getConfig().getBoolean("MySQL.Enabled")) {
+					Bukkit.getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
+						@Override
+						public void run() {
+							updateData(player, "ONLINENICKNAME", nickname);
+							updateData(player, "ISNICKED", true);
+						}
+					}, 40);
+				} else {
+					updateData(player, "ONLINENICKNAME", nickname);
+					updateData(player, "ISNICKED", true);
+				}
 				Bukkit.getPluginManager().callEvent(new PlayerNickEvent(player, nickname));
 			} else {
 				setRandomPlayerNickName(player, nametagprefix, nametagsuffix);
@@ -534,6 +554,12 @@ public class BetterNickAPI implements Listener {
 			pd.setNewBalance(pl.econ.getBalance(player));
 			pd.deleteNewBalance();
 		}
+		updateData(player, "ONLINENICKNAME", pd.getDefaultName());
+		updateData(player, "ISNICKED", false);
+		if(hasPlayerKeepNick(player)) {
+			updateData(player, "WASNICKED", false);
+		}
+		updateData(player, "OFFLINENICKNAME", pd.getDefaultName());
 		switch(VersionChecker.getBukkitVersion()) {
 		case v1_8_R1:
 			break;
@@ -623,8 +649,6 @@ public class BetterNickAPI implements Listener {
 		if(pl.econ != null) {
 			pd.updateOldBalance();
 		}
-		updateData(player, "NICKNAME", pd.getDefaultName());
-		updateData(player, "NICKED", false);
 		Bukkit.getPluginManager().callEvent(new PlayerUnnickEvent(player));
 	}
 	
@@ -641,7 +665,7 @@ public class BetterNickAPI implements Listener {
 		}
 		PlayerData pd = players.get(player);
 		String defaultname = pd.getDefaultName();
-		String nickname = pd.getNickName();		
+		String nickname = pd.getNickName();
 		pd.setNickName(defaultname);
 		switch(VersionChecker.getBukkitVersion()) {
 		case v1_8_R1:
@@ -725,12 +749,27 @@ public class BetterNickAPI implements Listener {
 		if(pl.econ != null) {
 			pd.updateOldBalance();
 		}
-		if(keepNick) {
-			updateData(player, "NICKNAME", nickname);
-			updateData(player, "NICKED", true);
+		updateData(player, "ONLINENICKNAME", pd.getDefaultName());
+		updateData(player, "ISNICKED", false);
+		if(pl.getConfig().getBoolean("MySQL.Enabled")) {
+			Bukkit.getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
+				@Override
+				public void run() {
+					updateData(player, "WASNICKED", keepNick);
+					if(keepNick) {
+						updateData(player, "OFFLINENICKNAME", nickname);
+					} else {
+						updateData(player, "OFFLINENICKNAME", pd.getDefaultName());
+					}
+				}
+			}, 40);
 		} else {
-			updateData(player, "NICKNAME", pd.getDefaultName());
-			updateData(player, "NICKED", false);
+			updateData(player, "WASNICKED", keepNick);
+			if(keepNick) {
+				updateData(player, "OFFLINENICKNAME", nickname);
+			} else {
+				updateData(player, "OFFLINENICKNAME", pd.getDefaultName());
+			}
 		}
 		Bukkit.getPluginManager().callEvent(new PlayerUnnickEvent(player));
 	}
@@ -994,17 +1033,14 @@ public class BetterNickAPI implements Listener {
 		}
 		PlayerData pd = players.get(player);
 		pd.setSkin(pd.getDefaultName());
-		/*
-		 * Per Version den Skin resetten
-		 */
 		GameProfile gameProfile = null;
 		try {
 			gameProfile = GameProfileBuilder.fetch(player.getUniqueId());
 		} catch (Exception e) {
-			e.printStackTrace();
 			if(pl.getConfig().getBoolean("Messages.Enabled")) {
 				player.sendMessage(pl.prefix + pl.getConfig().getString("Messages.Skin Set Error").replace("&", "§"));
 			}
+			return;
 		}
 		Collection<Property> properties = gameProfile.getProperties().get("textures");
 		switch(VersionChecker.getBukkitVersion()) {
@@ -1087,15 +1123,42 @@ public class BetterNickAPI implements Listener {
 		if(isPlayerNicked(player)) {
 			if(pl.getConfig().getBoolean("MySQL.Enabled")) {
 				try {
-					ResultSet rs = pl.mysql.result("SELECT NICKNAME FROM BetterNick WHERE UUID='" + player.getUniqueId() + "'");
+					ResultSet rs = pl.mysql.result("SELECT ONLINENICKNAME FROM BetterNick WHERE UUID='" + player.getUniqueId() + "';");
 					if(rs.next()) {
-						return rs.getString("NICKNAME");
+						return rs.getString("ONLINENICKNAME");
 					}
 				} catch(SQLException s) {
 					pl.log.warning(s.getMessage());
 				}
 			} else {
-				return NickedPlayersFile.cfg.getString(player.getUniqueId() + ".NICKNAME");
+				return NickedPlayersFile.cfg.getString(player.getUniqueId() + ".ONLINENICKNAME");
+			}
+		} else {
+			return player.getName();
+		}
+		return null;
+	}
+	
+	/**
+	 * Call this method to get the nickname of a player when logged out and enabled keepnick.
+	 *
+	 * @param player The player
+	 * @return String nickname of the player
+	 *
+	 */
+	public String getLogoutNickName(Player player) {
+		if(wasPlayerNicked(player)) {
+			if(pl.getConfig().getBoolean("MySQL.Enabled")) {
+				try {
+					ResultSet rs = pl.mysql.result("SELECT OFFLINENICKNAME FROM BetterNick WHERE UUID='" + player.getUniqueId() + "';");
+					if(rs.next()) {
+						return rs.getString("OFFLINENICKNAME");
+					}
+				} catch(SQLException s) {
+					pl.log.warning(s.getMessage());
+				}
+			} else {
+				return NickedPlayersFile.cfg.getString(player.getUniqueId() + ".OFFLINENICKNAME");
 			}
 		} else {
 			return player.getName();
@@ -1113,15 +1176,15 @@ public class BetterNickAPI implements Listener {
 	public String getRealName(Player player) {
 		if(pl.getConfig().getBoolean("MySQL.Enabled")) {
 			try {
-				ResultSet rs = pl.mysql.result("SELECT NAME FROM BetterNick WHERE UUID='" + player.getUniqueId() + "'");
+				ResultSet rs = pl.mysql.result("SELECT DEFAULTNAME FROM BetterNick WHERE UUID='" + player.getUniqueId() + "';");
 				if(rs.next()) {
-					return rs.getString("NAME");
+					return rs.getString("DEFAULTNAME");
 				}
 			} catch(SQLException s) {
 				pl.log.warning(s.getMessage());
 			}
 		} else {
-			return NickedPlayersFile.cfg.getString(player.getUniqueId() + ".NAME");
+			return NickedPlayersFile.cfg.getString(player.getUniqueId() + ".DEFAULTNAME");
 		}
 		return null;
 	}
@@ -1140,6 +1203,22 @@ public class BetterNickAPI implements Listener {
 		PlayerData pd = players.get(player);
 		return pd.getSkin();
 	}
+	
+	/**
+	 * Call this method to get the autonick setting of a player.
+	 *
+	 * @param player The player
+	 * @return boolean True if the player enabled autonick
+	 *
+	 */
+	public boolean hasPlayerNewSkin(Player player) {
+		if(!players.containsKey(player)) {
+			players.put(player, new PlayerData(player));
+		}
+		PlayerData pd = players.get(player);
+		return pd.hasNewSkin();
+	}
+	
 	
 	/**
 	 * Call this method to set a player the autonick setting.
@@ -1162,7 +1241,7 @@ public class BetterNickAPI implements Listener {
 	public boolean hasPlayerAutoNick(Player player) {
 		if(pl.getConfig().getBoolean("MySQL.Enabled")) {
 			try {
-				ResultSet rs = pl.mysql.result("SELECT AUTONICK FROM BetterNick WHERE UUID='" + player.getUniqueId() + "'");
+				ResultSet rs = pl.mysql.result("SELECT AUTONICK FROM BetterNick WHERE UUID='" + player.getUniqueId() + "';");
 				if(rs.next()) {
 					return rs.getBoolean("AUTONICK");
 				}
@@ -1171,6 +1250,40 @@ public class BetterNickAPI implements Listener {
 			}
 		} else {
 			return NickedPlayersFile.cfg.getBoolean(player.getUniqueId() + ".AUTONICK");
+		}
+		return false;
+	}
+	
+	/**
+	 * Call this method to set a player the keepnick setting.
+	 *
+	 * @param player The player
+	 * @param keepnick True or false
+	 *
+	 */
+	public void setPlayerKeepNick(Player player, boolean keepnick) {
+		updateData(player, "KEEPNICK", keepnick);
+	}
+	
+	/**
+	 * Call this method to get the keepnick setting of a player.
+	 *
+	 * @param player The player
+	 * @return boolean True if the player enabled keepnick
+	 *
+	 */
+	public boolean hasPlayerKeepNick(Player player) {
+		if(pl.getConfig().getBoolean("MySQL.Enabled")) {
+			try {
+				ResultSet rs = pl.mysql.result("SELECT KEEPNICK FROM BetterNick WHERE UUID='" + player.getUniqueId() + "';");
+				if(rs.next()) {
+					return rs.getBoolean("KEEPNICK");
+				}
+			} catch(SQLException s) {
+				pl.log.warning(s.getMessage());
+			}
+		} else {
+			return NickedPlayersFile.cfg.getBoolean(player.getUniqueId() + ".KEEPNICK");
 		}
 		return false;
 	}
@@ -1185,15 +1298,38 @@ public class BetterNickAPI implements Listener {
 	public boolean isPlayerNicked(Player player) {
 		if(pl.getConfig().getBoolean("MySQL.Enabled")) {
 			try {
-				ResultSet rs = pl.mysql.result("SELECT NICKED FROM BetterNick WHERE UUID='" + player.getUniqueId() + "'");
+				ResultSet rs = pl.mysql.result("SELECT ISNICKED FROM BetterNick WHERE UUID='" + player.getUniqueId() + "';");
 				if(rs.next()) {
-					return rs.getBoolean("NICKED");
+					return rs.getBoolean("ISNICKED");
 				}
 			} catch(SQLException s) {
 				pl.log.warning(s.getMessage());
 			}
 		} else {
-			return NickedPlayersFile.cfg.getBoolean(player.getUniqueId() + ".NICKED");
+			return NickedPlayersFile.cfg.getBoolean(player.getUniqueId() + ".ISNICKED");
+		}
+		return false;
+	}
+	
+	/**
+	 * Call this method to get if a player was nicked when leaving the server.
+	 *
+	 * @param player The player
+	 * @return boolean True if the player is nicked
+	 *
+	 */
+	public boolean wasPlayerNicked(Player player) {
+		if(pl.getConfig().getBoolean("MySQL.Enabled")) {
+			try {
+				ResultSet rs = pl.mysql.result("SELECT WASNICKED FROM BetterNick WHERE UUID='" + player.getUniqueId() + "';");
+				if(rs.next()) {
+					return rs.getBoolean("WASNICKED");
+				}
+			} catch(SQLException s) {
+				pl.log.warning(s.getMessage());
+			}
+		} else {
+			return NickedPlayersFile.cfg.getBoolean(player.getUniqueId() + ".WASNICKED");
 		}
 		return false;
 	}
@@ -1208,7 +1344,7 @@ public class BetterNickAPI implements Listener {
 	public boolean isNickNameUsed(String nickname) {
 		if(pl.getConfig().getBoolean("MySQL.Enabled")) {
 			try {
-				ResultSet rs = pl.mysql.result("SELECT NICKNAME FROM BetterNick WHERE NICKNAME='" + nickname + "'");
+				ResultSet rs = pl.mysql.result("SELECT ONLINENICKNAME FROM BetterNick WHERE NICKNAME='" + nickname + "';");
 				if(rs.next()) {
 					return true;
 				}
@@ -1217,7 +1353,7 @@ public class BetterNickAPI implements Listener {
 			}
 		} else {
 			for(Player all : Bukkit.getOnlinePlayers()) {
-				if(NickedPlayersFile.cfg.getString(all.getUniqueId() + ".NICKNAME") != null && NickedPlayersFile.cfg.getString(all.getUniqueId() + ".NICKNAME").equalsIgnoreCase(nickname)) {
+				if(NickedPlayersFile.cfg.getString(all.getUniqueId() + ".ONLINENICKNAME") != null && NickedPlayersFile.cfg.getString(all.getUniqueId() + ".ONLINENICKNAME").equalsIgnoreCase(nickname)) {
 					return true;
 				}
 			}
@@ -1226,7 +1362,8 @@ public class BetterNickAPI implements Listener {
 	}
 	private static void updateData(Player player, String field, Object value) {
 		if(pl.getConfig().getBoolean("MySQL.Enabled")) {
-			pl.mysql.update("UPDATE BetterNick SET " + field + "='" + value + "' WHERE UUID='" + player.getUniqueId() + "'");
+			pl.mysql.update("UPDATE BetterNick SET " + field + "='" + value + "' WHERE UUID='" + player.getUniqueId() + "';");
+			pl.log.info("updated " + field + " with " + value);
 		} else {
 			NickedPlayersFile.cfg.set(player.getUniqueId() + "." + field + "", value);
 			NickedPlayersFile.save();
@@ -1295,7 +1432,7 @@ public class BetterNickAPI implements Listener {
 	public boolean playerExists(Player player) {
 		if(pl.getConfig().getBoolean("MySQL.Enabled")) {
 			try {
-				ResultSet rs = pl.mysql.result("SELECT NAME FROM BetterNick WHERE UUID='" + player.getUniqueId() + "'");
+				ResultSet rs = pl.mysql.result("SELECT DEFAULTNAME FROM BetterNick WHERE UUID='" + player.getUniqueId() + "';");
 		    	if(rs.next()) {
 		    		return true;
 		    	}
@@ -1321,12 +1458,15 @@ public class BetterNickAPI implements Listener {
 	 */
 	public void createPlayer(Player player) {
 		if(pl.getConfig().getBoolean("MySQL.Enabled")) {
-			pl.mysql.update("INSERT INTO BetterNick (UUID, NAME, NICKNAME, NICKED, AUTONICK) VALUES ('" + player.getUniqueId() + "', '" + player.getName() + "', '" + player.getName() + "', 'false', 'false');");
+			pl.mysql.update("INSERT INTO BetterNick (UUID, DEFAULTNAME, ONLINENICKNAME, ISNICKED, AUTONICK, KEEPNICK, WASNICKED, OFFLINENICKNAME) VALUES ('" + player.getUniqueId() + "', '" + player.getName() + "', '" + player.getName() + "', 'false', 'false', 'false', 'false', '" + player.getName() + "');");
 		} else {
-			NickedPlayersFile.cfg.set(player.getUniqueId() + ".NAME", player.getName());
-			NickedPlayersFile.cfg.set(player.getUniqueId() + ".NICKNAME", player.getName());
-			NickedPlayersFile.cfg.set(player.getUniqueId() + ".NICKED", false);
+			NickedPlayersFile.cfg.set(player.getUniqueId() + ".DEFAULTNAME", player.getName());
+			NickedPlayersFile.cfg.set(player.getUniqueId() + ".ONLINENICKNAME", player.getName());
+			NickedPlayersFile.cfg.set(player.getUniqueId() + ".ISNICKED", false);
 			NickedPlayersFile.cfg.set(player.getUniqueId() + ".AUTONICK", false);
+			NickedPlayersFile.cfg.set(player.getUniqueId() + ".KEEPNICK", false);
+			NickedPlayersFile.cfg.set(player.getUniqueId() + ".WASNICKED", false);
+			NickedPlayersFile.cfg.set(player.getUniqueId() + ".OFFLINENICKNAME", player.getName());
 			NickedPlayersFile.save();
 		}
 	}

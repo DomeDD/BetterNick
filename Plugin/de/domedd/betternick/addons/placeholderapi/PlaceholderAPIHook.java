@@ -1,4 +1,4 @@
-/* 
+/*
  * All rights by DomeDD (2018)
  * You are allowed to modify this code
  * You are allowed to use this code in your plugins for private projects
@@ -33,15 +33,15 @@ public class PlaceholderAPIHook extends PlaceholderExpansion {
 			return BetterNickAPI.getApi().getNickName(p);
 		case "prefix":
 			if(BetterNickAPI.getApi().isPlayerNicked(p)) {
-				return pl.getConfig().getString("Nick Options.Chat Prefix").replace("&", "ยง");
+				return pl.getConfig().getString("Nick Options.Chat Prefix").replace("&", "ง");
 			} else {
-				return pl.chat.getPlayerPrefix(p).replace("&", "ยง");
+				return pl.chat.getPlayerPrefix(p).replace("&", "ง");
 			}
 		case "suffix":
 			if(BetterNickAPI.getApi().isPlayerNicked(p)) {
-				return pl.getConfig().getString("Nick Options.Chat Suffix").replace("&", "ยง");
+				return pl.getConfig().getString("Nick Options.Chat Suffix").replace("&", "ง");
 			} else {
-				return pl.chat.getPlayerSuffix(p).replace("&", "ยง");
+				return pl.chat.getPlayerSuffix(p).replace("&", "ง");
 			}
 		}
 		

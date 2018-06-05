@@ -28,9 +28,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.mojang.authlib.GameProfile;
 
-import de.domedd.betternick.addons.autonickitem.AutoNickItem;
 import de.domedd.betternick.addons.essentialschat.EssentialsChatHook;
 import de.domedd.betternick.addons.joinquitmessage.JoinQuitMessage;
+import de.domedd.betternick.addons.nickoptionsitem.NickOptionsItem;
 import de.domedd.betternick.addons.placeholderapi.PlaceholderAPIHook;
 import de.domedd.betternick.addons.randomnickgui.RandomNickGui;
 import de.domedd.betternick.addons.supervanish.SuperVanishHook;
@@ -38,6 +38,7 @@ import de.domedd.betternick.api.Metrics;
 import de.domedd.betternick.api.betternickapi.BetterNickAPI;
 import de.domedd.betternick.api.betternickapi.PlayerData;
 import de.domedd.betternick.commands.AutoNickCommand;
+import de.domedd.betternick.commands.KeepNickCommand;
 import de.domedd.betternick.commands.NickCommand;
 import de.domedd.betternick.commands.NickListCommand;
 import de.domedd.betternick.commands.RealNameCommand;
@@ -72,6 +73,8 @@ public class BetterNick extends JavaPlugin implements Listener {
 	
 	@Override
 	public void onEnable() {
+		Bukkit.getConsoleSender().sendMessage("[BetterNick] §4IMPORTANT: On first run of the new update (v6.9):");
+		Bukkit.getConsoleSender().sendMessage("[BetterNick] §4IMPORTANT: Read the update news on Spigot.org and follow the steps to run the newest version without any trouble!");
 		switch(VersionChecker.getBukkitVersion()) {
 		case v1_8_R1:
 			log.warning("Bukkit version v1_8_R1 is not supported!");
@@ -142,8 +145,8 @@ public class BetterNick extends JavaPlugin implements Listener {
 		this.getServer().getPluginManager().registerEvents(new BetterNickAPI(this), this);
 		this.getServer().getPluginManager().registerEvents(new AutoNick(this), this);
 		this.getServer().getPluginManager().registerEvents(new MySQL(this), this);
-		if(this.getConfig().getBoolean("Addons.AutoNick Item.Enabled")) {
-			this.getServer().getPluginManager().registerEvents(new AutoNickItem(this), this);
+		if(this.getConfig().getBoolean("Addons.Nick Options Item.Enabled")) {
+			this.getServer().getPluginManager().registerEvents(new NickOptionsItem(this), this);
 		}
 		if(this.getConfig().getBoolean("Addons.Random Nick Gui.Enabled")) {
 			this.getServer().getPluginManager().registerEvents(new RandomNickGui(this), this);
@@ -158,7 +161,8 @@ public class BetterNick extends JavaPlugin implements Listener {
 			getCommand("autonick").setExecutor(new AutoNickCommand(this));
 			getCommand("nicklist").setExecutor(new NickListCommand(this));
 			getCommand("realname").setExecutor(new RealNameCommand(this));
-			getCommand("seenick").setExecutor(new SeeNickCommand(this));			
+			getCommand("seenick").setExecutor(new SeeNickCommand(this));
+			getCommand("keepnick").setExecutor(new KeepNickCommand(this));		
 			this.getServer().getPluginManager().registerEvents(new BetterNickEvents(this), this);
 		} else {
 			log.info("activated in API mode...");
@@ -167,11 +171,11 @@ public class BetterNick extends JavaPlugin implements Listener {
 		if(getConfig().getBoolean("MySQL.Enabled")) {
 			connectToMySQL();
 		}
-		if(getConfig().getBoolean("Config.Auto Update Check")) {
-			checkForUpdates();
-		}
 		if(getConfig().getBoolean("Config.Send Metrics")) {
 			sendMetrics();
+		}
+		if(getConfig().getBoolean("Config.Auto Update Check")) {
+			checkForUpdates();
 		}
 	}
 	private void hookIntoAdditionalPlugins() {
@@ -219,12 +223,12 @@ public class BetterNick extends JavaPlugin implements Listener {
 	private void connectToMySQL() {
 		mysql = new MySQL(getConfig().getString("MySQL.Username"), getConfig().getString("MySQL.Password"), getConfig().getString("MySQL.Database"), getConfig().getString("MySQL.Host"), getConfig().getString("MySQL.Port"));
 		mysql.connect();
-		mysql.createTable();
+		mysql.createTables();
 	}
 	private void checkForUpdates() {
 		log.info("Checking for updates...");
 		ReadableByteChannel channel = null;
-		String newVersionString = "";
+		String newVersionString = "0.0";
 		double oldVersion = 0.0;
 		double newVersion = 0.0;
 		File file = new File("plugins", "BetterNick 1.8.3 - 1.12.2.jar");
@@ -237,6 +241,9 @@ public class BetterNick extends JavaPlugin implements Listener {
 			e.printStackTrace();
 		}
 		if(!newVersionString.equals(getDescription().getVersion())) {
+			if(newVersionString.equals("0.0")) {
+				log.info("Failed to check for update. Try again later");
+			}
 			newVersion = Double.valueOf(newVersionString.replace("-SNAPSHOT", ""));
 			oldVersion = Double.valueOf(getDescription().getVersion().replace("-SNAPSHOT", ""));
 			if(newVersion > oldVersion || getDescription().getVersion().contains("-SNAPSHOT") && newVersion == oldVersion) {
@@ -258,7 +265,7 @@ public class BetterNick extends JavaPlugin implements Listener {
 					} catch (IOException e) {
 						throw new RuntimeException("File could not be saved", e);
 					}
-					log.info("Successfully updated plugin to v" + newVersion + ". Please restart your server");
+					log.info("Successfully updated plugin to v" + newVersionString + ". Please restart your server");
 					log.info("Checkout the newest update description to find out if you need to update your config.yml: https://www.spigotmc.org/resources/better-nick-api-1-8-3-1-12-2.39633/updates");
 				} else {
 					log.info("Download the update here: https://www.spigotmc.org/resources/better-nick-api-1-8-3-1-12-2.39633/");

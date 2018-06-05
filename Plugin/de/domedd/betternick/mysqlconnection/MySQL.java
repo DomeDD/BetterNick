@@ -62,10 +62,10 @@ public class MySQL implements Listener {
 			}
 		}
 	}
-	public void createTable() {
+	public void createTables() {
 		if(connected()) {
 			try {
-				connection.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS BetterNick (UUID VARCHAR(100), NAME VARCHAR(100), NICKNAME VARCHAR(100), NICKED VARCHAR(10), AUTONICK VARCHAR(10))");
+				connection.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS BetterNick (UUID VARCHAR(50), DEFAULTNAME VARCHAR(20), ONLINENICKNAME VARCHAR(20), ISNICKED VARCHAR(10), AUTONICK VARCHAR(10), KEEPNICK VARCHAR(10), WASNICKED VARCHAR(10), OFFLINENICKNAME VARCHAR(20));");
 			} catch (SQLException s) {
 				pl.log.warning(s.getMessage());
 			}

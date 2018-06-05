@@ -33,7 +33,7 @@ public class PlayerData implements Listener {
 	private Player p;
 	private Location loc, bedspawnloc;
 	private double health, maxhealth,  oldbalance, newbalance;
-	private String defname, defchatprefix, defchatsuffix, defdisplayname, deftablistname, chatprefix, chatsuffix, displayname, tablistname, nickname, skin, inv;
+	private String defname, defchatprefix, defchatsuffix, defdisplayname, deftablistname, chatprefix, chatsuffix, displayname, tablistname, nickname, defskin, skin, inv;
 	private int food, totexp;
 	private float exp, flyspeed, walkspeed, saturation;
 	private boolean flying, allowflying;
@@ -48,6 +48,7 @@ public class PlayerData implements Listener {
 	
 	public PlayerData(Player player) {
 		p = player;
+		defskin = player.getName();
 		skin = player.getName();
 		defname = p.getName();
 		defdisplayname = p.getDisplayName();
@@ -94,6 +95,9 @@ public class PlayerData implements Listener {
 	
 	public void setSkin(String skin) {
 		this.skin = skin;
+	}
+	public boolean hasNewSkin() {
+		return !defskin.equals(skin);
 	}
 	public void setNickName(String nickname) {
 		this.nickname = nickname;

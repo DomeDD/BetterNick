@@ -40,11 +40,11 @@ public class AutoNick implements Listener {
 			}
 			if(pl.getConfig().getBoolean("Config.Nick on Join")) {
 				if(BetterNickAPI.getApi().hasPlayerAutoNick(p)) {
-					if(BetterNickAPI.getApi().isPlayerNicked(p)) {
+					if(BetterNickAPI.getApi().wasPlayerNicked(p)) {
 						Bukkit.getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
 							@Override
 							public void run() {
-								Bukkit.getPluginManager().callEvent(new PlayerCallNickEvent(p, BetterNickAPI.getApi().getNickName(p)));
+								Bukkit.getPluginManager().callEvent(new PlayerCallNickEvent(p, BetterNickAPI.getApi().getLogoutNickName(p)));
 								Bukkit.getPluginManager().callEvent(new PlayerCallRandomSkinEvent(p));
 							}
 						}, 2);
@@ -58,11 +58,11 @@ public class AutoNick implements Listener {
 						}, 2);
 					}
 				} else {
-					if(BetterNickAPI.getApi().isPlayerNicked(p)) {
+					if(BetterNickAPI.getApi().wasPlayerNicked(p)) {
 						Bukkit.getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
 							@Override
 							public void run() {
-								Bukkit.getPluginManager().callEvent(new PlayerCallNickEvent(p, BetterNickAPI.getApi().getNickName(p)));
+								Bukkit.getPluginManager().callEvent(new PlayerCallNickEvent(p, BetterNickAPI.getApi().getLogoutNickName(p)));
 								Bukkit.getPluginManager().callEvent(new PlayerCallRandomSkinEvent(p));
 							}
 						}, 2);
@@ -75,19 +75,7 @@ public class AutoNick implements Listener {
 	public void onPlayerQuit(PlayerQuitEvent e) {
 		Player p = e.getPlayer();
 		if(BetterNickAPI.getApi().isPlayerNicked(p)) {
-			if(!pl.getConfig().getBoolean("Config.Keep NickName On Quit")) {
-				BetterNickAPI.getApi().resetPlayerChatName(p);
-				BetterNickAPI.getApi().resetPlayerDisplayName(p);
-				BetterNickAPI.getApi().resetPlayerTablistName(p);
-				BetterNickAPI.getApi().resetPlayerNickNameOnQuit(p, false);
-				BetterNickAPI.getApi().removeNickedPlayer(p);
-			} else {
-				BetterNickAPI.getApi().resetPlayerChatName(p);
-				BetterNickAPI.getApi().resetPlayerDisplayName(p);
-				BetterNickAPI.getApi().resetPlayerTablistName(p);
-				BetterNickAPI.getApi().resetPlayerNickNameOnQuit(p, true);
-				BetterNickAPI.getApi().removeNickedPlayer(p);
-			}
+			BetterNickAPI.getApi().resetPlayerNickNameOnQuit(p, BetterNickAPI.getApi().hasPlayerKeepNick(p));
 		}
 	}
 	@EventHandler

@@ -9,7 +9,6 @@
  */
 package de.domedd.betternick.commands;
 
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -17,14 +16,12 @@ import org.bukkit.entity.Player;
 
 import de.domedd.betternick.BetterNick;
 import de.domedd.betternick.api.betternickapi.BetterNickAPI;
-import de.domedd.betternick.api.events.PlayerCallSkinResetEvent;
-import de.domedd.betternick.api.events.PlayerCallUnnickEvent;
 
-public class UnnickCommand implements CommandExecutor {
+public class KeepNickCommand implements CommandExecutor {
 
 	private BetterNick pl;
 	
-	public UnnickCommand(BetterNick main) {
+	public KeepNickCommand(BetterNick main) {
 		this.pl = main;
 	}
 	@Override
@@ -32,34 +29,18 @@ public class UnnickCommand implements CommandExecutor {
 		if(sender instanceof Player) {
 			Player p = (Player) sender;
 			if(args.length == 0) {
-				if(p.hasPermission("BetterNick.UnNick")) {
-					if(BetterNickAPI.getApi().isPlayerNicked(p)) {
-						Bukkit.getPluginManager().callEvent(new PlayerCallUnnickEvent(p));
+				if(p.hasPermission("BetterNick.KeepNick")) {
+					if(BetterNickAPI.getApi().hasPlayerKeepNick(p)) {
+						BetterNickAPI.getApi().setPlayerKeepNick(p, false);
+						p.sendMessage(pl.prefix + pl.getConfig().getString("Messages.KeepNick Turned Off").replace("&", "§"));
+					} else {
+						BetterNickAPI.getApi().setPlayerKeepNick(p, true);
+						p.sendMessage(pl.prefix + pl.getConfig().getString("Messages.KeepNick Turned On").replace("&", "§"));
 					}
-					if(BetterNickAPI.getApi().hasPlayerNewSkin(p)) {
-						Bukkit.getPluginManager().callEvent(new PlayerCallSkinResetEvent(p));
-					}
-					BetterNickAPI.getApi().removeNickedPlayer(p);
 				} else {
 					if(pl.getConfig().getBoolean("Messages.Enabled")) {
 						p.sendMessage(pl.prefix + pl.getConfig().getString("Messages.No Permissions").replace("&", "§"));
 					}
-				}
-				
-			}
-		} else {
-			if(args.length == 1) {
-				Player t = Bukkit.getPlayer(args[0]);
-				if(t.isOnline()) {
-					if(BetterNickAPI.getApi().isPlayerNicked(t)) {
-						Bukkit.getPluginManager().callEvent(new PlayerCallUnnickEvent(t));
-					}
-					if(BetterNickAPI.getApi().hasPlayerNewSkin(t)) {
-						Bukkit.getPluginManager().callEvent(new PlayerCallSkinResetEvent(t));
-					}
-					BetterNickAPI.getApi().removeNickedPlayer(t);
-				} else {
-					Bukkit.getConsoleSender().sendMessage(pl.prefix + pl.getConfig().getString("Config.Messages.See Real Name Error").replace("&", "§"));
 				}
 			}
 		}

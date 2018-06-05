@@ -38,13 +38,15 @@ public class NickCommand implements CommandExecutor {
 				if(p.hasPermission("BetterNick.RandomNick")) {
 					if(!pl.getConfig().getBoolean("Addons.Random Nick Gui.Enabled")) {
 						Bukkit.getPluginManager().callEvent(new PlayerCallRandomNickEvent(p));
-						Bukkit.getPluginManager().callEvent(new PlayerCallRandomSkinEvent(p));
+						if(pl.getConfig().getBoolean("Config.Nick And Skin Combination")) {
+							Bukkit.getPluginManager().callEvent(new PlayerCallRandomSkinEvent(p));
+						}
 					} else {
 						p.openInventory(RandomNickGui.randomNicksInventory(p));
 					}
 				} else {
 					if(pl.getConfig().getBoolean("Messages.Enabled")) {
-						p.sendMessage(pl.prefix + pl.getConfig().getString("Messages.No Permissions").replace("&", "ยง"));
+						p.sendMessage(pl.prefix + pl.getConfig().getString("Messages.No Permissions").replace("&", "ง"));
 					}
 				}
 			} else if(args.length == 1) {
@@ -53,11 +55,11 @@ public class NickCommand implements CommandExecutor {
 						pl.reloadConfig();
 						NickedPlayersFile.reload();
 						if(pl.getConfig().getBoolean("Messages.Enabled")) {
-							p.sendMessage(pl.prefix + pl.getConfig().getString("Messages.Files Reloaded").replace("&", "ยง"));
+							p.sendMessage(pl.prefix + pl.getConfig().getString("Messages.Files Reloaded").replace("&", "ง"));
 						}
 					} else {
 						if(pl.getConfig().getBoolean("Messages.Enabled")) {
-							p.sendMessage(pl.prefix + pl.getConfig().getString("Messages.No Permissions").replace("&", "ยง"));
+							p.sendMessage(pl.prefix + pl.getConfig().getString("Messages.No Permissions").replace("&", "ง"));
 						}
 					}
 				} else {
@@ -65,7 +67,7 @@ public class NickCommand implements CommandExecutor {
 						Bukkit.getPluginManager().callEvent(new PlayerCallNickEvent(p, args[0]));
 					} else {
 						if(pl.getConfig().getBoolean("Messages.Enabled")) {
-							p.sendMessage(pl.prefix + pl.getConfig().getString("Messages.No Permissions").replace("&", "ยง"));
+							p.sendMessage(pl.prefix + pl.getConfig().getString("Messages.No Permissions").replace("&", "ง"));
 						}
 					}
 				}
@@ -75,7 +77,7 @@ public class NickCommand implements CommandExecutor {
 				if(args[0].equalsIgnoreCase("reload")) {
 					pl.reloadConfig();
 					NickedPlayersFile.reload();
-					Bukkit.getConsoleSender().sendMessage(pl.prefix + pl.getConfig().getString("Messages.Reloaded").replace("&", "ยง"));
+					Bukkit.getConsoleSender().sendMessage(pl.prefix + pl.getConfig().getString("Messages.Reloaded").replace("&", "ง"));
 				}
 			}
 		}

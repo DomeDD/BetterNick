@@ -34,13 +34,9 @@ public class JoinQuitMessage implements Listener {
 		Bukkit.getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
 			@Override
 			public void run() {
-				if(BetterNickAPI.getApi().isPlayerNicked(p)) {
-					Bukkit.broadcastMessage(pl.getConfig().getString("Addons.Join / Quit Message.Join Message").replace("[PREFIX]", pl.getConfig().getString("Nick Options.Chat Prefix").replace("&", "§")).replace("[SUFFIX]", pl.getConfig().getString("Nick Options.Chat Suffix").replace("&", "§")).replace("[NAME]", BetterNickAPI.getApi().getNickName(p)).replace("&", "§"));
-				} else {
-					Bukkit.broadcastMessage(pl.getConfig().getString("Addons.Join / Quit Message.Join Message").replace("[PREFIX]", pl.chat.getPlayerPrefix(p).replace("&", "§")).replace("[SUFFIX]", pl.chat.getPlayerSuffix(p).replace("&", "§")).replace("[NAME]", p.getName()).replace("&", "§"));
-				}
+				Bukkit.broadcastMessage(pl.getConfig().getString("Addons.Join / Quit Message.Join Message").replace("[PREFIX]", pl.getConfig().getString("Nick Options.Chat Prefix").replace("&", "§")).replace("[SUFFIX]", pl.getConfig().getString("Nick Options.Chat Suffix").replace("&", "§")).replace("[NAME]", BetterNickAPI.getApi().getNickName(p)).replace("&", "§"));
 			}
-		}, 5);
+		}, 10);
 	}
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent e) {
@@ -49,12 +45,8 @@ public class JoinQuitMessage implements Listener {
 		Bukkit.getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
 			@Override
 			public void run() {
-				if(BetterNickAPI.getApi().isPlayerNicked(p)) {
-					Bukkit.broadcastMessage(pl.getConfig().getString("Addons.Join / Quit Message.Quit Message").replace("[PREFIX]", pl.getConfig().getString("Nick Options.Chat Prefix").replace("&", "§")).replace("[SUFFIX]", pl.getConfig().getString("Nick Options.Chat Suffix").replace("&", "§")).replace("[NAME]", BetterNickAPI.getApi().getNickName(p)).replace("&", "§"));
-				} else {
-					Bukkit.broadcastMessage(pl.getConfig().getString("Addons.Join / Quit Message.Quit Message").replace("[PREFIX]", pl.chat.getPlayerPrefix(p).replace("&", "§")).replace("[SUFFIX]", pl.chat.getPlayerSuffix(p).replace("&", "§")).replace("[NAME]", p.getName()).replace("&", "§"));
-				}
+				Bukkit.broadcastMessage(pl.getConfig().getString("Addons.Join / Quit Message.Quit Message").replace("[PREFIX]", pl.getConfig().getString("Nick Options.Chat Prefix").replace("&", "§")).replace("[SUFFIX]", pl.getConfig().getString("Nick Options.Chat Suffix").replace("&", "§")).replace("[NAME]", BetterNickAPI.getApi().getNickName(p)).replace("&", "§"));
 			}
-		}, 3);
+		}, 10);
 	}
 }
