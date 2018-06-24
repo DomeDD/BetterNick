@@ -73,8 +73,6 @@ public class BetterNick extends JavaPlugin implements Listener {
 	
 	@Override
 	public void onEnable() {
-		Bukkit.getConsoleSender().sendMessage("[BetterNick] §4IMPORTANT: On first run of the new update (v6.9):");
-		Bukkit.getConsoleSender().sendMessage("[BetterNick] §4IMPORTANT: Read the update news on Spigot.org and follow the steps to run the newest version without any trouble!");
 		switch(VersionChecker.getBukkitVersion()) {
 		case v1_8_R1:
 			log.warning("Bukkit version v1_8_R1 is not supported!");

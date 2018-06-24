@@ -87,6 +87,7 @@ public class BetterNickAPI implements Listener {
 	 * @param nametagsuffix The nametag suffix
 	 *
 	 */
+	@SuppressWarnings("deprecation")
 	public void setPlayerNickName(Player player, String nickname, String nametagprefix, String nametagsuffix) {
 		if(!playerExists(player)) {
 			createPlayer(player);
@@ -193,51 +194,57 @@ public class BetterNickAPI implements Listener {
 					}
 					v1_12_R1.removeFromTablist(player);
 					v1_12_R1.addToTablist(player);
+					v1_12_R1.respawn(player);
 					break;
 				case v1_13_R1:
 					break;
 				}
+				for(Player all : Bukkit.getOnlinePlayers()) {
+					try {
+						all.hidePlayer(pl, player);
+						all.showPlayer(pl, player);
+					} catch (NoSuchMethodError e) {
+						all.hidePlayer(player);
+						all.showPlayer(player);
+					}
+				}
+				pd.saveData();
+				pd.setNickedPlayerData();
 				Bukkit.getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
 					@Override
 					public void run() {
 						if(nametagprefix != null && nametagsuffix == null) {
-							if(pl.nte || pl.coloredtags) {
-								if(pl.nte) {
-									NametagEdit.getApi().setPrefix(player, nametagprefix);
-								}
-								if(pl.coloredtags) {
-									ColoredTags.updateNametag(player);
-									ColoredTags.updateTab(player);
-								}
+							if(pl.nte) {
+								NametagEdit.getApi().setPrefix(player, nametagprefix);
+							}
+							if(pl.coloredtags) {
+								ColoredTags.updateNametag(player);
+								ColoredTags.updateTab(player);
 							}
 						} else if(nametagprefix != null && nametagsuffix != null) {
-							if(pl.nte || pl.coloredtags) {
-								if(pl.nte) {
-									NametagEdit.getApi().setPrefix(player, nametagprefix);
-									NametagEdit.getApi().setSuffix(player, nametagsuffix);
-								}
-								if(pl.coloredtags) {
-									ColoredTags.updateNametag(player);
-									ColoredTags.updateTab(player);
-								}
+							if(pl.nte) {
+								NametagEdit.getApi().setPrefix(player, nametagprefix);
+								NametagEdit.getApi().setSuffix(player, nametagsuffix);
+							}
+							if(pl.coloredtags) {
+								ColoredTags.updateNametag(player);
+								ColoredTags.updateTab(player);
 							}
 						} else if(nametagprefix == null && nametagsuffix != null) {
-							if(pl.nte || pl.coloredtags) {
-								if(pl.nte) {
-									NametagEdit.getApi().setSuffix(player, nametagsuffix);
-								}
-								if(pl.coloredtags) {
-									ColoredTags.updateNametag(player);
-									ColoredTags.updateTab(player);
-								}
+							if(pl.nte) {
+								NametagEdit.getApi().setSuffix(player, nametagsuffix);
+							}
+							if(pl.coloredtags) {
+								ColoredTags.updateNametag(player);
+								ColoredTags.updateTab(player);
 							}
 						}
 						if(pl.cloudnet) {
 							CloudServer.getInstance().updateNameTags(player);
 						}
 					}
-				}, 5);
-				if(pl.econ != null) {
+				}, 14);
+				if(pl.econ != null && pl.econ.getName().equalsIgnoreCase("iConomy 7")) {
 					pd.createNewBalance();
 				}
 				if(pl.getConfig().getBoolean("MySQL.Enabled")) {
@@ -274,6 +281,7 @@ public class BetterNickAPI implements Listener {
 	 * @param nametagsuffix The nametag suffix
 	 *
 	 */
+	@SuppressWarnings("deprecation")
 	public void setRandomPlayerNickName(Player player, String nametagprefix, String nametagsuffix) {
 		if(!playerExists(player)) {
 			createPlayer(player);
@@ -381,51 +389,61 @@ public class BetterNickAPI implements Listener {
 					}
 					v1_12_R1.removeFromTablist(player);
 					v1_12_R1.addToTablist(player);
+					if(!pl.getConfig().getBoolean("Config.Nick And Skin Combination")) {
+						v1_12_R1.respawn(player);
+					}
 					break;
 				case v1_13_R1:
 					break;
+				}
+				if(!pl.getConfig().getBoolean("Config.Nick And Skin Combination")) {
+					for(Player all : Bukkit.getOnlinePlayers()) {
+						try {
+							all.hidePlayer(pl, player);
+							all.showPlayer(pl, player);
+						} catch (NoSuchMethodError e) {
+							all.hidePlayer(player);
+							all.showPlayer(player);
+						}
+					}
+					pd.saveData();
+					pd.setNickedPlayerData();
 				}
 				Bukkit.getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
 					@Override
 					public void run() {
 						if(nametagprefix != null && nametagsuffix == null) {
-							if(pl.nte || pl.coloredtags) {
-								if(pl.nte) {
-									NametagEdit.getApi().setPrefix(player, nametagprefix);
-								}
-								if(pl.coloredtags) {
-									ColoredTags.updateNametag(player);
-									ColoredTags.updateTab(player);
-								}
+							if(pl.nte) {
+								NametagEdit.getApi().setPrefix(player, nametagprefix);
+							}
+							if(pl.coloredtags) {
+								ColoredTags.updateNametag(player);
+								ColoredTags.updateTab(player);
 							}
 						} else if(nametagprefix != null && nametagsuffix != null) {
-							if(pl.nte || pl.coloredtags) {
-								if(pl.nte) {
-									NametagEdit.getApi().setPrefix(player, nametagprefix);
-									NametagEdit.getApi().setSuffix(player, nametagsuffix);
-								}
-								if(pl.coloredtags) {
-									ColoredTags.updateNametag(player);
-									ColoredTags.updateTab(player);
-								}
+							if(pl.nte) {
+								NametagEdit.getApi().setPrefix(player, nametagprefix);
+								NametagEdit.getApi().setSuffix(player, nametagsuffix);
+							}
+							if(pl.coloredtags) {
+								ColoredTags.updateNametag(player);
+								ColoredTags.updateTab(player);
 							}
 						} else if(nametagprefix == null && nametagsuffix != null) {
-							if(pl.nte || pl.coloredtags) {
-								if(pl.nte) {
-									NametagEdit.getApi().setSuffix(player, nametagsuffix);
-								}
-								if(pl.coloredtags) {
-									ColoredTags.updateNametag(player);
-									ColoredTags.updateTab(player);
-								}
+							if(pl.nte) {
+								NametagEdit.getApi().setSuffix(player, nametagsuffix);
+							}
+							if(pl.coloredtags) {
+								ColoredTags.updateNametag(player);
+								ColoredTags.updateTab(player);
 							}
 						}
 						if(pl.cloudnet) {
 							CloudServer.getInstance().updateNameTags(player);
 						}
 					}
-				}, 5);
-				if(pl.econ != null) {
+				}, 14);
+				if(pl.econ != null && pl.econ.getName().equalsIgnoreCase("iConomy 7")) {
 					pd.createNewBalance();
 				}
 				if(pl.getConfig().getBoolean("MySQL.Enabled")) {
@@ -543,6 +561,7 @@ public class BetterNickAPI implements Listener {
 	 * @param player The player
 	 *
 	 */
+	@SuppressWarnings("deprecation")
 	public void resetPlayerNickName(Player player) {
 		if(!players.containsKey(player)) {
 			players.put(player, new PlayerData(player));
@@ -550,7 +569,7 @@ public class BetterNickAPI implements Listener {
 		PlayerData pd = players.get(player);
 		String defaultname = pd.getDefaultName();
 		pd.setNickName(defaultname);
-		if(pl.econ != null) {
+		if(pl.econ != null && pl.econ.getName().equalsIgnoreCase("iConomy 7")) {
 			pd.setNewBalance(pl.econ.getBalance(player));
 			pd.deleteNewBalance();
 		}
@@ -643,10 +662,23 @@ public class BetterNickAPI implements Listener {
 		case v1_13_R1:
 			break;
 		}
+		if(!hasPlayerNewSkin(player)) {
+			for(Player all : Bukkit.getOnlinePlayers()) {
+				try {
+					all.hidePlayer(pl, player);
+					all.showPlayer(pl, player);
+				} catch (NoSuchMethodError e) {
+					all.hidePlayer(player);
+					all.showPlayer(player);
+				}
+			}
+			pd.saveData();
+			pd.setNickedPlayerData();
+		}
 		if(pl.cloudnet) {
 			CloudServer.getInstance().updateNameTags(player);
 		}
-		if(pl.econ != null) {
+		if(pl.econ != null && pl.econ.getName().equalsIgnoreCase("iConomy 7")) {
 			pd.updateOldBalance();
 		}
 		Bukkit.getPluginManager().callEvent(new PlayerUnnickEvent(player));
@@ -746,7 +778,7 @@ public class BetterNickAPI implements Listener {
 		if(pl.cloudnet) {
 			CloudServer.getInstance().updateNameTags(player);
 		}
-		if(pl.econ != null) {
+		if(pl.econ != null && pl.econ.getName().equalsIgnoreCase("iConomy 7")) {
 			pd.updateOldBalance();
 		}
 		updateData(player, "ONLINENICKNAME", pd.getDefaultName());
@@ -1363,7 +1395,6 @@ public class BetterNickAPI implements Listener {
 	private static void updateData(Player player, String field, Object value) {
 		if(pl.getConfig().getBoolean("MySQL.Enabled")) {
 			pl.mysql.update("UPDATE BetterNick SET " + field + "='" + value + "' WHERE UUID='" + player.getUniqueId() + "';");
-			pl.log.info("updated " + field + " with " + value);
 		} else {
 			NickedPlayersFile.cfg.set(player.getUniqueId() + "." + field + "", value);
 			NickedPlayersFile.save();

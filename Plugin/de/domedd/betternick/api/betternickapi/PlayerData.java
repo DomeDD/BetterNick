@@ -80,16 +80,15 @@ public class PlayerData implements Listener {
 	public void updateOldBalance() {
 		if(!pl.econ.hasAccount(p)) {
 			pl.econ.createPlayerAccount(p);
-		}
+		}		
 		if(oldbalance < newbalance) {
 			double balance = newbalance - oldbalance;
+			pl.log.info("Old: " + oldbalance + "	New: " + newbalance + "		Adding: " + balance); 
 			pl.econ.depositPlayer(p, balance);
 		} else if(oldbalance > newbalance) {
 			double balance = oldbalance - newbalance;
+			pl.log.info("Old: " + oldbalance + "	New: " + newbalance + "		Substracting: " + balance);
 			pl.econ.withdrawPlayer(p, balance);
-		}
-		if(pl.econ.getName().equalsIgnoreCase("Essentials Economy")) {
-			pl.econ.withdrawPlayer(p, 100.0);
 		}
 	}
 	

@@ -197,7 +197,7 @@ public class NickOptionsItem implements Listener {
 	    	String[] array = from.split(":");
 	    	ID = Integer.valueOf(array[0]);
 	    	String a = array[1];
-	    	if(array[1].startsWith("1")) {
+	    	if(a.startsWith("10") || a.startsWith("11") || a.startsWith("12") || a.startsWith("13") || a.startsWith("14") || a.startsWith("15") || a.startsWith("16") || a.startsWith("17") || a.startsWith("18") || a.startsWith("19")) {
 	    		a = a.substring(0, 2);
 	    	} else {
 	    		a = a.substring(0, 1);
