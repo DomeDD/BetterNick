@@ -1417,16 +1417,22 @@ public class BetterNickAPI implements Listener {
 				case v1_8_R1:
 					break;
 				case v1_8_R2:
+					v1_8_R2.sendActionBar(player, message);
 					break;
 				case v1_8_R3:
+					v1_8_R3.sendActionBar(player, message);
 					break;
 				case v1_9_R1:
+					v1_9_R1.sendActionBar(player, message);
 					break;
 				case v1_9_R2:
+					v1_9_R2.sendActionBar(player, message);
 					break;
 				case v1_10_R1:
+					v1_10_R1.sendActionBar(player, message);
 					break;
 				case v1_11_R1:
+					v1_11_R1.sendActionBar(player, message);
 					break;
 				case v1_12_R1:
 					v1_12_R1.sendActionBar(player, message);

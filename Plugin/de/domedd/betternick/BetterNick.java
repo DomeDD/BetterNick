@@ -28,7 +28,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.mojang.authlib.GameProfile;
 
-import de.domedd.betternick.addons.essentialschat.EssentialsChatHook;
+import de.domedd.betternick.addons.chathook.ChatHook;
 import de.domedd.betternick.addons.joinquitmessage.JoinQuitMessage;
 import de.domedd.betternick.addons.nickoptionsitem.NickOptionsItem;
 import de.domedd.betternick.addons.placeholderapi.PlaceholderAPIHook;
@@ -121,7 +121,7 @@ public class BetterNick extends JavaPlugin implements Listener {
 			break;
 		case v1_13_R1:
 			log.warning("Bukkit version v1_13_R1 is not supported!");
-			//this.getServer().getPluginManager().registerEvents(new v1_13_R1(this), this);
+			log.warning("Use the 1.13 version instead!");
 			break;
 		}
 	}
@@ -191,16 +191,13 @@ public class BetterNick extends JavaPlugin implements Listener {
             if(chatProvider != null) {
             	log.info("Hooking into " + chatProvider.getProvider().getName() + " via Vault...");
                 chat = chatProvider.getProvider();
+                this.getServer().getPluginManager().registerEvents(new ChatHook(this), this);
             }
             if(econProvider != null) {
             	log.info("Hooking into " + econProvider.getProvider().getName() + " via Vault...");
                 econ = econProvider.getProvider();
             }
 		}
-    	if(Bukkit.getPluginManager().getPlugin("EssentialsChat") != null) {
-    		log.info("Hooking into EssentialsChat...");
-    		this.getServer().getPluginManager().registerEvents(new EssentialsChatHook(this), this);
-    	}
     	if(Bukkit.getPluginManager().getPlugin("CloudNetAPI") != null) {
     		log.info("Hooking into CloudNetAPI...");
 			cloudnet = true;
@@ -229,7 +226,7 @@ public class BetterNick extends JavaPlugin implements Listener {
 		String newVersionString = "0.0";
 		double oldVersion = 0.0;
 		double newVersion = 0.0;
-		File file = new File("plugins", "BetterNick 1.8.3 - 1.12.2.jar");
+		File file = new File("plugins", "BetterNick.zip");
 		try {
 			URL versionURL = new URL("https://api.spigotmc.org/legacy/update.php?resource=39633");
 			BufferedReader reader = new BufferedReader(new InputStreamReader(versionURL.openStream()));
@@ -263,7 +260,7 @@ public class BetterNick extends JavaPlugin implements Listener {
 					} catch (IOException e) {
 						throw new RuntimeException("File could not be saved", e);
 					}
-					log.info("Successfully updated plugin to v" + newVersionString + ". Please restart your server");
+					log.info("Successfully downloaded the newest plugin version (v" + newVersionString + "). Please unpack the zip-file, pick the mathcing file for your server and restart your server");
 					log.info("Checkout the newest update description to find out if you need to update your config.yml: https://www.spigotmc.org/resources/better-nick-api-1-8-3-1-12-2.39633/updates");
 				} else {
 					log.info("Download the update here: https://www.spigotmc.org/resources/better-nick-api-1-8-3-1-12-2.39633/");

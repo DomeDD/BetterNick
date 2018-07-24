@@ -36,7 +36,8 @@ public class NickedPlayersFile {
 		try {
 			cfg.load(file);
 		} catch (IOException | InvalidConfigurationException e) {
-			e.printStackTrace();
+			save();
+			reload();
 		}
 	}
 }

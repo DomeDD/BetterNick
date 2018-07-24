@@ -77,7 +77,7 @@ public class NickCommand implements CommandExecutor {
 				if(args[0].equalsIgnoreCase("reload")) {
 					pl.reloadConfig();
 					NickedPlayersFile.reload();
-					Bukkit.getConsoleSender().sendMessage(pl.prefix + pl.getConfig().getString("Messages.Reloaded").replace("&", "§"));
+					Bukkit.getConsoleSender().sendMessage(pl.prefix + pl.getConfig().getString("Messages.Files Reloaded").replace("&", "§"));
 				}
 			}
 		}
