@@ -1,0 +1,299 @@
+###########################
+## Better Nick by DomeDD ##
+###########################
+
+Config:
+    Auto Update Check: true
+    Auto Update Download: true
+    Send Metrics: true
+    # In API mode, all commands and listeners will be disabled that you can make your one ones
+    API Mode: false
+    # If true, you will get a nickname on join if the client enabled AutoJoin and has the permissions
+    Nick on Join: true
+    Skin Self Update: true
+    Nicked Actionbar: true
+    # If true, you will get a nickname and a skin on /nick; disabled this if your server runs in offline mode to only get a nickname
+    Nick And Skin Combination: true
+MySQL:
+    Enabled: false
+    Username: root
+    Password: password
+    Database: nicknames
+    Host: localhost
+    Port: '3306'
+Nick Options:
+    # If NametagEdit or ColoredTags is installed you can use longer prefixes than 2 chars
+    Nametag Prefix: '&7'
+    # If NametagEdit or ColoredTags is installed you can use this, otherwise leave it empty
+    Nametag Suffix: ''
+    # If Vault and a Vault compatible chat & permissions plugin is installed you can use this, otherwise leave it empty
+    Chat Prefix: ''
+    # If Vault and a Vault compatible chat & permissions plugin is installed you can use this, otherwise leave it empty
+    Chat Suffix: ''
+    Displayname Prefix: ''
+    Displayname Suffix: ''
+    Tablist Prefix: ''
+    Tablist Suffix: ''
+Messages:
+    Enabled: true
+    Prefix: '&8[&5BetterNick&8] '
+    Nick Name Set: '&7Your nickname is &5[NAME]&7.'
+    Nick Name Removed: '&7Your nickname has been removed.'
+    Nick Set Error: '&7Your name could not be changed.'
+    Skin Set: '&7You have a new skin now.'
+    Skin Removed: '&7Your skin has been removed.'
+    Skin Set Error: '&7Your skin could not be changed.'
+    # Can be disabled at "Config.Nicked Actionbar"
+    Nicked Actionbar: '&eYou are nicked as &3[NAME]&e.'
+    # Can't be disabled
+    See Real Name: '&7The real name of &3[PLAYER] &7is &e[NAME]&7.'
+    See Nick Name: '&7Your nickname is &e[NAME]&7.'
+    Get Nicked Players Header: '&7Listing all nicked players and their real names...'
+    Get Nicked Players: '&6[ID]&7: The real name of &3[PLAYER] &7is &e[NAME]&7.'
+    AutoNick Turned On: '&7You turned &2on &7autonick.'
+    AutoNick Turned Off: '&7You turned &4off &7autonick.'
+    KeepNick Turned On: '&7You turned &2on &7keepnick.'
+    KeepNick Turned Off: '&7You turned &4off &7keepnick.'
+    No Player Nicked Error: '&7At the moment no player is nicked.'
+    Player Not Nicked Error: '&7This Player is not nicked.'
+    Player Not Online Error: '&7This Player is not online.'
+    Files Reloaded: '&7You successfully reloaded the config files.'
+    No Permissions: '&7You don''t have the permissions to do that.'
+Addons:
+    Nick Options Item:
+        Enabled: false
+        Get On Server Join: true
+        Get On World Change:
+        - world
+        Enabled Worlds:
+        - world
+        # ID:SubID, Displayname, Slot
+        Item: 421:0, &5Nick Options, 4
+        Item Moveable: false
+        Inventory:
+            Name: '&8[&5BetterNick&8] &5Options'
+            # ID:SubID, Displayname, Slot (has to be the same slot as at "Addons.Nick Options Item.Inventory.AutoNick False")
+            AutoNick True: 348:0, &7AutoNick &8>> &2TRUE, 3
+            # ID:SubID, Displayname, Slot (has to be the same slot as at "Addons.Nick Options Item.Inventory.AutoNick True")
+            AutoNick False: 289:0, &7AutoNick &8>> &cFALSE, 3
+            # ID:SubID, Displayname, Slot (has to be the same slot as at "Addons.Nick Options Item.Inventory.KeepNick False")
+            KeepNick True: 348:0, &7KeepNick &8>> &2TRUE, 5
+            # ID:SubID, Displayname, Slot (has to be the same slot as at "Addons.Nick Options Item.Inventory.KeepNick True")
+            KeepNick False: 289:0, &7KeepNick &8>> &cFALSE, 5
+    Random Nick Gui:
+        Enabled: false
+        Inventory:
+            Name: '&5Random Nicks'
+            # Only change the colorcode. Don't add anything else
+            Nick Item Name: '&5[NAME]'
+            Nick Item Lore: '&7Click to set a new nickname.'
+    Join / Quit Message:
+        Enabled: false
+        # If using [PREFIX] and/or [SUFFIX] make sure a Vault compatible chat & permissions plugin is installed
+        Join Message: '[PREFIX]&3[NAME]&r[SUFFIX] &7joined the game.'
+        # If using [PREFIX] and/or [SUFFIX] make sure a Vault compatible chat & permissions plugin is installed
+        Quit Message: '[PREFIX]&3[NAME]&r[SUFFIX] &7left the game.'
+NickNames List:
+- 'abcplayer'
+- 'xxHolyMolyxx'
+- '123Playz123'
+- 'MasterOfGamez'
+- 'YoshiGamesHD'
+- 'Randiii'
+- '556NoSkillz'
+- 'IHaveNoAimxx'
+- 'LoLzxD'
+- 'NiceGG'
+- 'Gold_Swordy'
+- 'xXD_DXx'
+- 'C4A14'
+- 'Desert_Hill_HD'
+- 'M0_Z1ll4'
+- 'TiAnTi'
+- 'Cob_Website'
+- 'Allih'
+- 'alex_ander'
+- '2eZ4us'
+- 'Floridana'
+- '_xXHDLPXx_'
+- 'Johnnnyy'
+- 'Plate_123'
+- 'xxXGirlsss'
+- 'kryBabe'
+- 'Storm_Hunter'
+- 'l0L_G4M3r'
+- 'WorldWiideee'
+- 'Wooliyyy'
+- 'xx8msxx'
+- '_St3xxis_'
+- 'tryHarderrr'
+- 'ClownnXxX'
+- 'dope88'
+- 'ninja_cow'
+- 'LoyLoyLoy'
+- 'xxImBackxx'
+- 'ImNotBlack'
+- 'bagbakc98'
+- 'snow_onGround'
+- 'sammy001'
+- 'Crazyy4'
+- 'Gay4Life'
+- 'NoFaceMan'
+- 'AlpMen'
+- 'GruhGruh_'
+- '__xXx__'
+- 'Name_is_Cenaa'
+- 'samm_hd'
+- 'Butternesss'
+- 'Ohhl3333'
+- 'No360'
+- 'xXCanyonXx'
+- 'itz_M3_PvP'
+- 'Denniese_LP'
+- 'No_One_Can'
+- 'Cookingar'
+- 'Gamingin'
+- '88studgell'
+- 'xXFoot_Ball'
+- 'BloomGames'
+- 'Hope_36'
+- 'Sleep_Park_HD'
+- 'Tennis_Fan2'
+- '123HDLPXD'
+- 'Tired_A_F'
+- 'Arselnal'
+- 'Cheap_Pixii'
+- 'Loving_Me1'
+- 'hantoren_HD'
+- 'engontiy'
+- 'obreeel'
+- 'antenda69'
+- 'funotyond89'
+- 'great_gorat'
+- 'wolirerer'
+- 'ABCDEF'
+- '69_Me_69'
+- 'ohofornot'
+- 'oppuestarent'
+- 'Latinum_eZ'
+- 'erlosieee'
+- 'Hentai_69'
+- 'xxiTzKembo_PvP'
+- 'xSt3giex'
+- 'ccNayomcc'
+- 'yX_NoCare_Xy'
+- 'issolla'
+- 'yotare'
+- 'vodka_gutr'
+- 'AraseelYT'
+- 'NickoooPvP_YT'
+- 'Hello_Its_Me'
+- 'hope_flyeess'
+- 'xXxlelxXx'
+- 'dopexD'
+- '8bd8bd8'
+- 'wuhuhuhuw'
+- 'ImBiggerThanU'
+Skins List:
+- 'C418'
+- 'Earstorm'
+- 'Hola'
+- 'vexx21322'
+- 'FoidzaFlow'
+- 'Inzuki'
+- 'Noggin'
+- 'Anomaly'
+- 'Whomobile'
+- 'Glent'
+- 'Nikmi'
+- 'Gogo'
+- 'Asrue2'
+- 'swampie'
+- 'torteela'
+- 'muhammad'
+- 'Dwragon'
+- 'iam2little'
+- 'Minecrafter'
+- 'Conan3D'
+- 'andersonmat'
+- 'Swedman'
+- 'CapnAwesom'
+- 'elbowgrease12'
+- 'Skype'
+- 'Woodenwindows'
+- 'SeanNanoware'
+- 'Frog'
+- '00Fraday00'
+- 'Yumcake'
+- 'Settler'
+- 'ddrl46'
+- '8zero'
+- 'southworth'
+- 'Micsi'
+- 'A_Glitch'
+- 'speedblader03'
+- 'MightyMega'
+- 'Seanm07'
+- 'Chamonze'
+- 'vista_df'
+- 'Notsuru'
+- 'sade1212'
+- 'inacio'
+- 'Snipex01'
+- 'Foogles'
+- 'Blocky_Lemon'
+- 'Hackscore'
+- 'Cool'
+- 'PervertedHermit'
+- 'Yunie'
+- 'CherryJimbo'
+- 'Fury'
+- 'God'
+- 'Romaji'
+- 'chrisjon'
+- 'Gravn'
+- 'Spikespiegel'
+- 'gagamel'
+- 'ManningQB18'
+- 'AndrewPH'
+- 'Nether'
+- 'Frewp'
+- 'Explorer'
+- 'SunriseMoon'
+- 'Cheapshot'
+- 'hug9000'
+- 'Computrix'
+- 'KingSam'
+- 'Fish_warden'
+- 'liv3d'
+- 'Neath'
+- 'Rixxz2'
+- 'xHellfire'
+- 'SolWolf'
+- 'Razorlance'
+- 'Dread'
+- 'Israphel'
+- 'Ryzo'
+- 'Jakeobs'
+- 'stolengoose'
+- 'elrobto'
+- 'TheJohan'
+- 'subtraho'
+- 'Creeper_Boss'
+- 'Eisblut'
+- 'mendo89'
+- 'Graytico'
+- 'Peter'
+- 'jacksturrr416'
+- 'phone'
+- 'ControlFreak92'
+- 'GRUML3N'
+- '2easy4you'
+- 'DoNotBeSad'
+- 'zTqbii'
+- 'TheSnowyWolf'
+- 'IBimsAufsCrack'
+- '1Dayi'
+- 'iNatalia200_'
+NickNames Black List:
+- 'DomeDD'
