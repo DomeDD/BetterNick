@@ -34,7 +34,9 @@ import de.domedd.betternick.api.events.PlayerSkinResetEvent;
 import de.domedd.betternick.api.events.PlayerSkinSetEvent;
 import de.domedd.betternick.api.events.PlayerUnnickEvent;
 import de.domedd.betternick.files.NickedPlayersFile;
+import de.domedd.betternick.packets.VersionChecker;
 import de.domedd.betternick.packets.v1_13_R1;
+import de.domedd.betternick.packets.v1_13_R2;
 import de.dytanic.cloudnet.api.CloudAPI;
 import de.dytanic.cloudnet.bridge.CloudServer;
 import de.dytanic.cloudnet.lib.player.CloudPlayer;
@@ -107,16 +109,34 @@ public class BetterNickAPI implements Listener {
 						nametag = nickname;
 					}
 				}
-				try {
-					v1_13_R1.setNameField(player, nametag);
-				} catch (IllegalArgumentException | IllegalAccessException e) {
-					if(pl.getConfig().getBoolean("Messages.Enabled")) {
-						player.sendMessage(pl.prefix + pl.getConfig().getString("Messages.Nick Set Error").replace("&", "§"));
+				switch(VersionChecker.getBukkitVersion()) {
+				default:
+					break;
+				case v1_13_R1:
+					try {
+						v1_13_R1.setNameField(player, nametag);
+					} catch (IllegalArgumentException | IllegalAccessException e) {
+						if(pl.getConfig().getBoolean("Messages.Enabled")) {
+							player.sendMessage(pl.prefix + pl.getConfig().getString("Messages.Nick Set Error").replace("&", "§"));
+						}
 					}
-				}
-				v1_13_R1.removeFromTablist(player);
-				v1_13_R1.addToTablist(player);
-				v1_13_R1.respawn(player);
+					v1_13_R1.removeFromTablist(player);
+					v1_13_R1.addToTablist(player);
+					v1_13_R1.respawn(player);
+					break;
+				case v1_13_R2:
+					try {
+						v1_13_R2.setNameField(player, nametag);
+					} catch (IllegalArgumentException | IllegalAccessException e) {
+						if(pl.getConfig().getBoolean("Messages.Enabled")) {
+							player.sendMessage(pl.prefix + pl.getConfig().getString("Messages.Nick Set Error").replace("&", "§"));
+						}
+					}
+					v1_13_R2.removeFromTablist(player);
+					v1_13_R2.addToTablist(player);
+					v1_13_R2.respawn(player);
+					break;
+				}				
 				for(Player all : Bukkit.getOnlinePlayers()) {
 					all.hidePlayer(pl, player);
 					all.showPlayer(pl, player);
@@ -156,7 +176,7 @@ public class BetterNickAPI implements Listener {
 							CloudServer.getInstance().updateNameTags(player);
 						}
 					}
-				}, 14);
+				}, 20);
 				if(pl.econ != null && pl.econ.getName().equalsIgnoreCase("iConomy 7")) {
 					pd.createNewBalance();
 				}
@@ -222,16 +242,34 @@ public class BetterNickAPI implements Listener {
 						nametag = nickname;
 					}
 				}
-				try {
-					v1_13_R1.setNameField(player, nametag);
-				} catch (IllegalArgumentException | IllegalAccessException e) {
-					if(pl.getConfig().getBoolean("Messages.Enabled")) {
-						player.sendMessage(pl.prefix + pl.getConfig().getString("Messages.Nick Set Error").replace("&", "§"));
+				switch(VersionChecker.getBukkitVersion()) {
+				default:
+					break;
+				case v1_13_R1:
+					try {
+						v1_13_R1.setNameField(player, nametag);
+					} catch (IllegalArgumentException | IllegalAccessException e) {
+						if(pl.getConfig().getBoolean("Messages.Enabled")) {
+							player.sendMessage(pl.prefix + pl.getConfig().getString("Messages.Nick Set Error").replace("&", "§"));
+						}
 					}
+					v1_13_R1.removeFromTablist(player);
+					v1_13_R1.addToTablist(player);
+					v1_13_R1.respawn(player);
+					break;
+				case v1_13_R2:
+					try {
+						v1_13_R2.setNameField(player, nametag);
+					} catch (IllegalArgumentException | IllegalAccessException e) {
+						if(pl.getConfig().getBoolean("Messages.Enabled")) {
+							player.sendMessage(pl.prefix + pl.getConfig().getString("Messages.Nick Set Error").replace("&", "§"));
+						}
+					}
+					v1_13_R2.removeFromTablist(player);
+					v1_13_R2.addToTablist(player);
+					v1_13_R2.respawn(player);
+					break;
 				}
-				v1_13_R1.removeFromTablist(player);
-				v1_13_R1.addToTablist(player);
-				v1_13_R1.respawn(player);
 				if(!pl.getConfig().getBoolean("Config.Nick And Skin Combination")) {
 					for(Player all : Bukkit.getOnlinePlayers()) {
 						all.hidePlayer(pl, player);
@@ -239,7 +277,7 @@ public class BetterNickAPI implements Listener {
 					}
 					pd.saveData();
 					pd.setNickedPlayerData();
-				}				
+				}
 				Bukkit.getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
 					@Override
 					public void run() {
@@ -409,15 +447,32 @@ public class BetterNickAPI implements Listener {
 			updateData(player, "WASNICKED", false);
 		}
 		updateData(player, "OFFLINENICKNAME", pd.getDefaultName());
-		try {
-			v1_13_R1.setNameField(player, pd.getDefaultName());
-		} catch (IllegalArgumentException | IllegalAccessException e) {
-			if(pl.getConfig().getBoolean("Messages.Enabled")) {
-				player.sendMessage(pl.prefix + pl.getConfig().getString("Messages.Nick Set Error").replace("&", "§"));
+		switch(VersionChecker.getBukkitVersion()) {
+		default:
+			break;
+		case v1_13_R1:
+			try {
+				v1_13_R1.setNameField(player, pd.getDefaultName());
+			} catch (IllegalArgumentException | IllegalAccessException e) {
+				if(pl.getConfig().getBoolean("Messages.Enabled")) {
+					player.sendMessage(pl.prefix + pl.getConfig().getString("Messages.Nick Set Error").replace("&", "§"));
+				}
 			}
+			v1_13_R1.removeFromTablist(player);
+			v1_13_R1.addToTablist(player);
+			break;
+		case v1_13_R2:
+			try {
+				v1_13_R2.setNameField(player, pd.getDefaultName());
+			} catch (IllegalArgumentException | IllegalAccessException e) {
+				if(pl.getConfig().getBoolean("Messages.Enabled")) {
+					player.sendMessage(pl.prefix + pl.getConfig().getString("Messages.Nick Set Error").replace("&", "§"));
+				}
+			}
+			v1_13_R2.removeFromTablist(player);
+			v1_13_R2.addToTablist(player);
+			break;
 		}
-		v1_13_R1.removeFromTablist(player);
-		v1_13_R1.addToTablist(player);
 		if(!hasPlayerNewSkin(player)) {
 			for(Player all : Bukkit.getOnlinePlayers()) {
 				all.hidePlayer(pl, player);
@@ -450,14 +505,30 @@ public class BetterNickAPI implements Listener {
 		String defaultname = pd.getDefaultName();
 		String nickname = pd.getNickName();
 		pd.setNickName(defaultname);
-		try {
-			v1_13_R1.setNameField(player, pd.getDefaultName());
-		} catch (IllegalArgumentException | IllegalAccessException e) {
-			if(pl.getConfig().getBoolean("Messages.Enabled")) {
-				player.sendMessage(pl.prefix + pl.getConfig().getString("Messages.Nick Set Error").replace("&", "§"));
+		switch(VersionChecker.getBukkitVersion()) {
+		default:
+			break;
+		case v1_13_R1:
+			try {
+				v1_13_R1.setNameField(player, pd.getDefaultName());
+			} catch (IllegalArgumentException | IllegalAccessException e) {
+				if(pl.getConfig().getBoolean("Messages.Enabled")) {
+					player.sendMessage(pl.prefix + pl.getConfig().getString("Messages.Nick Set Error").replace("&", "§"));
+				}
 			}
+			v1_13_R1.removeFromTablist(player);
+			break;
+		case v1_13_R2:
+			try {
+				v1_13_R2.setNameField(player, pd.getDefaultName());
+			} catch (IllegalArgumentException | IllegalAccessException e) {
+				if(pl.getConfig().getBoolean("Messages.Enabled")) {
+					player.sendMessage(pl.prefix + pl.getConfig().getString("Messages.Nick Set Error").replace("&", "§"));
+				}
+			}
+			v1_13_R2.removeFromTablist(player);
+			break;
 		}
-		v1_13_R1.removeFromTablist(player);
 		if(pl.cloudnet) {
 			CloudServer.getInstance().updateNameTags(player);
 		}
@@ -572,11 +643,24 @@ public class BetterNickAPI implements Listener {
 			return;
 		}
 		Collection<Property> properties = gameProfile.getProperties().get("textures");
-		v1_13_R1.removeProfileProperties(player, "textures");
-		v1_13_R1.putProfileProperties(player, "textures", properties);
-		v1_13_R1.removeFromTablist(player);
-		v1_13_R1.addToTablist(player);
-		v1_13_R1.respawn(player);
+		switch(VersionChecker.getBukkitVersion()) {
+		default:
+			break;
+		case v1_13_R1:
+			v1_13_R1.removeProfileProperties(player, "textures");
+			v1_13_R1.putProfileProperties(player, "textures", properties);
+			v1_13_R1.removeFromTablist(player);
+			v1_13_R1.addToTablist(player);
+			v1_13_R1.respawn(player);
+			break;
+		case v1_13_R2:
+			v1_13_R2.removeProfileProperties(player, "textures");
+			v1_13_R2.putProfileProperties(player, "textures", properties);
+			v1_13_R2.removeFromTablist(player);
+			v1_13_R2.addToTablist(player);
+			v1_13_R2.respawn(player);
+			break;
+		}
 		for(Player all : Bukkit.getOnlinePlayers()) {
 			all.hidePlayer(pl, player);
 			all.showPlayer(pl, player);
@@ -609,11 +693,24 @@ public class BetterNickAPI implements Listener {
 			return;
 		}
 		Collection<Property> properties = gameProfile.getProperties().get("textures");
-		v1_13_R1.removeProfileProperties(player, "textures");
-		v1_13_R1.putProfileProperties(player, "textures", properties);
-		v1_13_R1.removeFromTablist(player);
-		v1_13_R1.addToTablist(player);
-		v1_13_R1.respawn(player);
+		switch(VersionChecker.getBukkitVersion()) {
+		default:
+			break;
+		case v1_13_R1:
+			v1_13_R1.removeProfileProperties(player, "textures");
+			v1_13_R1.putProfileProperties(player, "textures", properties);
+			v1_13_R1.removeFromTablist(player);
+			v1_13_R1.addToTablist(player);
+			v1_13_R1.respawn(player);
+			break;
+		case v1_13_R2:
+			v1_13_R2.removeProfileProperties(player, "textures");
+			v1_13_R2.putProfileProperties(player, "textures", properties);
+			v1_13_R2.removeFromTablist(player);
+			v1_13_R2.addToTablist(player);
+			v1_13_R2.respawn(player);
+			break;
+		}
 		for(Player all : Bukkit.getOnlinePlayers()) {
 			all.hidePlayer(pl, player);
 			all.showPlayer(pl, player);
@@ -645,11 +742,24 @@ public class BetterNickAPI implements Listener {
 			return;
 		}
 		Collection<Property> properties = gameProfile.getProperties().get("textures");
-		v1_13_R1.removeProfileProperties(player, "textures");
-		v1_13_R1.putProfileProperties(player, "textures", properties);
-		v1_13_R1.removeFromTablist(player);
-		v1_13_R1.addToTablist(player);
-		v1_13_R1.respawn(player);
+		switch(VersionChecker.getBukkitVersion()) {
+		default:
+			break;
+		case v1_13_R1:
+			v1_13_R1.removeProfileProperties(player, "textures");
+			v1_13_R1.putProfileProperties(player, "textures", properties);
+			v1_13_R1.removeFromTablist(player);
+			v1_13_R1.addToTablist(player);
+			v1_13_R1.respawn(player);
+			break;
+		case v1_13_R2:
+			v1_13_R2.removeProfileProperties(player, "textures");
+			v1_13_R2.putProfileProperties(player, "textures", properties);
+			v1_13_R2.removeFromTablist(player);
+			v1_13_R2.addToTablist(player);
+			v1_13_R2.respawn(player);
+			break;
+		}
 		for(Player all : Bukkit.getOnlinePlayers()) {
 			all.hidePlayer(pl, player);
 			all.showPlayer(pl, player);
@@ -928,7 +1038,17 @@ public class BetterNickAPI implements Listener {
 		tid = Bukkit.getScheduler().scheduleSyncRepeatingTask(pl, new Runnable() {
 			@Override
 			public void run() {
-				v1_13_R1.sendActionBar(player, message);
+				switch(VersionChecker.getBukkitVersion()) {
+				default:
+					break;
+				case v1_13_R1:
+					v1_13_R1.sendActionBar(player, message);
+					break;
+				case v1_13_R2:
+					v1_13_R2.sendActionBar(player, message);
+					break;
+				}
+				
 			}
 		}, 0, 40);
 		taskID.put(player, tid);

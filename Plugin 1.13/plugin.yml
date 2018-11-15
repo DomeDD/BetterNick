@@ -1,6 +1,6 @@
 name: BetterNick
 api-version: 1.13
-version: 7.1
+version: 7.2
 author: DomeDD
 main: de.domedd.betternick.BetterNick
 softdepend: [Essentials, EssentialsChat, PlaceholderAPI, CloudNetAPI, SuperVanish, Vault, NametagEdit, ColoredTags, ChatControl]

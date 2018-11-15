@@ -51,6 +51,7 @@ import de.domedd.betternick.mysqlconnection.MySQL;
 import de.domedd.betternick.packets.VersionChecker;
 import de.domedd.betternick.packets.VersionChecker.BukkitVersion;
 import de.domedd.betternick.packets.v1_13_R1;
+import de.domedd.betternick.packets.v1_13_R2;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 
@@ -71,6 +72,11 @@ public class BetterNick extends JavaPlugin implements Listener {
 		if(VersionChecker.getBukkitVersion() == BukkitVersion.v1_13_R1) {
 			log.info("Hooking into v1_13_R1...");
 			this.getServer().getPluginManager().registerEvents(new v1_13_R1(this), this);
+			hookIntoAdditionalPlugins();
+			loadPlugin();
+		} else if(VersionChecker.getBukkitVersion() == BukkitVersion.v1_13_R2) {
+			log.info("Hooking into v1_13_R2...");
+			this.getServer().getPluginManager().registerEvents(new v1_13_R2(this), this);
 			hookIntoAdditionalPlugins();
 			loadPlugin();
 		} else {

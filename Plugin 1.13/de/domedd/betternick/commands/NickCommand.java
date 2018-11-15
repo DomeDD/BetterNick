@@ -76,16 +76,53 @@ public class NickCommand implements CommandExecutor {
 						}
 					}
 				} else {
-					if(p.hasPermission("BetterNick.Nick")) {
-						Bukkit.getPluginManager().callEvent(new PlayerCallNickEvent(p, args[0]));
+					Player t = Bukkit.getPlayer(args[0]);
+					if(t != null && t.isOnline()) {
+						if(!pl.getConfig().getBoolean("Addons.Random Nick Gui.Enabled")) {
+							if(p.hasPermission("BetterNick.RandomNick")) {
+								Bukkit.getPluginManager().callEvent(new PlayerCallRandomNickEvent(t));
+							} else {
+								if(pl.getConfig().getBoolean("Messages.Enabled")) {
+									p.sendMessage(pl.prefix + pl.getConfig().getString("Messages.No Permissions").replace("&", "§"));
+								}
+							}
+							if(pl.getConfig().getBoolean("Config.Nick And Skin Combination")) {
+								Bukkit.getPluginManager().callEvent(new PlayerCallRandomSkinEvent(t));
+							}
+						} else {
+							if(p.hasPermission("BetterNick.RandomNick")) {
+								p.openInventory(RandomNickGui.randomNicksInventory(t));
+							} else {
+								if(pl.getConfig().getBoolean("Messages.Enabled")) {
+									p.sendMessage(pl.prefix + pl.getConfig().getString("Messages.No Permissions").replace("&", "§"));
+								}
+							}
+						}
 					} else {
-						if(pl.getConfig().getBoolean("Messages.Enabled")) {
-							p.sendMessage(pl.prefix + pl.getConfig().getString("Messages.No Permissions").replace("&", "§"));
+						if(p.hasPermission("BetterNick.Nick")) {
+							Bukkit.getPluginManager().callEvent(new PlayerCallNickEvent(p, args[0]));
+						} else {
+							if(pl.getConfig().getBoolean("Messages.Enabled")) {
+								p.sendMessage(pl.prefix + pl.getConfig().getString("Messages.No Permissions").replace("&", "§"));
+							}
 						}
 					}
 				}
+			} else if(args.length == 2) {
+				if(p.hasPermission("BetterNick.Nick")) {
+					Player t = Bukkit.getPlayer(args[0]);
+					if(t.isOnline()) {
+						Bukkit.getPluginManager().callEvent(new PlayerCallNickEvent(t, args[1]));
+					} else {
+						p.sendMessage(pl.prefix + pl.getConfig().getString("Config.Messages.See Real Name Error").replace("&", "§"));
+					}
+				} else {
+					if(pl.getConfig().getBoolean("Messages.Enabled")) {
+						p.sendMessage(pl.prefix + pl.getConfig().getString("Messages.No Permissions").replace("&", "§"));
+					}
+				}
 			}
-		}else {
+		} else {
 			if(args.length == 1) {
 				if(args[0].equalsIgnoreCase("reload")) {
 					pl.reloadConfig();

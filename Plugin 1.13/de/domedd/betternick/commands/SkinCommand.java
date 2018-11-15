@@ -40,8 +40,32 @@ public class SkinCommand implements CommandExecutor {
 					}
 				}
 			} else if(args.length == 1) {
+				Player t = Bukkit.getPlayer(args[0]);
+				if(t != null && t.isOnline()) {
+					if(p.hasPermission("BetterNick.RandomSkin")) {
+						Bukkit.getPluginManager().callEvent(new PlayerCallRandomSkinEvent(t));
+					} else {
+						if(pl.getConfig().getBoolean("Messages.Enabled")) {
+							p.sendMessage(pl.prefix + pl.getConfig().getString("Messages.No Permissions").replace("&", "§"));
+						}
+					}
+				} else {
+					if(p.hasPermission("BetterNick.Skin")) {
+						Bukkit.getPluginManager().callEvent(new PlayerCallSkinEvent(p, args[0]));
+					} else {
+						if(pl.getConfig().getBoolean("Messages.Enabled")) {
+							p.sendMessage(pl.prefix + pl.getConfig().getString("Messages.No Permissions").replace("&", "§"));
+						}
+					}
+				}
+			} else if(args.length == 2) {
 				if(p.hasPermission("BetterNick.Skin")) {
-					Bukkit.getPluginManager().callEvent(new PlayerCallSkinEvent(p, args[0]));
+					Player t = Bukkit.getPlayer(args[0]);
+					if(t != null && t.isOnline()) {
+						Bukkit.getPluginManager().callEvent(new PlayerCallSkinEvent(t, args[1]));
+					} else {
+						p.sendMessage(pl.prefix + pl.getConfig().getString("Config.Messages.See Real Name Error").replace("&", "§"));
+					}
 				} else {
 					if(pl.getConfig().getBoolean("Messages.Enabled")) {
 						p.sendMessage(pl.prefix + pl.getConfig().getString("Messages.No Permissions").replace("&", "§"));

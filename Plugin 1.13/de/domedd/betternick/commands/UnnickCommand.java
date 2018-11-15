@@ -46,11 +46,30 @@ public class UnnickCommand implements CommandExecutor {
 					}
 				}
 				
+			} else if(args.length == 1) {
+				if(p.hasPermission("BetterNick.UnNick")) {
+					Player t = Bukkit.getPlayer(args[0]);
+					if(t != null && t.isOnline()) {
+						if(BetterNickAPI.getApi().isPlayerNicked(t)) {
+							Bukkit.getPluginManager().callEvent(new PlayerCallUnnickEvent(t));
+						}
+						if(BetterNickAPI.getApi().hasPlayerNewSkin(t)) {
+							Bukkit.getPluginManager().callEvent(new PlayerCallSkinResetEvent(t));
+						}
+						BetterNickAPI.getApi().removeNickedPlayer(t);
+					} else {
+						p.sendMessage(pl.prefix + pl.getConfig().getString("Config.Messages.See Real Name Error").replace("&", "§"));
+					}
+				} else {
+					if(pl.getConfig().getBoolean("Messages.Enabled")) {
+						p.sendMessage(pl.prefix + pl.getConfig().getString("Messages.No Permissions").replace("&", "§"));
+					}
+				}
 			}
 		} else {
 			if(args.length == 1) {
 				Player t = Bukkit.getPlayer(args[0]);
-				if(t.isOnline()) {
+				if(t != null && t.isOnline()) {
 					if(BetterNickAPI.getApi().isPlayerNicked(t)) {
 						Bukkit.getPluginManager().callEvent(new PlayerCallUnnickEvent(t));
 					}
