@@ -121,7 +121,11 @@ public class BetterNick extends JavaPlugin implements Listener {
 			break;
 		case v1_13_R1:
 			log.warning("Bukkit version v1_13_R1 is not supported!");
-			log.warning("Use the 1.13 version instead!");
+			log.warning("Use the 1.13.X version instead!");
+			break;
+		case v1_13_R2:
+			log.warning("Bukkit version v1_13_R2 is not supported!");
+			log.warning("Use the 1.13.X version instead!");
 			break;
 		}
 	}

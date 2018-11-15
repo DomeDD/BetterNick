@@ -116,7 +116,7 @@ public class BetterNickAPI implements Listener {
 					}
 				}
 				switch(VersionChecker.getBukkitVersion()) {
-				case v1_8_R1:
+				default:
 					break;
 				case v1_8_R2:
 					try {
@@ -195,8 +195,6 @@ public class BetterNickAPI implements Listener {
 					v1_12_R1.removeFromTablist(player);
 					v1_12_R1.addToTablist(player);
 					v1_12_R1.respawn(player);
-					break;
-				case v1_13_R1:
 					break;
 				}
 				for(Player all : Bukkit.getOnlinePlayers()) {
@@ -311,7 +309,7 @@ public class BetterNickAPI implements Listener {
 					}
 				}
 				switch(VersionChecker.getBukkitVersion()) {
-				case v1_8_R1:
+				default:
 					break;
 				case v1_8_R2:
 					try {
@@ -392,8 +390,6 @@ public class BetterNickAPI implements Listener {
 					if(!pl.getConfig().getBoolean("Config.Nick And Skin Combination")) {
 						v1_12_R1.respawn(player);
 					}
-					break;
-				case v1_13_R1:
 					break;
 				}
 				if(!pl.getConfig().getBoolean("Config.Nick And Skin Combination")) {
@@ -580,7 +576,7 @@ public class BetterNickAPI implements Listener {
 		}
 		updateData(player, "OFFLINENICKNAME", pd.getDefaultName());
 		switch(VersionChecker.getBukkitVersion()) {
-		case v1_8_R1:
+		default:
 			break;
 		case v1_8_R2:
 			try {
@@ -659,8 +655,6 @@ public class BetterNickAPI implements Listener {
 			v1_12_R1.removeFromTablist(player);
 			v1_12_R1.addToTablist(player);
 			break;
-		case v1_13_R1:
-			break;
 		}
 		if(!hasPlayerNewSkin(player)) {
 			for(Player all : Bukkit.getOnlinePlayers()) {
@@ -700,7 +694,7 @@ public class BetterNickAPI implements Listener {
 		String nickname = pd.getNickName();
 		pd.setNickName(defaultname);
 		switch(VersionChecker.getBukkitVersion()) {
-		case v1_8_R1:
+		default:
 			break;
 		case v1_8_R2:
 			try {
@@ -771,8 +765,6 @@ public class BetterNickAPI implements Listener {
 				}
 			}
 			v1_12_R1.removeFromTablist(player);
-			break;
-		case v1_13_R1:
 			break;
 		}
 		if(pl.cloudnet) {
@@ -891,7 +883,7 @@ public class BetterNickAPI implements Listener {
 		}
 		Collection<Property> properties = gameProfile.getProperties().get("textures");
 		switch(VersionChecker.getBukkitVersion()) {
-		case v1_8_R1:
+		default:
 			break;
 		case v1_8_R2:
 			v1_8_R2.removeProfileProperties(player, "textures");
@@ -941,8 +933,6 @@ public class BetterNickAPI implements Listener {
 			v1_12_R1.removeFromTablist(player);
 			v1_12_R1.addToTablist(player);
 			v1_12_R1.respawn(player);
-			break;
-		case v1_13_R1:
 			break;
 		}
 		for(Player all : Bukkit.getOnlinePlayers()) {
@@ -984,7 +974,7 @@ public class BetterNickAPI implements Listener {
 		}
 		Collection<Property> properties = gameProfile.getProperties().get("textures");
 		switch(VersionChecker.getBukkitVersion()) {
-		case v1_8_R1:
+		default:
 			break;
 		case v1_8_R2:
 			v1_8_R2.removeProfileProperties(player, "textures");
@@ -1034,8 +1024,6 @@ public class BetterNickAPI implements Listener {
 			v1_12_R1.removeFromTablist(player);
 			v1_12_R1.addToTablist(player);
 			v1_12_R1.respawn(player);
-			break;
-		case v1_13_R1:
 			break;
 		}
 		for(Player all : Bukkit.getOnlinePlayers()) {
@@ -1076,7 +1064,7 @@ public class BetterNickAPI implements Listener {
 		}
 		Collection<Property> properties = gameProfile.getProperties().get("textures");
 		switch(VersionChecker.getBukkitVersion()) {
-		case v1_8_R1:
+		default:
 			break;
 		case v1_8_R2:
 			v1_8_R2.removeProfileProperties(player, "textures");
@@ -1126,8 +1114,6 @@ public class BetterNickAPI implements Listener {
 			v1_12_R1.removeFromTablist(player);
 			v1_12_R1.addToTablist(player);
 			v1_12_R1.respawn(player);
-			break;
-		case v1_13_R1:
 			break;
 		}
 		for(Player all : Bukkit.getOnlinePlayers()) {
@@ -1414,7 +1400,7 @@ public class BetterNickAPI implements Listener {
 			@Override
 			public void run() {
 				switch(VersionChecker.getBukkitVersion()) {
-				case v1_8_R1:
+				default:
 					break;
 				case v1_8_R2:
 					v1_8_R2.sendActionBar(player, message);
@@ -1436,8 +1422,6 @@ public class BetterNickAPI implements Listener {
 					break;
 				case v1_12_R1:
 					v1_12_R1.sendActionBar(player, message);
-					break;
-				case v1_13_R1:
 					break;
 				}
 			}
