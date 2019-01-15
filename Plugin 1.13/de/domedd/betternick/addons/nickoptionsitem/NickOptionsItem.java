@@ -91,6 +91,7 @@ public class NickOptionsItem implements Listener {
 			}
 		}
 	}
+	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onANIInvClick(InventoryClickEvent e) {
 		Player p = (Player) e.getWhoClicked();

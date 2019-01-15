@@ -48,6 +48,7 @@ private static BetterNick pl;
 		inv.setItem(7, nameTag(nickslist.get(r.nextInt(nickslist.size()))));
 		return inv;
 	}
+	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onRNGInvClick(InventoryClickEvent e) {
 		Player p = (Player) e.getWhoClicked();

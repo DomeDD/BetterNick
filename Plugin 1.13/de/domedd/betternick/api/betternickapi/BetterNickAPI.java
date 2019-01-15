@@ -37,9 +37,6 @@ import de.domedd.betternick.files.NickedPlayersFile;
 import de.domedd.betternick.packets.VersionChecker;
 import de.domedd.betternick.packets.v1_13_R1;
 import de.domedd.betternick.packets.v1_13_R2;
-import de.dytanic.cloudnet.api.CloudAPI;
-import de.dytanic.cloudnet.bridge.CloudServer;
-import de.dytanic.cloudnet.lib.player.CloudPlayer;
 
 public class BetterNickAPI implements Listener {
 
@@ -49,7 +46,7 @@ public class BetterNickAPI implements Listener {
 	private static List<String> blacklist;
 	private static List<String> nicks;
 	private static List<String> skins;
-	private static BetterNickAPI api;	
+	private static BetterNickAPI api;
 	
 	@SuppressWarnings("static-access")
 	public BetterNickAPI(BetterNick main) {
@@ -172,13 +169,10 @@ public class BetterNickAPI implements Listener {
 								ColoredTags.updateTab(player);
 							}
 						}
-						if(pl.cloudnet) {
-							CloudServer.getInstance().updateNameTags(player);
-						}
 					}
 				}, 20);
-				if(pl.econ != null && pl.econ.getName().equalsIgnoreCase("iConomy 7")) {
-					pd.createNewBalance();
+				if(pl.econ != null) {
+					pd.createNewBalanceAccount();
 				}
 				if(pl.getConfig().getBoolean("MySQL.Enabled")) {
 					Bukkit.getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
@@ -307,13 +301,10 @@ public class BetterNickAPI implements Listener {
 								ColoredTags.updateTab(player);
 							}
 						}
-						if(pl.cloudnet) {
-							CloudServer.getInstance().updateNameTags(player);
-						}
 					}
 				}, 14);
-				if(pl.econ != null && pl.econ.getName().equalsIgnoreCase("iConomy 7")) {
-					pd.createNewBalance();
+				if(pl.econ != null) {
+					pd.createNewBalanceAccount();
 				}
 				if(pl.getConfig().getBoolean("MySQL.Enabled")) {
 					Bukkit.getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
@@ -360,12 +351,6 @@ public class BetterNickAPI implements Listener {
 		if(chatsuffix != null) {
 			pd.setChatSuffix(chatsuffix);
 		}
-		
-		// Experimental
-		if(pl.cloudnet) {
-			CloudPlayer cp = CloudAPI.getInstance().getOnlinePlayer(player.getUniqueId());
-			CloudAPI.getInstance().updatePlayer(cp);
-		}
 	}
 	
 	/**
@@ -391,12 +376,6 @@ public class BetterNickAPI implements Listener {
 			displayname = nickname + displaynamesuffix;
 		}
 		pd.setDisplayName(displayname);
-		
-		// Experimental
-		if(pl.cloudnet) {
-			CloudPlayer cp = CloudAPI.getInstance().getOnlinePlayer(player.getUniqueId());
-			CloudAPI.getInstance().updatePlayer(cp);
-		}
 	}
 	
 	/**
@@ -437,9 +416,9 @@ public class BetterNickAPI implements Listener {
 		PlayerData pd = players.get(player);
 		String defaultname = pd.getDefaultName();
 		pd.setNickName(defaultname);
-		if(pl.econ != null && pl.econ.getName().equalsIgnoreCase("iConomy 7")) {
+		if(pl.econ != null) {
 			pd.setNewBalance(pl.econ.getBalance(player));
-			pd.deleteNewBalance();
+			pd.deleteNewBalanceAccount();
 		}
 		updateData(player, "ONLINENICKNAME", pd.getDefaultName());
 		updateData(player, "ISNICKED", false);
@@ -481,10 +460,7 @@ public class BetterNickAPI implements Listener {
 			pd.saveData();
 			pd.setNickedPlayerData();
 		}
-		if(pl.cloudnet) {
-			CloudServer.getInstance().updateNameTags(player);
-		}
-		if(pl.econ != null && pl.econ.getName().equalsIgnoreCase("iConomy 7")) {
+		if(pl.econ != null) {
 			pd.updateOldBalance();
 		}
 		Bukkit.getPluginManager().callEvent(new PlayerUnnickEvent(player));
@@ -529,10 +505,7 @@ public class BetterNickAPI implements Listener {
 			v1_13_R2.removeFromTablist(player);
 			break;
 		}
-		if(pl.cloudnet) {
-			CloudServer.getInstance().updateNameTags(player);
-		}
-		if(pl.econ != null && pl.econ.getName().equalsIgnoreCase("iConomy 7")) {
+		if(pl.econ != null) {
 			pd.updateOldBalance();
 		}
 		updateData(player, "ONLINENICKNAME", pd.getDefaultName());
@@ -579,11 +552,6 @@ public class BetterNickAPI implements Listener {
 		if(pd.getDefaultChatSuffix() != null) {
 			pd.setChatSuffix(pd.getDefaultChatSuffix());
 		}
-		// Experimental
-		if(pl.cloudnet) {
-			CloudPlayer cp = CloudAPI.getInstance().getOnlinePlayer(player.getUniqueId());
-			CloudAPI.getInstance().updatePlayer(cp);
-		}
 	}
 	
 	/**
@@ -598,11 +566,6 @@ public class BetterNickAPI implements Listener {
 		}
 		PlayerData pd = players.get(player);
 		pd.setDisplayName(pd.getDefaultDisplayName());
-		// Experimental
-		if(pl.cloudnet) {
-			CloudPlayer cp = CloudAPI.getInstance().getOnlinePlayer(player.getUniqueId());
-			CloudAPI.getInstance().updatePlayer(cp);
-		}
 	}
 	
 	/**

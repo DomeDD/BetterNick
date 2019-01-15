@@ -31,13 +31,19 @@ public class ChatHook implements Listener {
 		String format = e.getFormat();
 		if(BetterNickAPI.getApi().isPlayerNicked(p)) {
 			format = format.replace("{NICKPREFIX}", pl.getConfig().getString("Nick Options.Chat Prefix").replace("&", "§"));
+			format = format.replace("%prefix%", pl.getConfig().getString("Nick Options.Chat Prefix").replace("&", "§"));
 			format = format.replace("{NICKSUFFIX}", pl.getConfig().getString("Nick Options.Chat Suffix").replace("&", "§"));
+			format = format.replace("%suffix%", pl.getConfig().getString("Nick Options.Chat Suffix").replace("&", "§"));
 			format = format.replace("{NICKNAME}", BetterNickAPI.getApi().getNickName(p));
+			format = format.replace("%player%", BetterNickAPI.getApi().getNickName(p));
 			format = format.replace("{REALNAME}", BetterNickAPI.getApi().getRealName(p));
 		} else {
 			format = format.replace("{NICKPREFIX}", pl.chat.getPlayerPrefix(p).replace("&", "§"));
+			format = format.replace("%prefix%", pl.chat.getPlayerPrefix(p).replace("&", "§"));
 			format = format.replace("{NICKSUFFIX}", pl.chat.getPlayerSuffix(p).replace("&", "§"));
+			format = format.replace("%suffix%", pl.chat.getPlayerSuffix(p).replace("&", "§"));
 			format = format.replace("{NICKNAME}", p.getName());
+			format = format.replace("%player%", p.getName());
 			format = format.replace("{REALNAME}", p.getName());
 		}
 		e.setFormat(format);

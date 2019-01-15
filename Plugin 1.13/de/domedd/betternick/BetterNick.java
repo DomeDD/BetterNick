@@ -26,9 +26,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.greatmancode.craftconomy3.Common;
+import com.greatmancode.craftconomy3.tools.interfaces.Loader;
 import com.mojang.authlib.GameProfile;
 
 import de.domedd.betternick.addons.chathook.ChatHook;
+import de.domedd.betternick.addons.cloudnet.CloudNetHook;
 import de.domedd.betternick.addons.joinquitmessage.JoinQuitMessage;
 import de.domedd.betternick.addons.nickoptionsitem.NickOptionsItem;
 import de.domedd.betternick.addons.placeholderapi.PlaceholderAPIHook;
@@ -65,6 +68,8 @@ public class BetterNick extends JavaPlugin implements Listener {
 	public boolean nte = false;
 	public boolean coloredtags = false;
 	public boolean cloudnet = false;
+	public boolean cc3 = false;
+	public Common craftconomy = null;
 	public String prefix;
 	
 	@Override
@@ -160,6 +165,7 @@ public class BetterNick extends JavaPlugin implements Listener {
     	if(Bukkit.getPluginManager().getPlugin("CloudNetAPI") != null) {
     		log.info("Hooking into CloudNetAPI...");
 			cloudnet = true;
+			this.getServer().getPluginManager().registerEvents(new CloudNetHook(), this);
 		}
     	if(Bukkit.getPluginManager().getPlugin("ColoredTags") != null) {
     		log.info("Hooking into ColoredTags...");
@@ -168,6 +174,10 @@ public class BetterNick extends JavaPlugin implements Listener {
     	if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
     		log.info("Hooking into PlaceholderAPI...");
     		new PlaceholderAPIHook(this).register();
+    	}
+    	if(Bukkit.getPluginManager().getPlugin("Craftconomy3") != null) {
+    		cc3 = true;
+    		craftconomy = (Common) ((Loader)Bukkit.getPluginManager().getPlugin("Craftconomy3")).getCommon();
     	}
 	}
 	private void sendMetrics() {

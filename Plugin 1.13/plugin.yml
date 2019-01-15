@@ -1,9 +1,9 @@
 name: BetterNick
 api-version: 1.13
-version: 7.2
+version: 7.3-SNAPSHOT
 author: DomeDD
 main: de.domedd.betternick.BetterNick
-softdepend: [Essentials, EssentialsChat, PlaceholderAPI, CloudNetAPI, SuperVanish, Vault, NametagEdit, ColoredTags, ChatControl]
+softdepend: [Essentials, EssentialsChat, PlaceholderAPI, CloudNetAPI, SuperVanish, Vault, NametagEdit, ColoredTags]
 commands:
      nick:
           description: Nick Command
