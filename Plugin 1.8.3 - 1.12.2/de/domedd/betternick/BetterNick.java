@@ -29,6 +29,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.mojang.authlib.GameProfile;
 
 import de.domedd.betternick.addons.chathook.ChatHook;
+import de.domedd.betternick.addons.cloudnet.CloudNetHook;
 import de.domedd.betternick.addons.joinquitmessage.JoinQuitMessage;
 import de.domedd.betternick.addons.nickoptionsitem.NickOptionsItem;
 import de.domedd.betternick.addons.placeholderapi.PlaceholderAPIHook;
@@ -205,6 +206,7 @@ public class BetterNick extends JavaPlugin implements Listener {
     	if(Bukkit.getPluginManager().getPlugin("CloudNetAPI") != null) {
     		log.info("Hooking into CloudNetAPI...");
 			cloudnet = true;
+			this.getServer().getPluginManager().registerEvents(new CloudNetHook(), this);
 		}
     	if(Bukkit.getPluginManager().getPlugin("ColoredTags") != null) {
     		log.info("Hooking into ColoredTags...");

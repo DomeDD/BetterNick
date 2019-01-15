@@ -68,28 +68,25 @@ public class PlayerData implements Listener {
 	public void setNewBalance(double newBalance) {
 		newbalance = newBalance;
 	}
-	public void createNewBalance() {
+	public void createNewBalanceAccount() {
 		if(!pl.econ.hasAccount(p)) {
 			pl.econ.createPlayerAccount(p);
 		}
 		pl.econ.depositPlayer(p, oldbalance);
+		if(pl.econ.getBalance(p) > oldbalance) {
+			pl.econ.withdrawPlayer(p, pl.econ.getBalance(p) - oldbalance);
+		}
 	}
-	public void deleteNewBalance() {
+	public void deleteNewBalanceAccount() {
 		pl.econ.deleteBank(p.getName());
 	}
 	public void updateOldBalance() {
 		if(!pl.econ.hasAccount(p)) {
 			pl.econ.createPlayerAccount(p);
-		}		
-		if(oldbalance < newbalance) {
-			double balance = newbalance - oldbalance;
-			pl.log.info("Old: " + oldbalance + "	New: " + newbalance + "		Adding: " + balance); 
-			pl.econ.depositPlayer(p, balance);
-		} else if(oldbalance > newbalance) {
-			double balance = oldbalance - newbalance;
-			pl.log.info("Old: " + oldbalance + "	New: " + newbalance + "		Substracting: " + balance);
-			pl.econ.withdrawPlayer(p, balance);
 		}
+		double balance = newbalance;
+		pl.econ.withdrawPlayer(p, pl.econ.getBalance(p));
+		pl.econ.depositPlayer(p, balance);
 	}
 	
 	public void setSkin(String skin) {
