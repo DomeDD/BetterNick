@@ -1,0 +1,46 @@
+name: BetterNick
+version: 7.4-SNAPSHOT
+author: DomeDD
+main: de.domedd.betternick.BetterNick
+softdepend: [Essentials, EssentialsChat, PlaceholderAPI, CloudNetAPI, SuperVanish, Vault, NametagEdit, ColoredTags]
+commands:
+     nick:
+          description: Nick Command
+          aliases: [disguise, n]
+     skin:
+          description: Skin Command
+          aliases: [changeskin, s]
+     unnick:
+          description: UnNick Command
+          aliases: [undisguise, un]
+     realname:
+          description: RealName Command
+          aliases: [rn]
+     nicklist:
+          description: NickList Command
+          aliases: [nicks, nl]
+     seenick:
+          description: SeeNick Command
+          aliases: [nickinfo, mynick, sn]
+     autonick:
+          description: AutoNick Command
+          aliases: [an]
+     keepnick:
+          description: KeepNick Command
+          aliases: [kn]
+permissions:
+     BetterNick.*:
+         children:
+            BetterNick.Reload: true
+            BetterNick.Nick: true
+            BetterNick.RandomNick: true
+            BetterNick.Skin: true
+            BetterNick.RandomSkin: true
+            BetterNick.UnNick: true
+            BetterNick.RealName: true
+            BetterNick.NickList: true
+            BetterNick.JoinItem: true
+            BetterNick.SeeNick: true
+            BetterNick.AutoNick: true
+            BetterNick.KeepNick: true
+            BetterNick.OptionsGUI: true
